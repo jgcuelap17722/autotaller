@@ -7,6 +7,7 @@ const pool = require('../database'); //referencia a ala base de datos
 const helpers = require('../lib/helpers');
 const {asinarOrden} = require('../controllers/controlador.ordenes');
 
+Consulta = (pQuery) => {return pool.query(pQuery)};
 //router.get('/signup',isNotLoggedIn, (req, res) =>{
 //    res.render('auth/signup');
 //})
@@ -16,7 +17,7 @@ router.get('/signup',isLoggedIn, async (req, res) =>{
   if(InfoUser.id_usuario != 1){
     res.render('profile');
   }else{
-    const Data = await pool.query('SELECT id_tipo_usuario,tipo_usuario FROM ttipo_usuario;');
+    const Data = await Consulta('SELECT id_tipo_usuario,tipo_usuario FROM ttipo_usuario;');
 
     let idTipo_Usuario=[],Tipo_Usuario=[],n = 0
 
