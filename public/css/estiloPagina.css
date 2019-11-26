@@ -1,0 +1,111 @@
+
+/*.btn-success {
+  color: #fff;
+  background-color: #28a745;
+  border-radius: 35px;
+       font-family: Arial;
+    border: 1px solid rgba(21, 87, 36, 0.75); <== comentar esto
+}*/
+
+
+
+.form-group.col-md-6 {
+  height: 70px;
+}
+
+/*     .fa.fa-envelope.prefix.prefix.active {
+  color: #D2202E;
+} */
+
+/*   .fa.prefix.prefix.active{
+  color: #D2202E;
+} */
+
+.md-form .prefix.active {
+  color: #D2202E;
+}
+
+
+
+.fa.fa-car.prefix.mb-1.active {
+  color: #4f4f4f;
+}
+
+
+
+.nombre.form-control.orden {
+  border-top-left-radius: 0rem;
+  border-bottom-left-radius: 0rem;
+  border-top-right-radius: 0.25rem;
+  border-bottom-right-radius: 0.25rem;
+}
+
+body {
+  /*height: 100vh;*/
+  /* background:rgba(191, 63, 63, 0.9);  */
+  background: url('../img/fondo.jpg');
+  /*background: url('https://cdn.pixabay.com/photo/2018/10/06/13/31/red-3727877_960_720.jpg');*/
+  /*background-repeat:no-repeat;*/
+  /*background-size: cover;*/
+  /*background-size: contain;*/
+}
+
+.jose {
+  background: #CC0000
+}
+
+.top-nav-collapse {
+  background: rgba(191, 63, 63, 0.8) !important;
+}
+
+/* #formInfoUsuario {
+  display: none;
+} */
+
+/*  #formAddUsuario {
+  display: none;
+} */
+
+#boton_nuevo {
+  color: white;
+  display: inline;
+}
+
+.fas.fa-user-plus {
+  color: white;
+}
+
+.fas.fa-phone {
+  color: white;
+}
+
+/*     .contenedor{
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+} */
+
+.card-header .fa {
+  transition: .3s transform ease-in-out;
+}
+
+.card-header .collapsed .fa {
+  transform: rotate(90deg);
+}
+
+.noselect {
+  -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+     -khtml-user-select: none; /* Konqueror HTML */
+       -moz-user-select: none; /* Old versions of Firefox */
+        -ms-user-select: none; /* Internet Explorer/Edge */
+            user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome, Opera and Firefox */
+}
+/*     
+#total{
+  padding-right: 0px;
+  padding-left: 0px;
+} */

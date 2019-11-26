@@ -1,0 +1,32 @@
+extends partials/messages.pug
+append head
+    // Librerias Awesomplate
+    link(rel='stylesheet', href='../lib/lib_awesomplete/awesomplete.css')
+    //script(src='/socket.io/socket.io.js')
+append area-librerias-scripts
+    // JavaScript de awesomplate 
+    script(src='../lib/lib_awesomplete/awesomplete.js')
+append message
+block contenido
+        #total.container.h-100
+            .row.align-items-center.h-100
+                .col-12
+                    .card.border-danger
+                        form#form-post(action="nuevo-cliente" method="post")
+                            .card-header.text-center.alert-danger.value Ingrese almenos 2 digitos para buscar por placa
+                            .card-body
+                                .row.justify-content-center.align-items-center
+                                    section.form-gradient
+                                        .md-form
+                                            i.fa.fa-car.prefix.mb-1
+                                            input#cbPlaca.form-control-xl.text-center.text-uppercase.h4.orden(type='text',name='nueva_placa',placeholder='Ejemplo,ABC-123', maxlength='7', autocomplete='off',required='')
+                                    button#boton_nuevo.btn.btn-success(type='submit')
+                                        i.fas.fa-user-plus(font-size='16px')
+                                        | nuevo
+        form#form-get(action="info-cliente")
+            input#id_Vehiculo(type="hidden",name='id_vehiculo')
+            input#Placa(type="hidden",name='placa')
+block area-scripts
+    script.
+         const data    = !{JSON.stringify(data)};
+    script(type='text/javascript' src='../js/consultar.js')

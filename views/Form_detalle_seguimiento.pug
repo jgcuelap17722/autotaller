@@ -1,0 +1,286 @@
+extends partials/messages.pug
+append head
+    script(src='/socket.io/socket.io.js')
+    link(href="lib/MDBootstrap 4.8.7/css/addons/datatables.min.css" rel="stylesheet")
+append area-librerias-scripts
+    script(type="text/javascript" src="lib/MDBootstrap 4.8.7/js/addons/datatables.min.js")
+block area-scripts
+    script.
+        $(document).ready(function(){
+
+            $('#dtHistorialCliente').DataTable({
+                "scrollX": true
+            });
+
+            $('#dtHistorialLlamadas').DataTable({
+                "scrollX": true
+            });
+
+            $('.dataTables_length').addClass('bs-select');
+
+            const data    = !{JSON.stringify(data)};
+            console.log('toda la info',data.historial_servicios[0].nro_orden);
+            //let sk_detalleSeguimiento = io();
+            //let user    = !{JSON.stringify(data)};
+
+            //let objeto = {
+            //    id_usuario:108,
+            //    id_detalle_pedido:336
+            //};
+
+            //$('#btn_factuar').click(()=>{
+            //    sk_Navigation.emit('Registrar_Seguimiento',objeto)
+            //    console.log('Exito en callback')
+            //})
+
+            //$('#Form_Detallle_Factura').submit(() => {
+            //    sk_Navigation.emit('Registrar_Seguimiento',objeto)
+            //    console.log('Exito en callback')
+            //});
+        })
+block contenido
+    form(action="detalle-seguimiento" method="post")
+        .card.rounded-0.p-0
+            .card-body.p-0
+                .card.rounded-0.mb-1 
+                    .card-body.p-0
+                        .d-flex.justify-content-center.border-bottom
+                            h5.my-auto.p-2.text-muted.text-uppercase  Placa: #{data.Info_vehiculo.placa}
+                            //h5.my-auto.p-2.text-danger Orden: N° 000001
+                            //input(name='pNro_Orden' type="hidden" value= '123') 
+                .card.rounded-0.mb-1 
+                    .card-header.py-2.border-bottom-0 
+                        i#iconombre.fas.fa-car.text-muted.mr-2
+                        strong.text-muted Información Vehiculo
+                    .card-body.p-1
+                        .container-fluid
+                            .row
+                                .col-12.col-sm.p-0
+                                    .m-1.border.border-muted.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Marca
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center #{data.Info_vehiculo.vehiculo_marca}
+                                .col-6.col-sm.p-0
+                                    .m-1.border.border-muted.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Modelo
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center #{data.Info_vehiculo.modelo}
+                                .col-6.col-sm.p-0
+                                    .m-1.border.border-muted.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Color
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center #{data.Info_vehiculo.color}
+                                //-.col-6.col-sm.p-0
+                                //-    .m-1.border.border-muted.rounded
+                                //-        .container-fluid
+                                //-            .row.text-danger.d-flex.justify-content-center
+                                //-                small Km Inicial
+                                //-            .row.text-left.d-flex.justify-content-center
+                                //-                .mi_entrada.md-form.m-0
+                                //-                    input#imp_KmInicial.form-control.p-0.m-0.border-0.text-center(type="number" placeholder='Km Inicial')
+                                //-.col-6.col-sm.p-0
+                                //-    .m-1.border.border-muted.rounded
+                                //-        .container-fluid
+                                //-            .row.text-danger.d-flex.justify-content-center
+                                //-                small Prox Mnto
+                                //-            .row.text-left.d-flex.justify-content-center
+                                //-                .mi_entrada.md-form.m-0
+                                //-                    input#imp_ProxM.form-control.p-0.m-0.border-0.text-center(type="number" placeholder='Prox Mnto')
+                .card.rounded-0.mb-1 
+                    .card-header.py-2.border-bottom-0 
+                        i#iconombre.fas.fa-user.text-muted.mr-2
+                        strong.text-muted Información Usuario
+                    .card-body.p-1
+                        .container-fluid
+                            .row
+                                .col-12.col-sm.p-0
+                                    .m-1.border.border-muted.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Nombre
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center #{data.Info_Cliente.nombre_cliente}
+                                .col-6.col-sm.p-0
+                                    .m-1.border.border-muted.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Telefono
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center #{data.Info_Cliente.telefono}
+                                .col-6.col-sm.p-0
+                                    .m-1.border.border-muted.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Dni
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center #{data.Info_Cliente.dni}
+                                .col-6.col-sm.p-0
+                                    .m-1.border.border-muted.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Ruc
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center #{data.Info_Cliente.ruc}
+                                .col-6.col-sm.p-0
+                                    .m-1.border.border-muted.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Tipo Usuario
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center #{data.Info_Cliente.tipo_cliente}
+                .card.rounded-0.mb-1 
+                    .card-header.py-2.border-bottom-0
+                        i#iconombre.fas.fa-clipboard-list.text-muted.mr-2
+                        strong.text-muted Historial seguimiento de servicios
+                    .card-body.p-1
+                        .container-fluid
+                            table#dtHistorialCliente.table.table-striped.table-bordered.table-sm(cellspacing="0" width="100%")
+                                thead
+                                    tr
+                                        th.th-sm Nro Orden
+                                        //th.th-sm Placa
+                                        //th.th-sm Marca
+                                        th.th-sm Km Inicial
+                                        th.th-sm Servicio
+                                        th.th-sm Detalle de Cliente
+                                        th.th-sm Detalle de Recepcion
+                                        //th.th-sm Nombre Usuario
+                                        th.th-sm Fecha de visita
+                                        th.th-sm Fecha
+                                        th.th-sm Detalle Requerimiento
+                                tbody
+                                    - var i = 0;
+                                    each val in data.historial_servicios
+                                        tr
+                                            td #{data.historial_servicios[i].nro_orden}
+                                            //td
+                                                a.font-weight-bold.text-uppercase(href='/info-cliente?id_vehiculo='+data.historial_servicios[i].id_vehiculo+'&placa='+data.historial_servicios[i].placa+'') #{data.historial_servicios[i].placa}
+                                                input(id='id_vehiculo_'+i type="hidden" value= 'data.historial_servicios[i].id_vehiculo') 
+                                            //td #{data.historial_servicios[i].vehiculo_marca}
+                                            td #{data.historial_servicios[i].km_inicial} km
+                                            td #{data.historial_servicios[i].nombre_servicio}
+                                            td #{data.historial_servicios[i].descripcion_cliente}
+                                            td #{data.historial_servicios[i].Detalle_usuario}
+                                            //td #{data.historial_servicios[i].nombre_cliente}
+                                            td #{data.Tiempo_Inicio[i]}
+                                            td #{data.Tiempo_Inicio_corto[i]}
+                                            td #{data.historial_servicios[i].Detalle_requerimiento}
+                                        - i++
+                                tfoot
+                                    tr
+                                        th Nro Orden
+                                        //th Placa
+                                        //th Marca
+                                        th Km Inicial
+                                        th Servicio
+                                        th Detalle de Cliente
+                                        th Detalle de Recepcion
+                                        //th Nombre Usuario
+                                        th Fecha de visita
+                                        th Fecha
+                                        th Detalle Requerimiento 
+                .card.rounded-0.mb-1 
+                    .card-header.py-2.border-bottom-0
+                        i#iconombre.fas.fa-clipboard-list.text-muted.mr-2
+                        strong.text-muted historial_servicios de llamadas
+                    .card-body.p-1
+                        .container-fluid
+                            if data.estado
+                                table#dtHistorialLlamadas.table.table-striped.table-bordered.table-sm(cellspacing="0" width="100%")
+                                    thead
+                                        tr
+                                            th.th-sm Nro Orden
+                                            th.th-sm Usuario que llamó
+                                            th.th-sm Etapa de Seguimiento
+                                            th.th-sm Antiguedad de la llamada
+                                            th.th-sm Fecha de la llamada
+                                            th.th-sm Detalle Llamada
+                                    tbody
+                                        - var n = 0;
+                                        each val in data.historial_seguimiento
+                                            tr
+                                                td #{data.historial_seguimiento[n].nro_orden}
+                                                td #{data.historial_seguimiento[n].nombre} #{data.historial_seguimiento[n].apellido_paterno} 
+                                                td #{data.historial_seguimiento[n].nombre_etapa_seguimineto}
+                                                td #{data.Tiempo_Seguimiento[n]}
+                                                td #{data.Tiempo_Seguimiento_corto[n]}
+                                                td #{data.historial_seguimiento[n].detalle_seguimiento}
+                                            - n++
+                                    tfoot
+                                        tr
+                                            th Nro Orden
+                                            th Usuario que llamó
+                                            th Etapa de Seguimiento
+                                            th Antiguedad de la llamada
+                                            th Fecha de la llamada
+                                            th Detalle Llamada
+                            else
+                                p No existe Un historial por el momento
+
+                //.card.rounded-0.mb-1 
+                //    .card-header.py-2.border-bottom-0
+                //        i#iconombre.fas.fa-clipboard-list.text-muted.mr-2
+                //        strong.text-muted Información descripcion de ( Pepe perez )
+                //    .card-body.p-1
+                //        .container-fluid
+                //            .row
+                //                .col-12.col-sm-3.p-0
+                //                    .m-1.border.border-muted.rounded
+                //                        .container-fluid
+                //                            .row.text-danger.d-flex.justify-content-center
+                //                                small Kilometrage Inicial
+                //                            .row.text-left.d-flex.justify-content-center
+                //                                p6.text-center.font-weight-light 20000 km
+                //                .col-12.col-sm-9.p-0.mb-2
+                //                    .m-1.border.border-muted.rounded
+                //                        .container-fluid
+                //                            .row.text-danger.d-flex.justify-content-center
+                //                                small Observacion del Usuario ( Pepe perez )
+                //                            .row.text-left.px-2
+                //                                p6.text-justify.font-weight-light jajaaj
+                .card.rounded-0.mb-1
+                    .card-header.py-2.border-bottom-0
+                        i#iconombre.fas.fa-clipboard-list.text-muted.mr-2
+                        strong.text-muted Detalle de llamada
+                    .card-body.p-1
+                        .md-form
+                            textarea#detalleSeguimiento.md-textarea.form-control(name='detalle_seguimiento' ,rows='7',style='overflow:auto' required)
+                            label(for='misObservaciones') Escribe los detalles de la llamada
+            .card-footer.py-2.d-flex.justify-content-around
+                //-button#btn_guardar.btn.btn-info.rounded-pill(type='button') guardar cambios
+                button#btnFinLlamada.btn.btn-success.rounded-pill(type='submit') Terminar llamada
+                //-button#btn_factuar.btn.btn-success.rounded-pill(type='button' onclick='') Hacer Checklist
+                //-input#id_detalle_pedido(type="hidden" value=''+data.Detalle_Pedido[0].id_detallePedido+'' name='id_detalle_pedido')
+                input#idSeguimiento(type="hidden" value=''+data.idSeguimiento+'' name='id_seguimiento')
+                //-input#id_Notificacion(type="hidden" value=''+data.idDNotificacion+'' name='id_Notificacion')
+                //-input(type="hidden" value=''+data.Detalle_Pedido[0].id_usuario_asignado+'' name='id_usuario_asignador')
+append styles
+    style.
+        .dtHistorialCliente {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        #dtHistorialCliente th, td {
+            white-space: nowrap;
+        }
+        #dtHistorialLlamadas th, td {
+            white-space: nowrap;
+        }
+        table.dataTable thead .sorting:after,
+        table.dataTable thead .sorting:before,
+        table.dataTable thead .sorting_asc:after,
+        table.dataTable thead .sorting_asc:before,
+        table.dataTable thead .sorting_asc_disabled:after,
+        table.dataTable thead .sorting_asc_disabled:before,
+        table.dataTable thead .sorting_desc:after,
+        table.dataTable thead .sorting_desc:before,
+        table.dataTable thead .sorting_desc_disabled:after,
+        table.dataTable thead .sorting_desc_disabled:before {
+            bottom: .5em;
+        }

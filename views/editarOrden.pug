@@ -1,0 +1,14 @@
+extends layouts/main
+block contenido
+    .col-md-4.mx-auto
+        .card
+            .card-body
+                form(action='/listar/edit/'+ordenes.id, method='POST')
+                    .form-group
+                        input.form-control(type='text', name='title', placeholder='Title', value=ordenes.title, autofocus='')
+                    .form-group
+                        input.form-control(type='url', name='url', placeholder='URL', value=ordenes.url)
+                    .form-group
+                        textarea.form-control(name='description', rows='2', placeholder='description') #{ordenes.description}
+                    .form-group
+                        button.btn.btn-success.btn-block Save

@@ -1,0 +1,195 @@
+extends layouts/main.pug
+append area-scripts
+    script.
+        $(".mas").click(() => {
+            event.preventDefault();
+        });
+        $(".menos").click(() => {
+            event.preventDefault();
+        });
+append styles
+    style.
+        .number-input button {
+        -webkit-appearance: none;
+        background-color: transparent;
+        border: none;
+        cursor: pointer;
+        position: relative;
+        }
+
+        .number-input button:before,
+        .number-input button:after {
+        display: inline-block;
+        position: absolute;
+        content: '';
+        height: 2px;
+        transform: translate(-50%, -50%);
+        }
+
+        .number-input button.plus:after {
+        transform: translate(-50%, -50%) rotate(90deg);
+        }
+
+        .number-input input[type=number] {
+        text-align: center;
+        }
+
+        .number-input.number-input {
+        border: 1px solid #ced4da;
+        height: 1.5rem;
+        border-radius: .25rem;
+        }
+
+        .number-input.number-input button {
+        width: 2.8rem;
+        height: 1.25rem;
+        }
+
+        .number-input.number-input button:before,
+        .number-input.number-input button:after {
+        width: .9rem;
+        background-color: #495057;
+        }
+
+        .number-input.number-input input[type=number] {
+        max-width: 4rem;
+        /*padding: .5rem;*/
+        border: 1px solid #ced4da;
+        border-width: 0 1px;
+        font-size: 1rem;
+        height: 1rem;
+        color: #495057;
+        }
+
+        .custom-control-input:checked~.custom-control-label::before {
+            color: #fff;
+            border-color: rgb(0, 200, 81);
+            background-color: rgb(0, 200, 81);
+        }
+        .custom-control-label::before {
+            position: absolute;
+            top: .0rem;
+            left: -1.5rem;
+            display: block;
+            width: 1.5rem;
+            height: 1.5rem;
+            pointer-events: none;
+            content: "";
+            background-color: #fff;
+            border: #8A8A8A solid 2px;
+        }
+        .custom-control-label::after {
+            position: absolute;
+            top: .0rem;
+            left: -1.5rem;
+            display: block;
+            width: 1.5rem;
+            height: 1.5rem;
+            content: "";
+            background: no-repeat 50%/50% 50%;
+        }
+        #colService{   
+            padding-left: 0px;
+            padding-right: 0px;
+        }
+block contenido
+    .card.border-danger
+        .card-header.text-center.alert-danger.value Servicio solicitado(inspeccion, mantenimiento,Reparaciones)
+        .card-body
+            form(action='/crear-orden', method='POST')
+                .row
+                    #colService.col-sm-6
+                        .card.m-1
+                            .card-header SERVICIO
+                            .card-body
+                                .row
+                                    .col-sm-12.p-3
+                                        .custom-control.custom-checkbox
+                                            input#cbservicio1.custom-control-input(type='checkbox')
+                                            label.custom-control-label(for='cbservicio1')
+                                                .ml-3 
+                                                    |   Revicion de Frenos
+                                    .col-sm-12.p-3
+                                        .custom-control.custom-checkbox
+                                            input#cbservicio2.custom-control-input(type='checkbox')
+                                            label.custom-control-label(for='cbservicio2')
+                                                .ml-3 
+                                                    |   Revicion de suspencion
+                    #colService.col-sm-6
+                        .card.m-1
+                            .card-header REPUESTO
+                            .card-body
+                                .row
+                                    .col-sm-12.p-3
+                                        .row.d-flex.align-items-center
+                                            .col-7
+                                                .custom-control.custom-checkbox
+                                                    input#cbrepuesto1.custom-control-input(type='checkbox')
+                                                    label.custom-control-label(for='cbrepuesto1')
+                                                        .ml-3 
+                                                            |   Rotula con juego
+                                            .col-5.d-flex.justify-content-center
+                                                .def-number-input.number-input.safari_only.d-flex.align-items-center
+                                                    button.menos.minus.p-2.bd-highlight(onclick="this.parentNode.querySelector('input[type=number]').stepDown()")
+                                                    input.quantity(min='0',value='0', type='number')
+                                                    button.mas.plus.p-2.bd-highlight(onclick="this.parentNode.querySelector('input[type=number]').stepUp()")
+                                    .col-sm-12.p-3
+                                        .row.d-flex.align-items-center
+                                            .col-7                                    
+                                                .custom-control.custom-checkbox
+                                                    input#cbrepuesto2.custom-control-input(type='checkbox')
+                                                    label.custom-control-label(for='cbrepuesto2')
+                                                        .ml-3 
+                                                            |   Rodaje con juego
+                                            .col-5.d-flex.justify-content-center
+                                                .def-number-input.number-input.safari_only.d-flex.align-items-center
+                                                    button.menos.minus.p-2.bd-highlight(onclick="this.parentNode.querySelector('input[type=number]').stepDown()")
+                                                    input.quantity(min='0',value='0', type='number')
+                                                    button.mas.plus.p-2.bd-highlight(onclick="this.parentNode.querySelector('input[type=number]').stepUp()")
+                    #colService.col-sm-12
+                        .card.m-1
+                            .card-header Servicio solicitado(inspeccion, mantenimiento,Reparaciones)
+                            .card-body
+                                .card
+                                    .card-header
+                                        .row
+                                            .col-10
+                                                .custom-control.custom-checkbox
+                                                    input#jose.custom-control-input(type='checkbox',data-toggle='collapse', data-target='#description1')
+                                                    label.custom-control-label(for='jose')
+                                                        .ml-3
+                                                            |     jajaja
+                                            .col-2      
+                                                a.card-link.collapsed(data-toggle='collapse', data-target='#description1')
+                                                    i.fa.fa-chevron-down.pull-right
+                                    #description1.collapse
+                                        .card-body
+                                            | aca ira el reporte del historial
+                            #description1.collapse
+                                .card-body
+                                    | aca ira el reporte del historial
+                                    .col-sm-12.p-3
+                                        .custom-control.custom-checkbox
+                                            input#cbManoObra2.custom-control-input(type='checkbox',data-toggle='collapse', data-target='#collapseOne')
+                                            label.custom-control-label(for='cbManoObra2')
+                                                .ml-3 
+                                                    |   Correccion de camber
+                                                    #collapseOne.collapse
+                                                        |   Correccion de camber
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

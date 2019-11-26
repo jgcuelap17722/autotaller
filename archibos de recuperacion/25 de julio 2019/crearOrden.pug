@@ -1,0 +1,331 @@
+extends layouts/main.pug
+prepend area-scripts
+    script.
+
+        $(".mas").click(() => {
+            event.preventDefault();
+        });
+        $(".menos").click(() => {
+            event.preventDefault();
+        });
+
+        $("#cbList").click(function() {
+            this.value = this.checked ? 1 : 0;
+            if(this.value != 0){
+                $('#collapsList').attr("class","collapse"); //-colapsa
+                $('#detalles').text("ocultar detalles"); 
+                $("#detalles").css("display", "block");
+                $("#ojo").css("display", "block");
+                $("#ojo").removeClass("fa-eye-slash");
+                $("#ojo").addClass("fa-eye");
+            }else{
+                $('#collapsList').attr("class","collapse show"); //-nada
+                $("#ojo").css("display", "none");
+                $("#detalles").css("display", "none");
+            }
+        });
+
+        cambiar_estado = () => {
+            if($('#detalles').text() == "ver detalles"){
+                $('#detalles').text("ocultar detalles"); 
+            }else{
+                $('#detalles').text("ver detalles"); 
+            }
+            $('#ojo').toggleClass("fa-eye fa-eye-slash");
+        }
+
+        $("#detalles").click(function() {
+            cambiar_estado()
+        })
+
+        $("#ojo").click(function() {
+            cambiar_estado()
+        })
+
+        $("#cbList").click(function() {
+            this.value = this.checked ? 1 : 0;
+            if(this.value != 0){
+                $('#collapsList').attr("class","collapse"); //-colapsa
+                $('#detalles').text("ocultar detalles"); 
+                $("#detalles").css("display", "block");
+                $("#ojo").css("display", "block");
+                $("#ojo").removeClass("fa-eye-slash");
+                $("#ojo").addClass("fa-eye");
+            }else{
+                $('#collapsList').attr("class","collapse show"); //-nada
+                $("#ojo").css("display", "none");
+                $("#detalles").css("display", "none");
+            }
+        });
+
+        //- Alternar texto Ocultar icono 0jo y Validar Checkbox 
+        function fnCheck(id_check,colapsador,detalle,ojo){
+            $('#'+id_check).val() == 0 ? $('#'+id_check).val(1):$('#'+id_check).val(0);
+            var valor = $('#'+id_check).val()
+            if(valor != 0){
+                $('#'+colapsador).attr("class","collapse");
+                $('#'+detalle).text("ocultar detalles");
+                $('#'+detalle).css("display", "block");
+                $('#'+ojo).css("display", "block");
+                $('#'+ojo).removeClass("fa-eye-slash");
+                $('#'+ojo).addClass("fa-eye");
+            }else{
+                $('#'+colapsador).attr("class","collapse show"); //-nada
+                $('#'+ojo).css("display", "none");
+                $('#'+detalle).css("display", "none");
+            }
+        }
+
+        //- Cambiar la imagen del Ojo al precionarlo
+        fnOjo = (id,id_ojo) => cambiarEstado(id,id_ojo)
+
+        //- Cambiar el texto "detalles" al precionarlo
+        fnSmall = (id,id_ojo) => cambiarEstado(id,id_ojo)
+
+        //- Cambiar el texto "detalles" y imagen del Ojo al precionarlo
+        cambiarEstado = (id,id_ojo) => {
+            $('#'+id_ojo).toggleClass("fa-eye fa-eye-slash"); 
+            $('#'+id).text() == "ver detalles" ? $('#'+id).text("ocultar detalles") : $('#'+id).text("ver detalles")
+        }
+
+        //Agregar 0 en la lista de text area al precionar enter
+        ListarTexarea = (id_textArea) => event.keyCode == 13 && $('#'+id_textArea).val($('#'+id_textArea).val()+'•     ')
+        
+append styles
+    style.
+        ul {
+            list-style: circle;
+            padding-left: 20px;
+        }
+
+        .collapsing {
+            -webkit-transition: none;
+            transition: none;
+            /*display: none;*/
+        }
+        /*Por defecto el ojo esta oculto*/
+        #ojo{
+            display:none
+        }
+        #detalles{
+            display:none
+        }
+        /*Estilos de Boton suma y resta (NUMERICO)*/
+            .number-input button {
+            -webkit-appearance: none;
+            background-color: transparent;
+            border: none;
+            cursor: pointer;
+            position: relative;
+            }
+
+            .number-input button:before,
+            .number-input button:after {
+            display: inline-block;
+            position: absolute;
+            content: '';
+            height: 2px;
+            transform: translate(-50%, -50%);
+            }
+
+            .number-input button.plus:after {
+            transform: translate(-50%, -50%) rotate(90deg);
+            }
+
+            .number-input input[type=number] {
+            text-align: center;
+            }
+
+            .number-input.number-input {
+            border: 1px solid #ced4da;
+            height: 1.5rem;
+            border-radius: .25rem;
+            }
+
+            .number-input.number-input button {
+            width: 2.8rem;
+            height: 1.25rem;
+            }
+
+            .number-input.number-input button:before,
+            .number-input.number-input button:after {
+            width: .9rem;
+            background-color: #495057;
+            }
+
+            .number-input.number-input input[type=number] {
+            max-width: 4rem;
+            /*padding: .5rem;*/
+            border: 1px solid #ced4da;
+            border-width: 0 1px;
+            font-size: 1rem;
+            height: 1rem;
+            color: #495057;
+            }
+        /*Estilos de Checkbox*/
+            .custom-control-input:checked~.custom-control-label::before {
+                color: #fff;
+                border-color: rgb(0, 200, 81);
+                background-color: rgb(0, 200, 81);
+            }
+            .custom-control-label::before {
+                position: absolute;
+                top: .0rem;
+                left: -1.5rem;
+                display: block;
+                width: 1.5rem;
+                height: 1.5rem;
+                pointer-events: none;
+                content: "";
+                background-color: #fff;
+                border: #8A8A8A solid 2px;
+            }
+            .custom-control-label::after {
+                position: absolute;
+                top: .0rem;
+                left: -1.5rem;
+                display: block;
+                width: 1.5rem;
+                height: 1.5rem;
+                content: "";
+                background: no-repeat 50%/50% 50%;
+            }
+        /*Estilos para eliminar el pading de colService*/
+            #colService{   
+                padding-left: 0px;
+                padding-right: 0px;
+            }
+block contenido
+    .card.border-danger
+        .card-header.text-center.alert-danger.value Servicio solicitado(inspeccion, mantenimiento,Reparaciones)
+        h3 Orden #{enviar.nroOrdenNueva}
+        h3 Placa #{enviar.placa_cliente}
+        .card-body
+            form#form1.row(action='/crear-orden', method='POST')
+
+                //- Mixin Lista creado para reutilizar y agregar
+                mixin lista(id_input,servicio,id_icono,colapsador,id_small,id_textArea)
+                    .card.m-1
+                        .card-header.d-flex.bd-highlight
+                            .mr-auto.bd-highlight.d-flex.align-items-center 
+                                .custom-control.custom-checkbox
+                                    input.custom-control-input(onClick="fnCheck('"+id_input+"','"+colapsador+"','"+id_small+"','"+id_icono+"')",id=id_input,value="0",type='checkbox',data-toggle='collapse', data-target="#"+colapsador)
+                                    label.custom-control-label(for=id_input)
+                                        a.ml-3 #{servicio}
+                            .pr-1.bd-highlight.d-flex.align-items-center
+                                a.fa.fa-fw.fa-eye.field-icon.toggle-password(onClick="fnSmall('"+id_small+"','"+id_icono+"')",id=id_icono, data-toggle='collapse', data-target="#"+colapsador,toggle="#"+colapsador style="display:none")
+                            .pl-1.bd-highlight.d-flex.align-items-center 
+                                a(data-toggle='collapse', data-target="#"+colapsador,toggle="#"+colapsador)
+                                    small(id=id_small onClick="fnSmall('"+id_small+"','"+id_icono+"')",style="display:none") ocultar detalles
+                        .collapse(id=colapsador)
+                            .card-body
+                                h5 Obsrvaciones del Cliente 
+                                    .md-form
+                                        textarea.md-textarea.form-control(onkeyup="ListarTexarea('"+id_textArea+"');",id=id_textArea, rows='9',style='overflow:auto') •     
+                                        label(for=id_textArea) Escribe observaciones del cliente
+
+                #colService.col-sm-6
+                    .card.m-1.mr-auto.bd-highlight
+                        a.pl-1.bd-highlight.d-flex.align-items-center   Minimizar todas
+                    - var n = 0
+                    while n < 9
+                        +lista('id_input'+n,'servicio'+n,'id_icono'+n,'colapsador'+n,"id_small"+n,'text_area'+n)
+                        - n++
+                    .card.m-1
+                        .card-header.d-flex.bd-highlight
+                            .mr-auto.bd-highlight.d-flex.align-items-center 
+                                .custom-control.custom-checkbox
+                                    input#cbList.custom-control-input(value="0", type='checkbox',data-toggle='collapse', data-target='#collapsList')
+                                    label.custom-control-label(for='cbList')
+                                        a.ml-3 Alineamiento
+                            .pr-1.bd-highlight.d-flex.align-items-center 
+                                a#ojo.fa.fa-fw.fa-eye.field-icon.toggle-password(data-toggle='collapse', data-target='#collapsList',toggle='#collapsList')
+                            .pl-1.bd-highlight.d-flex.align-items-center 
+                                a(data-toggle='collapse', data-target='#collapsList',toggle='#collapsList')
+                                    small#detalles ocultar detalles
+                        #collapsList.collapse
+                            .card-body
+                                h5 Detalles de Alineamiento
+                                | aca ira losdetalles de servicio
+                //-Columna 2              
+                #colService.col-sm-6
+                    .card.m-1
+                        .card-header REPUESTO
+                        .card-body
+                            .row
+                                .col-sm-12.p-3
+                                    .row.d-flex.align-items-center
+                                        .col-7
+                                            .custom-control.custom-checkbox
+                                                input#cbrepuesto1.custom-control-input(type='checkbox')
+                                                label.custom-control-label(for='cbrepuesto1')
+                                                    .ml-3 
+                                                        |   Rotula con juego
+                                        .col-5.d-flex.justify-content-center
+                                            .def-number-input.number-input.safari_only.d-flex.align-items-center
+                                                button.menos.minus.p-2.bd-highlight(onclick="this.parentNode.querySelector('input[type=number]').stepDown()")
+                                                input.quantity(min='0',value='0', type='number')
+                                                button.mas.plus.p-2.bd-highlight(onclick="this.parentNode.querySelector('input[type=number]').stepUp()")
+                                .col-sm-12.p-3
+                                    .row.d-flex.align-items-center
+                                        .col-7                                    
+                                            .custom-control.custom-checkbox
+                                                input#cbrepuesto2.custom-control-input(type='checkbox')
+                                                label.custom-control-label(for='cbrepuesto2')
+                                                    .ml-3 
+                                                        |   Rodaje con juego
+                                        .col-5.d-flex.justify-content-center
+                                            .def-number-input.number-input.safari_only.d-flex.align-items-center
+                                                button.menos.minus.p-2.bd-highlight(onclick="this.parentNode.querySelector('input[type=number]').stepDown()")
+                                                input.quantity(min='0',value='0', type='number')
+                                                button.mas.plus.p-2.bd-highlight(onclick="this.parentNode.querySelector('input[type=number]').stepUp()")
+                #colService.col-sm-12
+                    .card.m-1
+                        .card-header Servicio solicitado(inspeccion, mantenimiento,Reparaciones)
+                        .card-body
+                            .card
+                                .card-header
+                                    .row
+                                        .col-10
+                                            .custom-control.custom-checkbox
+                                                input#jose.custom-control-input(type='checkbox',data-toggle='collapse', data-target='#collapsList')
+                                                label.custom-control-label(for='jose')
+                                                    .ml-3
+                                                        |     jajaja
+                                        .col-2      
+                                            a.card-link.collapsed(data-toggle='collapse', data-target='#collapsList')
+                                                i.fa.fa-chevron-down.pull-right
+                                #collapsList.collapse
+                                    .card-body
+                                        | aca ira el reporte del historial
+                        #collapsList.collapse
+                            .card-body
+                                | aca ira el reporte del historial
+                                .col-sm-12.p-3
+                                    .custom-control.custom-checkbox
+                                        input#cbManoObra2.custom-control-input(type='checkbox',data-toggle='collapse', data-target='#collapseOne')
+                                        label.custom-control-label(for='cbManoObra2')
+                                            .ml-3 
+                                                |   Correccion de camber
+                                                #collapseOne.collapse
+                                                    |   Correccion de camber
+        .card-footer.d-flex.justify-content-center
+            button.btn.btn-success(type='button') Generar pedido
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

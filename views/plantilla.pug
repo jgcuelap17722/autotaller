@@ -1,0 +1,129 @@
+extends partials/messages.pug
+prepend head
+    link(href="lib/MDBootstrap 4.8.7/css/addons/datatables.min.css" rel="stylesheet")
+append area-librerias-scripts
+    script(type="text/javascript" src="lib/MDBootstrap 4.8.7/js/addons/datatables.min.js")
+prepend area-scripts
+    script.
+        $(document).ready(function(){
+            $('#dtBasicExample').DataTable({
+                "scrollX": true
+            });
+            
+            $('.dataTables_length').addClass('bs-select');
+
+            const data    = !{JSON.stringify(data)};
+            console.log('toda la info',data.historial[0].nro_orden);
+        })
+append styles
+    style.
+        .dtBasicExample {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        #dtBasicExample th, td {
+            white-space: nowrap;
+        }
+        table.dataTable thead .sorting:after,
+        table.dataTable thead .sorting:before,
+        table.dataTable thead .sorting_asc:after,
+        table.dataTable thead .sorting_asc:before,
+        table.dataTable thead .sorting_asc_disabled:after,
+        table.dataTable thead .sorting_asc_disabled:before,
+        table.dataTable thead .sorting_desc:after,
+        table.dataTable thead .sorting_desc:before,
+        table.dataTable thead .sorting_desc_disabled:after,
+        table.dataTable thead .sorting_desc_disabled:before {
+            bottom: .5em;
+        }
+block contenido
+    .container-fluid.px-0
+        .card.rounded-0
+            .card-header.py-2.border-bottom-0
+                i#iconombre.fas.fa-history.text-muted.mr-2
+                strong.text-muted Historial general (Demo)
+            .card-body
+                // Collapse buttons
+                .border.border-mutted
+                    a.btn.btn-info.rounded-pill(data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample")
+                        i.far.fa-question-circle.prefix.mr-1
+                        | Ayuda
+                    // / Collapse buttons
+                    // Collapsible element
+                    #collapseExample.collapse
+                        .m-2.ml-2
+                            strong.text-info Search :
+                            small.ml-2 Busca el dato por cualquier atributo de una fila
+                            br
+                            strong.text-info Show-entries :
+                            small.ml-2 Muestar la cantidad de datos que quieras ver en la tabla
+                            br
+                            strong.text-info Previous-Next :
+                            small.ml-2 Navega por las paginas de la tabla
+                            br
+                            strong.text-info ▲-▼ :
+                            small.ml-2 Organiza los datos de la tabla dese (a-z) o de mayor a menor
+                            br
+                            strong.text-info PLACA :
+                            small.ml-2 Si haces click en La (placa) veras mas informacion del vehiculo
+                table#dtBasicExample.table.table-striped.table-bordered.table-sm(cellspacing="0" width="100%")
+                    thead
+                        tr
+                            th.th-sm Nro Orden
+                            th.th-sm Placa
+                            th.th-sm Vehiculo
+                            th.th-sm Km Inicial
+                            th.th-sm Servicio
+                            th.th-sm Detalle de Cliente
+                            th.th-sm Detalle de Recepcion
+                            th.th-sm Nombre Usuario
+                            th.th-sm Antiguedad de Visita
+                            th.th-sm Fecha de Visita
+                            th.th-sm Detalle Requerimiento
+                    tbody
+                        - var i = 0;
+                        each val in data.historial
+                            tr
+                                td #{data.historial[i].nro_orden}
+                                td
+                                    case data.historial[i].id_etapa_seguimiento
+                                        when 1
+                                            a.font-weight-bold.text-uppercase.text-success(href='/info-cliente?id_vehiculo='+data.historial[i].id_vehiculo+'&placa='+data.historial[i].placa+'') #{data.historial[i].placa}
+                                        when 2
+                                            a.font-weight-bold.text-uppercase.text-danger(href='/info-cliente?id_vehiculo='+data.historial[i].id_vehiculo+'&placa='+data.historial[i].placa+'') #{data.historial[i].placa}
+                                        when 3
+                                            a.font-weight-bold.text-uppercase.text-warning(href='/info-cliente?id_vehiculo='+data.historial[i].id_vehiculo+'&placa='+data.historial[i].placa+'') #{data.historial[i].placa} 
+                                        default
+                                            a.font-weight-bold.text-uppercase(href='/info-cliente?id_vehiculo='+data.historial[i].id_vehiculo+'&placa='+data.historial[i].placa+'') #{data.historial[i].placa} 
+                                    //a.font-weight-bold.text-uppercase.text-success(href='/info-cliente?id_vehiculo='+data.historial[i].id_vehiculo+'&placa='+data.historial[i].placa+'') #{data.historial[i].placa}
+                                    input(id='id_vehiculo_'+i type="hidden" value= 'data.historial[i].id_vehiculo') 
+                                
+                                td 
+                                    .d-flex.justify-content-start
+                                        .text-body #{data.historial[i].vehiculo_marca}
+                                        .text-primary.ml-1 #{data.historial[i].modelo} 
+                                td #{data.historial[i].km_inicial} km
+                                td #{data.historial[i].nombre_servicio}
+                                td #{data.historial[i].descripcion_cliente}
+                                td #{data.historial[i].Detalle_usuario}
+                                td #{data.historial[i].nombre_cliente}
+                                td #{data.Tiempo_Inicio[i]}
+                                td #{data.Tiempo_Inicio_corto[i]}
+                                if data.historial[i].Detalle_requerimiento == null
+                                    td.text-danger Hace falta los requerimientos
+                                else
+                                    td #{data.historial[i].Detalle_requerimiento}
+                            - i++
+                    tfoot
+                        tr
+                            th Nro Orden
+                            th Placa
+                            th Vehiculo
+                            th Km Inicial
+                            th Servicio
+                            th Detalle de Cliente
+                            th Detalle de Recepcion
+                            th Nombre Usuario
+                            th Antiguedad de Visita
+                            th Fecha de Visita
+                            th Detalle Requerimiento

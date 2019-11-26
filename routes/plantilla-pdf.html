@@ -1,0 +1,196 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    body {
+      font-family: "Arial", serif;
+    }
+
+    .cabeza {
+      font-size: 13px;
+    }
+
+    table {
+      width: 100%;
+    }
+
+    table,
+    th,
+    td {
+      border: 1px solid black;
+      border-collapse: collapse;
+    }
+
+    th,
+    td {
+      padding: 6px;
+      text-align: left;
+    }
+    
+    img{
+      height:100px;
+      width:100px;
+    }
+    
+    .sin_borde{
+      border: 0px
+    }
+  </style>
+</head>
+
+<body>
+  <table style="border: 0px">
+    <tr>
+      <td style="border: 0px">
+        <img src="../public/img/logo-autolinea.jpg" alt="logo Autolinea" 
+          style="border-radius: 5px;">
+      </td>
+      <td style="border: 0px">
+        <div class='cabeza'>
+          <strong>AUTOLINEA N&C SOCIAEDAD ANONIMA CERRADA</strong><br>
+          <strong>AUTOLINEA N&C SAC</strong><br>
+          <strong>PRINCIPAL : AV REPUBLICA DE VENEZUELA MZA. H LOTE. 6 URB. PARQUE INDUSTRIAL</strong><br>
+          <small>Cusco - Wanchaq</small><br>
+        </div>
+      </td>
+    </tr>
+  </table>
+  <hr>
+  <table class='sin_borde'>
+      <tr>
+        <th class='sin_borde'>ASESOR:</th>
+        <td class='sin_borde'>Raul Bernardo</td>
+    
+        <th class='sin_borde'>MECANICO</th>
+        <td class='sin_borde'>Ruben Patricio</td>
+      </tr>
+      <tr>
+        <th class='sin_borde'>OBS ASESOR:</th>
+        <td class='sin_borde' colspan="5">Es Necesario hacer una Revicion</td>
+      </tr>
+  </table>
+  <br>
+  <table>
+    <tr>
+      <tr>
+        <td colspan="6" style="text-align: center;">INFORMACION USUARIO</td>
+      </tr>
+      <th>CLIENTE</th>
+      <td>Bill Gates</td>
+      <th>RUC/DNI</th>
+      <td>0000001</td>
+      <th>TELEFONO</th>
+      <td>978276311</td>
+    </tr>
+    <tr>
+      <th>DIRECCION</th>
+      <td colspan="5">Av Huayrurupata N310</td>
+    </tr>
+  </table>
+
+  <br>
+  <table>
+    <tr>
+    <tr>
+      <td colspan="6" style="text-align: center;">INFORMACION VEHICULO</td>
+    </tr>
+    <th>MARCA</th>
+    <td>Mercedes-Benz</td>
+
+    <th>MODELO</th>
+    <td>Sprinter</td>
+
+    <th>COLOR</th>
+    <td>Blanco</td>
+    </tr>
+    <tr>
+      <th>PLACA</th>
+      <td colspan="5">XAP-963</td>
+    </tr>
+  </table>
+  <br>
+  <table>
+    <thead>
+      <tr>
+      <tr>
+        <td colspan="4" style="text-align: center;">INFORMACION DE SERVICIO</td>
+      </tr>
+      <th>DESCRIPCION</th>
+      <th>OBS CLIENTE</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-column="DESCRIPCION">Alineamineto</td>
+        <td data-column="OBS CLIENTE">Se necesitaba corregir</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- <br>
+  <table>
+    <thead>
+      <tr>
+      <tr>
+        <td colspan="4" style="text-align: center;">INFORMACION DE SERVICIO</td>
+      </tr>
+      <th style="text-align: center;">MANO DE OBRA</th>
+      <th colspan="2" style="text-align: center;">REPUESTOS</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <th style="text-align: center;">DESCRIPCION</th>
+        <th style="text-align: center;">CANT</th>
+        <th style="text-align: center;">DESCRIPCION</th>
+      </tr>
+      <tr>
+
+        <td>Se Cambio de llantas</td>
+        <td>1</td>
+        <td>gomas</td>
+      </tr>
+      <tr>
+        <td>Se cambio el aro</td>
+        <td>7</td>
+        <td>plomo de 3 gr</td>
+      </tr>
+    </tbody>
+  </table> -->
+
+  <br>
+  <table>
+    <thead>
+      <tr>
+        <th style="text-align: center;">INFORMACION DE SERVICIO</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-column="INFORMACION DE SERVICIO">4 Pastillas nuevas 200 soles, 
+          Desenllante de 4 Ruedas, 4 Plomos de 5 gr
+        </td>
+      </tr>
+    </tbody>
+  </table>
+  <br><hr>
+<!--   <br>
+  <table>
+    <thead>
+      <tr>
+        <th style="text-align: center;">OBSERVACIONES FINALES</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td data-column="OBSERVACIONES FINALES">El cambio de aceite quedo pendiente para una proxima visita</td>
+      </tr>
+    </tbody>
+  </table> -->
+</body>
+</html>

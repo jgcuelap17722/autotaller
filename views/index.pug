@@ -1,0 +1,269 @@
+doctype html
+html(lang='en')
+  include ../includes/head.pug
+  body
+    //
+      <nav class="navbar fixed-top navbar-expand-lg navbar-dark jose scrolling-navbar">
+      <div class="container"><a class="navbar-brand" href="/">Inicio</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup"
+      aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation"><span
+      class="navbar-toggler-icon"></span></button>
+      <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+      <div class="navbar-nav"><a class="nav-item nav-link active" href="/agregar_orden">Agregar Orden</a><span
+      class="sr-only">(current)</span><a class="nav-item nav-link" href="#">Cotizar</a><a
+      class="nav-item nav-link" href="#">presupuesto</a><a class="nav-item nav-link disabled" href="#"
+      tabindex="-1" aria-disabled="true">Disabled</a></div>
+      </div>
+      </div>
+      </nav>
+    #total.container.h-100
+      .row.align-items-center.h-100
+        .col-12
+          .card.border-danger
+            .card-header.text-center.alert-danger.value Ingrese la placa del vehiculo
+            .card-body
+              form(action='/add', method='POST')
+                // <div class="form-group">
+                .row.justify-content-center.align-items-center
+                  section.form-gradient
+                    .md-form
+                      i.fa.fa-car.prefix.mb-1
+                      input#cbPlaca.form-control-xl.text-center.text-uppercase.h4.orden(type='text', placeholder='ABC-123,ABC123', maxlength='7', autocomplete='off')
+                  a(href='cliente')
+                    button#boton_nuevo.btn.btn-success(type='button', action='cliente')
+                      i.fas.fa-user-plus(font-size='16px')
+                      | nuevo
+                // </div>
+                #formInfoUsuario
+                  //
+                    <div class="card mb-3">
+                    <div class="card-body">
+                  h5.card-title Datos de Cliente
+                  ul#myTab.nav.nav-tabs(role='tablist')
+                    li.nav-item
+                      a#client-tab.nav-link.active(data-toggle='tab', href='#client', role='tab', aria-controls='client', aria-selected='true') Cliente
+                    li.nav-item
+                      a#car-tab.nav-link(data-toggle='tab', href='#car', role='tab', aria-controls='car', aria-selected='false') Carro
+                    li.nav-item
+                      a#history-tab.nav-link(data-toggle='tab', href='#history', role='tab', aria-controls='history', aria-selected='false') Historial
+                  #myTabContent.tab-content
+                    #client.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='client-tab')
+                      .row.mt-3
+                        .col-sm-12
+                          .card
+                            h4.card-header.d-flex.justify-content-between
+                              .row.justify-content-center.align-items-center.ml-1.text-capitalize
+                                small juan jose ramirez peña
+                              button#boton.btn.btn-success.btn-sm(type='button')
+                                i.fas.fa-phone
+                            .card-body
+                              .row
+                                .form-group.col-md-5
+                                  .row
+                                    .col-6
+                                      label Contacto: 
+                                    .col-6
+                                      p.card-text Raul
+                                .form-group.col-md-5
+                                  .row
+                                    .col-6
+                                      label Teléfono: 
+                                    .col-6
+                                      p.card-text 987654321
+                              .row
+                                .form-group.col-md-5
+                                  .row
+                                    .col-6
+                                      label DNI: 
+                                    .col-6
+                                      p.card-text 12345678
+                                .form-group.col-md-5
+                                  .row
+                                    .col-6
+                                      label E-mail: 
+                                    .col-6
+                                      p.card-text ejemplo@gmail.com
+                              .row
+                                .form-group.col-md-5
+                                  .row
+                                    .col-6
+                                      label RUC: 
+                                    .col-6
+                                      p.card-text 20123456781
+                                .form-group.col-md-5
+                                  .row
+                                    .col-5
+                                      label Direccion: 
+                                    .col-7
+                                      p.card-text Av las palmeras nro 123
+                            .card-footer
+                              .row
+                                .col-6
+                                  button#boton.btn.btn-danger(type='button') Editar
+                                .col-6
+                                  // <button id="boton" type="button" class="btn btn-info text-nowrap">Nueva Orden</button>
+                                  button#boton.btn.btn-info(type='button') Orden
+                    #car.tab-pane.fade(role='tabpanel', aria-labelledby='car-tab')
+                      .row.mt-3
+                        .col-sm-12
+                          .card
+                            .card-body
+                              h4.card-title.mb-4 Lamborgini
+                              .row
+                                .form-group.col-md-5
+                                  .row
+                                    .col-6
+                                      label Contacto: 
+                                    .col-6
+                                      p.card-text Raul
+                                .form-group.col-md-5
+                                  .row
+                                    .col-6
+                                      label Teléfono: 
+                                    .col-6
+                                      p.card-text 987654321
+                              .row
+                                .form-group.col-md-5
+                                  .row
+                                    .col-6
+                                      label DNI: 
+                                    .col-6
+                                      p.card-text 12345678
+                                .form-group.col-md-5
+                                  .row
+                                    .col-6
+                                      label E-mail: 
+                                    .col-6
+                                      p.card-text ejemplo@gmail.com
+                              .row
+                                .form-group.col-md-5
+                                  .row
+                                    .col-6
+                                      label RUC: 
+                                    .col-6
+                                      p.card-text 20123456781
+                                .form-group.col-md-5
+                                  .row
+                                    .col-5
+                                      label Direccion: 
+                                    .col-7
+                                      p.card-text Av las palmeras nro 123
+                              a.card-link(href='#') Editar
+                              a.card-link(href='#') LLamar
+                    #history.tab-pane.fade(role='tabpanel', aria-labelledby='history-tab')
+                      .row.mt-3
+                        .col-sm-12
+                          #accordion
+                            .card
+                              .card-header
+                                a.card-link.row.collapsed(data-toggle='collapse', href='#description1')
+                                  .col-10
+                                    | 20/14/19
+                                  .col-2
+                                    i.fa.fa-chevron-down.pull-right
+                              #description1.collapse(data-parent='#accordion')
+                                .card-body
+                                  | aca ira el reporte del historial
+                                .card-footer.text-center
+                                  a.card-link(href='#') Mas detalles
+                            .card
+                              .card-header
+                                a.card-link.row.collapsed(data-toggle='collapse', href='#description2')
+                                  .col-10
+                                    | 10/04/19
+                                  .col-2
+                                    i.fa.fa-chevron-down.pull-right
+                              #description2.collapse(data-parent='#accordion')
+                                .card-body
+                                  | aca ira el reporte del historial
+                              .card
+                                .card-header
+                                  a.card-link.row.collapsed(data-toggle='collapse', href='#description3')
+                                    .col-10
+                                      | 22/09/19
+                                    .col-2
+                                      i.fa.fa-chevron-down.pull-right
+                                #description3.collapse(data-parent='#accordion')
+                                  .card-body
+                                    | aca ira el reporte del historial
+                            a.card-link(href='#') Editar
+                            a.card-link(href='#') LLamar
+    script.
+      /*  $(".formAddUsuario").prop("display", "none"); */
+      $(document).ready(() => {
+      /* var socket = io(); */
+      /*   var socket_2 = io(); */
+      /*  var socket_2 = io.connect (' http: // localhost: 3000 ');  */
+      var socket_2 = io();
+      /*
+      $("#boton_nuevo").click(function (event) {
+      $("#formAddUsuario").css("display", "block");
+      $("#formInfoUsuario").css("display", "none");
+      $("#boton_nuevo").css("display", "none");
+      });
+      */
+      
+      /*       $("#add_status").click(() => {
+      socket.emit('agregar_orden', $("#comment").val());
+      });
+      socket.on('refresh feed', (msg) => {
+      $("#show_comments").append(msg + '<br /><br />');
+      }); */
+      //Capturar los datos del formulario al presionar enviar
+      $("#btnSend").click(() => {
+      event.preventDefault();
+      $(Capturar = () => {
+      let lstNumero = $(".orden"),
+      arrayGuardar = [];
+      for (var i = 0; i < lstNumero.length; i++) {
+      arrayGuardar[i] = lstNumero[i].value;
+      //document.write (lstNumero[i].value);
+      }
+      console.log(arrayGuardar)
+      socket_2.emit('enviar', arrayGuardar);
+      });
+      });
+      //aqui escuchamos la nueva orden
+      //y al iniciar actualiza el combo box de nombre
+      //la libreria de awesomeplate no entiende jQuery XD
+      var input = document.getElementById("cbPlaca");
+      var awesomplete = new Awesomplete(input, { maxItems: 5, });
+      document.getElementById('cbPlaca').addEventListener('awesomplete-selectcomplete', function () {
+      socket_2.emit('consulta_placa', this.value);
+      $("#formAddUsuario").css("display", "none");
+      $("#formInfoUsuario").css("display", "block");
+      $("#boton_nuevo").css("display", "none");
+      $('#cbPlaca').blur();
+      });
+      socket_2.on('consulta_placa', (datosRecibidos) => {
+      var nombre = datosRecibidos[0].nombre;
+      var contacto = datosRecibidos[0].contacto;
+      socket_2.emit('enviar_datos_form', nombre)
+      /*  CambiarEstilo(nombre, contacto); */
+      });
+      /*       function CambiarEstilo(nombre, contacto) {
+      $(".md-form").find("i").addClass("active");
+      $(".md-form").find("label[for =nombre]").addClass("active");
+      $(".md-form").find("label[for =contacto]").addClass("active");
+      $("#nombre").prop("disabled", true);
+      $("#contacto").prop("disabled", true);
+      // console.log(n);
+      $("#nombre").val(nombre);
+      $("#contacto").val(contacto);
+      //console.log(elemento.label);
+      } */
+      socket_2.on('cargar_datos', (placasRecibidas) => {
+      placas = []
+      for (let cont = 0; cont < placasRecibidas.length; cont++) { placas[cont] = placasRecibidas[cont].placa; }
+      awesomplete.list = placas;
+      });
+      });
+    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js')
+    // Bootstrap tooltips
+    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js')
+    // Bootstrap core JavaScript
+    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js')
+    // MDB core JavaScript
+    script(type='text/javascript', src='https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.8.2/js/mdb.min.js')
+    // JavaScript de awesomplate 
+    script(src='lib/lib_awesomplete/awesomplete.js')

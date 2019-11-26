@@ -1,0 +1,9 @@
+extends partials/messages.pug
+append head
+    script(src='/socket.io/socket.io.js')
+append message
+block contenido
+  form(action="pdfd" method="post")
+    .container
+      .card
+          button#btnDescarga.btn.btn-primary(type='submit') Submit

@@ -1,0 +1,41 @@
+extends layouts/main.pug
+append head
+    script(src='/socket.io/socket.io.js')
+    title loggin
+block contenido
+    form(action='user' method='post')
+        h1 pagina de usuario
+        .form-group
+            label(for='email') Username
+            input.form-control(class="orden" type='text', name='email' placeholder='Email' class="orden" autocomplete="off")
+        .form-group
+            label(for='password') Password
+            input.form-control(class="orden" type='text', name='{:password}')
+        button.btn.btn-primary(id="btnSend" type='submit') Log-in
+
+block area-scripts
+    script.
+        $(document).ready(() => { 
+            var sk_usuario = io();
+            var msg = "datos_a_enviar";
+            sk_usuario.emit('datos_a_enviar');
+            sk_usuario.on('datos_a_enviar2',msg => {
+                console.log(msg);
+                //$("#nombre").val(msg[0]);
+            });  
+        $("#btnSend").click(() => {
+        event.preventDefault();
+        $(Capturar = () => {
+        let lstNumero = $(".orden"),
+        arrayGuardar = [];
+        for (var i = 0; i < lstNumero.length; i++) {
+        arrayGuardar[i] = lstNumero[i].value;
+        //document.write (lstNumero[i].value);
+        }
+        //console.log(arrayGuardar)
+        //socket_2.emit('enviar', arrayGuardar);
+        sk_usuario.emit('enviar', arrayGuardar);
+        });
+        });
+
+        });

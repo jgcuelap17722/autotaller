@@ -1,0 +1,90 @@
+extends ../layouts/main
+append message
+    if (confirmation) == 'La contraseña se actualizo correctamente'
+        #cont.container.pt-4
+            .row
+                .col-md-4.mx-auto
+                    .alert.alert-success.alert-dismissible.fade.show(role='alert') #{confirmation}
+                        button#btn.close(type='button', data-dismiss='alert', aria-label='Close')
+                            span(aria-hidden='true') ×
+    if (confirmation) == 'La contraseña antigua no existe'
+        #cont.container.pt-4
+            .row
+                .col-md-4.mx-auto
+                    .alert.alert-danger.alert-dismissible.fade.show(role='alert') #{confirmation}
+                        button#btn.close(type='button', data-dismiss='alert', aria-label='Close')
+                            span(aria-hidden='true') ×
+    if (confirmation) == 'Las contraseña no coinciden'
+        #cont.container.pt-4
+            .row
+                .col-md-4.mx-auto
+                    .alert.alert-info.alert-dismissible.fade.show(role='alert') #{confirmation}
+                        button#btn.close(type='button', data-dismiss='alert', aria-label='Close')
+                            span(aria-hidden='true') ×
+    if (messages) == 'Nuevo usuario creado con exito'
+        #cont.container.pt-4
+            .row
+                .col-md-4.mx-auto
+                    .alert.alert-success.alert-dismissible.fade.show(role='alert') #{messages}
+                        button#btn.close(type='button', data-dismiss='alert', aria-label='Close')
+                            span(aria-hidden='true') ×
+    if (messages) == 'Se ha enviado a facturar esta orden con exito'
+        #cont.container.pt-4
+            .row
+                .col-md-4.mx-auto
+                    .alert.alert-success.alert-dismissible.fade.show(role='alert') #{messages}
+                        button#btn.close(type='button', data-dismiss='alert', aria-label='Close')
+                            span(aria-hidden='true') ×
+    if (messages) == 'La orden se ha asignado Correctamente !'
+        #cont.container.pt-4
+            .row
+                .col-md-4.mx-auto
+                    .alert.alert-success.alert-dismissible.fade.show(role='alert') #{messages}
+                        button#btn.close(type='button', data-dismiss='alert', aria-label='Close')
+                            span(aria-hidden='true') ×
+    if (messages) == 'Existe ya un pedido en proceso con esta placa'
+            #cont.container.pt-4
+                .row
+                    .col-md-4.mx-auto
+                        .alert.alert-success.alert-dismissible.fade.show(role='alert') #{messages}
+                            button#btn.close(type='button', data-dismiss='alert', aria-label='Close')
+                                span(aria-hidden='true') ×
+    if (messages) == 'Se ha acabado con esta orden'
+        #cont.container.pt-4
+            .row
+                .col-md-4.mx-auto
+                    .alert.alert-success.alert-dismissible.fade.show(role='alert') #{messages}
+                        button#btn.close(type='button', data-dismiss='alert', aria-label='Close')
+                            span(aria-hidden='true') ×
+    if (messages) == 'Esa placa ya existe'
+        #cont.container.pt-4
+            .row
+                .col-md-4.mx-auto
+                    .alert.alert-success.alert-dismissible.fade.show(role='alert') #{messages}
+                        button#btn.close(type='button', data-dismiss='alert', aria-label='Close')
+                            span(aria-hidden='true') ×
+
+    if (success) == 'Orden Agregada correctamente'
+        #cont.container.pt-4
+            .row
+                .col-md-4.mx-auto
+                    .alert.alert-success.alert-dismissible.fade.show(role='alert') #{success}
+                        button#btn.close(type='button', data-dismiss='alert', aria-label='Close')
+                            span(aria-hidden='true') ×
+    if (success) == 'Orden finalizada correctamente'
+        #cont.container.pt-4
+            .row
+                .col-md-4.mx-auto
+                    .alert.alert-danger.alert-dismissible.fade.show(role='alert') #{success}
+                        button#btn.close(type='button', data-dismiss='alert', aria-label='Close')
+                            span(aria-hidden='true') ×
+    if (success) == 'Orden actualizada correctamente'
+        #cont.container.pt-4
+            .row
+                .col-md-4.mx-auto
+                    .alert.alert-info.alert-dismissible.fade.show(role='alert') #{success}
+                        button#btn.close(type='button', data-dismiss='alert', aria-label='Close')
+                            span(aria-hidden='true') ×                 
+append area-scripts
+    script.
+        $("#btn").click((event) => {$('#cont').remove();})

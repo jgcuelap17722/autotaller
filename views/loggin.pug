@@ -1,0 +1,26 @@
+extends partials/navigation.pug
+append navigation
+block contenido
+    .container.p-4
+        .row
+            .col-md-4.mx-auto
+                .card
+                    .card-body
+                        form(action='listar' method='post')
+                            .form-group
+                                label(for='nombre') titulo
+                                input#nombre.form-control(class="orden" type='text', name='title' placeholder='nombre' autofocus=true)
+                            .form-group
+                                label(for='link') link
+                                input#link.form-control(class="orden" type='text', name='url')
+                            .form-group
+                                label(for='descripcion') descripcion
+                                input#descripcion.form-control(class="orden" type='text', name='description')
+                            button#btn_prueba.btn.btn-success(type='submit') Log-in
+block area-scripts
+    script.
+        var socket_prueba = io();
+        $("#btn_prueba").click((event) => {
+            socket_prueba.emit('envio_orden')
+        });
+

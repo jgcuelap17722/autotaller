@@ -1,0 +1,455 @@
+append area-librerias-scripts
+    //JavaScript de awesomplate 
+    script(src='lib/Pushjs1.0/push.min.js')
+style.
+    #NotiDropDown.dropdown-menu {
+        width: 320px !important;
+        left: -125;
+        overflow-y: auto;
+    }
+    #NotiCallDropDown.dropdown-menu {
+        width: 320px !important;
+        /*height: 304px !important;*/
+        left: -125;
+        overflow-y: auto;
+    }
+
+    /*  ESTILOS DE TOOLTIP */
+    .tooltip-inner {
+        max-width: 200px;
+        padding: 3px 8px;
+        color: #fff;
+        text-align: center;
+        background-color: rgb(112,112,112) !important;
+        border-radius: .25rem;
+        margin-left: 5px;
+    }
+
+    .tooltip.bs-tooltip-auto[x-placement^=right] .arrow::before, .tooltip.bs-tooltip-right .arrow::before {
+        //margin-top: -1px;
+        //content: "";
+        //border-width: 5px 5px 5px 0;
+        //border-right-color: rgb(112,112,112) !important;
+        visibility:hidden;
+    }
+    
+    #Text_placa:hover {
+        color: #343a40;
+        font-weight: bold;
+    }
+nav.jose.navbar.navbar-expand-lg.navbar-dark
+    .container.d-flex.bd-highlight
+        .bd-highlight
+            a.navbar-brand.mr-2(href='/profile')
+                i.fab.fa-asymmetrik
+                |utolinea
+                //small.ml-1.text-monospace(style='font-size: 11px;') V1.1 Demo
+        .bd-highlight
+            if typeof user != 'undefined' 
+                //-user si esta definido
+                if users.id_tipo_usuario != 1
+                    li.nav-item.dropdown.d-flex.align-items-center
+                        a.nav-link.dropdown-toggle.ico_campana(role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false' style='color:#dab3b3')
+                            span#NroNotificaciones.bg-success.font-weight-bold.rounded.text-white.px-1.mr-1.noselect(style='display:auto') 0
+                            i(style='color:#dab3b3').fa.fa-bell.text-white-25.ico_campana
+                            #NotiDropDown.dropdown-menu.p-1.overflow-auto
+                                #Cuerpo_Notificacion
+                                    //a.dropdown-item(href="#")
+                                    //    .container-fluid
+                                    //        .row
+                                    //            .col-2.d-flex.align-items-center.text-danger.p-1
+                                    //                i.fas.fa-user-circle.fa-3x
+                                    //            .col-10
+                                    //                .row.pl-2
+                                    //                    strong.pr-1 Ricardinho Hernadez 1234
+                                    //                .row.pl-2
+                                    //                    .d-flex.bd-highlight
+                                    //                        .bd-highlight.d-flex
+                                    //                            p.m-0.pr-1 Te ha asignado la orden
+                                    //                        .bd-highlight.d-flex.text-dark
+                                    //                            strong.m-0 N° 234
+                                    //                .row.pl-2
+                                    //                    .col-12.py-0.px-0.text-muted
+                                    //                        small hace 10 minutos
+                                    //    .dropdown-divider.my-1
+                                    //a.dropdown-item.text-center.py-0.text-primary(href='#')
+                                    //    strong ver detalles
+        .bd-highlight
+            if typeof user != 'undefined' 
+                //-user si esta definido
+                if users.id_tipo_usuario != 1
+                    li.nav-item.dropdown.d-flex.align-items-center
+                        a.nav-link.dropdown-toggle.ico_telefono(role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false' style='color:#dab3b3')
+                            span#NroSeguimientos.bg-info.font-weight-bold.rounded.text-white.px-1.mr-1.noselect(style='display:auto;') 0
+                            i(style='color:#dab3b3').fas.fa-phone.ico_telefono
+                            //-i(onmouseenter="bigImg(this)" onmouseleave="normalImg(this)")
+                            //-    | The function bigImg() is triggered when the user moves the mouse pointer onto the image.
+                            #NotiCallDropDown.dropdown-menu.p-1.text-wrap
+                                #Cuerpo_Seguimiento
+                                    //-- var n = 0;
+                                    //-while n < 7
+                                    //-    .container-fluid(onclick="Click_Notificacin(339,2,500)")
+                                    //-        .row
+                                    //-            .col-2.d-flex.align-items-center.text-danger.p-1
+                                    //-                i.fas.fa-phone-square.fa-3x
+                                    //-            .col-10
+                                    //-                .row.pl-2
+                                    //-                    strong.pr-1 Anderson Jhussety Lloclla Huaychao
+                                    //-                .row.pl-2
+                                    //-                    .d-flex.bd-highlight
+                                    //-                        .bd-highlight.d-flex
+                                    //-                            p.m-0.pr-1 Llamada pendiente
+                                    //-                        .bd-highlight.d-flex.text-dark
+                                    //-                            strong.m-0 1er dia
+                                    //-                .row.pl-2
+                                    //-                    .col-12.py-0.px-0.text-muted
+                                    //-                        small justo ahora
+                                    //-    .dropdown-divider.my-1
+                                    //-    - n++
+
+        .ml-auto.bd-highlight
+            button.navbar-toggler(type='button', data-toggle='collapse', data-target='#navbarNav', aria-controls='navbarNav', aria-expanded='false', aria-label='Toggle navigation')
+                span.navbar-toggler-icon
+        #navbarNav.collapse.navbar-collapse
+            ul.navbar-nav.ml-auto 
+                //-si user no esta definido
+                if typeof user != 'undefined' 
+                    //-user si esta definido
+                    case users.id_tipo_usuario
+                        when 1
+                            li.nav-item.dropdown
+                                a#navbarDropdown_admin.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                                    | Control
+                                .dropdown-menu(aria-labelledby='navbarDropdown_admin')
+                                    a.dropdown-item(href='/listar') Ordenes
+                                    .dropdown-divider
+                                    a.dropdown-item(href='/nueva-orden') Mis Clientes
+                                    .dropdown-divider
+                                    a.dropdown-item(href='/nueva-orden') Recursos Humanos
+                            li.nav-item
+                                a.nav-link(href='/signup') Registrar Nuevo Usuario
+                        when 2
+                            li.nav-item
+                                a.nav-link(href='/consultar') Crear Visita
+                    li.nav-item
+                        a.nav-link(href='/historial') Historial
+                    li.nav-item.dropdown
+                        a#navbarDropdown_perfil.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                            | Perfil
+                        .dropdown-menu(aria-labelledby='navbarDropdown_perfil')
+                            a.dropdown-item(href='/edit-password') Editar Contraceña
+                            .dropdown-divider
+                            a.dropdown-item(href='/profile') Perfil
+                            .dropdown-divider
+                            a.dropdown-item(href='/logout') Cerrar sesión
+                else
+                    li.nav-item
+                        a.nav-link(href='/signin') Iniciar Sesion
+script.
+    let sk_Navigation = io();
+    let sk_Seguimientos = io();
+
+    let user    = !{JSON.stringify(data)},
+        My_id_Usuario = user.InfoUser.id_usuario;
+    
+    $(function () {
+        $("body").tooltip({ 
+            selector: '[data-toggle=tooltip]',
+            boundary:'window'
+         });
+    })
+
+    focus_seguimiento =(x) => {
+        $('#item_seguimiento_'+x+'').css("background", "#f7f7f7");
+    }
+
+    normal_seguimiento = (x) => {
+        $('#item_seguimiento_'+x+'').css("background", "white");
+    }
+
+    Cambiar_Color_Iconos = (pId_Ico) => {
+        $(pId_Ico).mouseenter(function(){
+            $(pId_Ico).css("color", "white");
+        });
+        
+        $(pId_Ico).mouseleave(function(){
+            $(pId_Ico).css("color", "#dab3b3");
+        });
+    }
+
+    Cambiar_Color_Iconos(".ico_telefono");
+    Cambiar_Color_Iconos(".ico_campana");
+
+
+    console.log('El idUsuario es :', My_id_Usuario);
+
+    Notificacion = (pTitulo,pCuerpo,pDireccion) => {
+        window.navigator.vibrate([200, 100, 200]);
+        Push.create(pTitulo, {
+            body: pCuerpo,
+            icon: '/img/logo-autolinea.jpg',
+            //timeout: 4000,
+            requireInteraction: true,
+            onClick: function () {
+                window.location = pDireccion;
+                window.focus();
+                this.close();
+            }
+        });
+    }
+
+    //let idTipo_Usuario = new Object();
+
+    // ==> Envio_Notificacion
+    sk_Navigation.emit('Requiero_Notificaciones',My_id_Usuario)
+
+    // ==> Envio_Notificacion
+    sk_Navigation.emit('Solicito_Notificaciones_Seguimiento')
+
+    //Escuchando Socket por Recarga de pagina
+    sk_Navigation.on('Envio_Notificacion',(List_Notifi,
+    nro_Notificaciones,pNro_Orden,pId_Tipo_Usuario,pId_detallePedido,vehiculo) => {
+        //idTipo_Usuario = pId_Tipo_Usuario;
+        if(nro_Notificaciones != 0){
+            console.log('pId_Tipo_Usuario ========>',pId_Tipo_Usuario);
+            console.log('List_Notifi',List_Notifi);
+
+            // Desfragmentamos el Array List_Notifi
+            let nombre              = List_Notifi[0], // Nombre del que nos envio
+                apellido_paterno    = List_Notifi[1], // Apellido_paterno del que nos envio
+                fecha_hora          = List_Notifi[2], // Fecha que emitio esa orden
+                id_notificacion     = List_Notifi[3]  // El id notificacion que pertenece esa orden
+
+            $('#NroNotificaciones').text(nro_Notificaciones);
+
+            //FILTRAMOS QUE NO SEA MECANICO = TIPO 2
+            // FILTRAMOS QUE NO SEA ADMIN = TIPO 1
+
+            if(pId_Tipo_Usuario != 2 && pId_Tipo_Usuario != 1){
+                for (let index = 0; index <= nombre.length-1; index++) {
+                    if(index > 3){
+                        $('#NotiDropDown').css("height","304px");
+                    }
+                    Crear_Notificacion(nombre[index],
+                    apellido_paterno[index],
+                    pNro_Orden[index],
+                    fecha_hora[index],
+                    pId_detallePedido[index],pId_Tipo_Usuario,id_notificacion[index],vehiculo[index])
+                }
+            }else{
+                for (let index = 0; index <= nombre.length-1; index++) {
+                    if(index > 3){
+                        $('#NotiDropDown').css("height","304px");
+                        console.log('si cumple')
+                    }
+                    Crear_Notificacion(nombre[index],
+                    apellido_paterno[index],
+                    pNro_Orden[index],
+                    fecha_hora[index],
+                    pId_detallePedido[index],pId_Tipo_Usuario,id_notificacion[index],vehiculo[index])
+                }
+            }
+        }
+        $('#NroNotificaciones').text(nro_Notificaciones);
+    });
+
+
+    // Recibe el socket enviado por (Enviar_Notificacion) y (Enviar_Notificacion_detallePedido_terminada)
+    sk_Navigation.on('Notificacion_Recibida',(
+        pInfo_Notif,
+        pId_Receptor,
+        pId_detallePedido,
+        pId_tipoUsuario,
+        pidNotificacion,
+        pVehiculo) => {
+        //idTipo_Usuario = pId_tipoUsuario;
+
+        console.log('pId_tipoUsuario envio ========>',pId_tipoUsuario);
+        if(My_id_Usuario == pId_Receptor){
+            Crear_Notificacion(
+            pInfo_Notif.User_Emisor.nombre,
+            pInfo_Notif.User_Emisor.apellido_paterno,
+            pInfo_Notif.pNoroOrden,
+            pInfo_Notif.tiempo_Notificacion,
+            pId_detallePedido,pId_tipoUsuario,pidNotificacion,pVehiculo);
+            const nNotificasiones = $('#Cuerpo_Notificacion .container-fluid').length
+            if(nNotificasiones > 4){
+                $('#NotiDropDown').css("height","304px");
+            }
+            // POR ENVIO___________.text('envio'+pInfo_Notif.nro_Notificaciones);
+            $('#NroNotificaciones').text(pInfo_Notif.nro_Notificaciones);
+
+            if(pId_tipoUsuario != 4){
+                // Especial Mecanico
+                Notificacion(''+pInfo_Notif.User_Emisor.nombre+' '+pInfo_Notif.User_Emisor.apellido_paterno+' Te ha asignado la orden',
+                '"Orden Nro"'+pInfo_Notif.pNoroOrden+'',
+                'detalle-pedido?id_receptor=\''+My_id_Usuario+'\'&idDetallePedido=\''+pId_detallePedido+'\'&idDNotificacion=\''+pidNotificacion+'\'');   
+            }else{
+                // Especial Caja
+                Notificacion(''+pInfo_Notif.User_Emisor.nombre+' '+pInfo_Notif.User_Emisor.apellido_paterno+' Te ha asignado la orden',
+                '"Orden Nro"'+pInfo_Notif.pNoroOrden+'',
+                'detalle-pedido-facturacion?id_receptor=\''+My_id_Usuario+'\'&idDetallePedido=\''+pId_detallePedido+'\'&idDNotificacion=\''+pidNotificacion+'\'');     
+            }
+        }
+    });
+
+    //SOCKETS DE NOTIFICACIONES SEGUIMIENTO
+    sk_Navigation.on('Emitir_Notificaciones_Seguimineto', async (data,nDatos) => {
+
+        $('#NroSeguimientos').text(nDatos)
+        for (let i = 0; i <= data.length-1; i++) {
+            if(i > 3){
+                $('#NotiCallDropDown').css("height","304px");
+                console.log('hola perro')
+            }
+            const {nombre_cliente,dia,fecha_notificacion,id_detalle_pedido,id_seguimiento,id_cliente,id_vehiculo} = data[i];
+            await Crear_Seguimiento(nombre_cliente,dia,fecha_notificacion,id_detalle_pedido,id_seguimiento,id_cliente,id_vehiculo);
+        }
+
+        console.log('Alarma Alarma')
+    });
+    // POR RECARGA
+    sk_Navigation.emit('Requiero_Notificaciones_Seguimiento');
+
+    // POR ENVIO 
+    sk_Navigation.on('Enviar_Notificaciones_Seguimiento', async (data) => {
+        console.log('La fecha que se programara es =>',data);
+        const {nombre_cliente,dia,fecha_salida_timeago,id_detalle_pedido,id_seguimiento,id_cliente,id_vehiculo} = data;
+        await Crear_Seguimiento(nombre_cliente,dia,fecha_salida_timeago,id_detalle_pedido,id_seguimiento,id_cliente,id_vehiculo);
+
+        $('#NroSeguimientos').text(1);
+    });
+
+    sk_Seguimientos.on('Crear_Notificaciones_Seguimiento', async (data) => {
+
+        console.log('RECIBIDO',data);
+        $('#NroSeguimientos').text(data.nro_seguimientos)
+        const {
+            nombre_cliente,
+            dia,
+            fecha_notificacion,
+            id_detalle_pedido,
+            id_seguimiento,
+            id_cliente,
+            id_vehiculo
+        } = data;
+
+        await Crear_Seguimiento(
+            nombre_cliente,
+            dia,
+            fecha_notificacion,
+            id_detalle_pedido,
+            id_seguimiento,
+            id_cliente,
+            id_vehiculo
+        );
+
+    });
+
+    //=== === EVENTOS === ===
+        function Click_Notificacin (id_detalle_pedido,id_tipo_usuario,pidNotificacion){
+            console.log('id_detalle_pedido es ',id_detalle_pedido);
+            console.log('id_tipo_usuario es ',id_tipo_usuario);
+            if(id_tipo_usuario != 4){
+                // Especial Mecanico
+                location.href = "detalle-pedido?id_receptor="+My_id_Usuario+"&idDetallePedido="+id_detalle_pedido+"&idDNotificacion="+pidNotificacion;
+            }else{
+                // Especial Caja
+                location.href = "detalle-pedido-facturacion?id_receptor="+My_id_Usuario+"&idDetallePedido="+id_detalle_pedido+"&idDNotificacion="+pidNotificacion;
+            }
+        }
+
+        Click_Seguimiento = (id_detalle_pedido,pidSeguimiento,id_cliente,id_vehiculo) => {
+            console.log('id_detalle_pedido es ',id_detalle_pedido);
+            // Especial Mecanico
+            location.href = "detalle-seguimiento?idDetallePedido="+id_detalle_pedido+"&idSeguimiento="+pidSeguimiento+"&id_cliente="+id_cliente+"&id_vehiculo="+id_vehiculo;
+        }
+
+    // === FUNCIONES ===
+        Crear_Notificacion = (pNombre_Emisor,pApellido_Emisor,pNroOrden,pHoraEnvio,pId_detallePedido,pId_TipoUusuario,pidNotificacion,pVehiculo) =>{
+            $('#Cuerpo_Notificacion').prepend('<div class="container-fluid" id="item_seguimiento_'+pidNotificacion+'"\
+            onclick= Click_Notificacin('+pId_detallePedido+','+pId_TipoUusuario+','+pidNotificacion+')\
+            onmouseover=focus_seguimiento('+pidNotificacion+') onmouseout=normal_seguimiento('+pidNotificacion+')>\
+                <div class="row">\
+                    <div class="col-2 d-flex align-items-center text-danger p-1"><i class="fas fa-user-circle fa-3x"></i></div>\
+                    <div class="col-10">\
+                        <div class="row pl-3 d-flex bd-highlight">\
+                            <div class="mr-auto bd-highlight">\
+                                <strong class="pr-1 noselect">'+pNombre_Emisor+' '+pApellido_Emisor+'</strong></div>\
+                            <div class="bd-highlight text-muted">\
+                                <small class="m-0 noselect">Orden N° '+pNroOrden+'</small></div>\
+                        </div>\
+                        <div class="row pl-3">\
+                            <div class="d-flex bd-highlight">\
+                                <div class="bd-highlight d-flex">\
+                                    <p class="m-0 pr-1 noselect">Te asigno la placa </p>\
+                                </div>\
+                                <div class="bd-highlight d-flex text-gray">\
+                                    <strong class="m-0 text-uppercase noselect" id="Text_placa"  data-toggle="tooltip" data-placement="right" title="'+pVehiculo.vehiculo_marca+' '+pVehiculo.modelo+'">'+pVehiculo.placa+'</strong>\
+                                </div>\
+                            </div>\
+                        </div>\
+                        <div class="row pl-3">\
+                            <div class="col-12 py-0 px-0 text-muted noselect"><small>'+pHoraEnvio+'</small></div>\
+                        </div>\
+                    </div>\
+                </div>\
+            </div>\
+            <div class="dropdown-divider my-1"></div>'
+        );
+        }
+        Crear_Notificacion2 = (pNombre_Emisor,pApellido_Emisor,pNroOrden,pHoraEnvio,pId_detallePedido,pId_TipoUusuario,pidNotificacion) => {
+            $('#Cuerpo_Notificacion').prepend('<div class="container-fluid" id="item_seguimiento_'+pidNotificacion+'"\
+            onclick= Click_Notificacin('+pId_detallePedido+','+pId_TipoUusuario+','+pidNotificacion+')\
+            onmouseover=focus_seguimiento('+pidNotificacion+') onmouseout=normal_seguimiento('+pidNotificacion+')>\
+                <div class="row">\
+                    <div class="col-2 d-flex align-items-center text-danger p-1"><i class="fas fa-user-circle fa-3x"></i></div>\
+                    <div class="col-10">\
+                        <div class="row pl-3 noselect"><strong class="pr-1">'+pNombre_Emisor+' '+pApellido_Emisor+'</strong></div>\
+                        <div class="row pl-3">\
+                            <div class="d-flex bd-highlight">\
+                                <div class="bd-highlight d-flex">\
+                                    <p class="m-0 pr-1 noselect">Te ha asignado la orden</p>\
+                                </div>\
+                                <div class="bd-highlight d-flex text-dark"><strong class="m-0" noselect>N° '+pNroOrden+'</strong></div>\
+                            </div>\
+                        </div>\
+                        <div class="row pl-3">\
+                            <div class="col-12 py-0 px-0 text-muted" noselect><small>'+pHoraEnvio+'</small></div>\
+                        </div>\
+                    </div>\
+                </div>\
+            </div>\
+            </div>\
+            <div class="dropdown-divider my-1"></div>'
+        );
+        }
+
+        Crear_Seguimiento = (pNombre_Cliente,pDia,pFecha,pId_detallePedido,pidSeguimiento,id_cliente,id_vehiculo) => {
+            // NECESITA COLOR DE TELEFONITO
+            let color_tel = '';
+            pDia == 'dia 1'? color_tel = 'success': pDia == 'dia 7'? color_tel = 'info':pDia == 'dia 30'? color_tel = 'danger': color_tel = 'muted';
+
+            $('#Cuerpo_Seguimiento').prepend('<div id="item_seguimiento_'+pidSeguimiento+'" class="container-fluid"\
+            onclick=Click_Seguimiento('+pId_detallePedido+','+pidSeguimiento+','+id_cliente+','+id_vehiculo+')\
+            onmouseover=focus_seguimiento('+pidSeguimiento+') onmouseout=normal_seguimiento('+pidSeguimiento+')>\
+            <div class="row">\
+                <div class="col-2 d-flex align-items-center text-'+color_tel+' p-1"><i class="fas fa-phone-square fa-3x"></i></div>\
+                <div class="col-10">\
+                    <div class="row pl-2 noselect"><strong class="pr-1">'+pNombre_Cliente+'</strong></div>\
+                    <div class="row pl-2">\
+                        <div class="d-flex bd-highlight">\
+                            <div class="bd-highlight d-flex">\
+                                <p class="m-0 pr-1 noselect">Llamada pendiente</p>\
+                            </div>\
+                            <div class="bd-highlight d-flex text-dark"><strong class="m-0 noselect">'+pDia+'</strong></div>\
+                        </div>\
+                    </div>\
+                    <div class="row pl-2">\
+                        <div class="col-12 py-0 px-0 text-muted noselect"><small>'+pFecha+' llego esta notificación</small></div>\
+                    </div>\
+                </div>\
+            </div>\
+        </div>\
+        <div class="dropdown-divider my-1"></div>'
+        )}

@@ -1,0 +1,19 @@
+extends partials/messages.pug
+append message
+block contenido
+    .container.p-4
+        .row
+            .col-md-4.mx-auto
+                .card.text-center
+                    .card-body
+                        if data.InfoUser.id_tipo_usuario != 4 && data.InfoUser.id_tipo_usuario != 1
+                            if data.InfoUser.sexo == 'Hombre'
+                                h3 Bienvenido #{data.InfoUser.nombre} #{data.InfoUser.apellido_paterno}
+                            else
+                                h3 Bienvenida #{data.InfoUser.nombre} #{data.InfoUser.apellido_paterno}
+                            a.btn.btn-success.m-4(href='/consultar') Crea visita
+                        else
+                            if data.InfoUser.sexo == 'Hombre'
+                                h3 Bienvenido #{data.InfoUser.nombre} #{data.InfoUser.apellido_paterno}
+                            else
+                                h3 Bienvenida #{data.InfoUser.nombre} #{data.InfoUser.apellido_paterno}

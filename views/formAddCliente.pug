@@ -1,0 +1,1074 @@
+extends layouts/main.pug
+append head
+    // Librerias Awesomplate
+    link(rel='stylesheet', href='lib/lib_awesomplete/awesomplete.css')
+    script(src='/socket.io/socket.io.js')
+append area-librerias-scripts
+    // JavaScript de awesomplate 
+    script(src='lib/lib_awesomplete/awesomplete.js')
+append styles
+    style.
+        /* Switch 1 Specific Styles Start */
+
+        input[type="checkbox"].switch_1{
+            /* font-size: 30px; */
+            -webkit-appearance: none;
+            -moz-appearance: none;
+                appearance: none;
+            width: 3.5em;
+            height: 1.5em;
+            background: #ddd;
+            border-radius: 3em;
+            position: relative;
+            cursor: pointer;
+            outline: none;
+            -webkit-transition: all .2s ease-in-out;
+            transition: all .2s ease-in-out;
+        }
+
+        input[type="checkbox"].switch_1:checked{
+            background: #28a745;
+        }
+
+        input[type="checkbox"].switch_1:after{
+            position: absolute;
+            content: "";
+            width: 1.5em;
+            height: 1.5em;
+            border-radius: 50%;
+            background: #fff;
+            -webkit-box-shadow: 0 0 .25em rgba(0,0,0,.3);
+                box-shadow: 0 0 .25em rgba(0,0,0,.3);
+            -webkit-transform: scale(.7);
+                transform: scale(.7);
+            left: 0;
+            -webkit-transition: all .2s ease-in-out;
+            transition: all .2s ease-in-out;
+        }
+
+        input[type="checkbox"].switch_1:checked:after{
+            left: calc(100% - 1.5em);
+        }
+
+        /* Switch 1 Specific Style End */
+
+        .fa,
+        .far,
+        .fas {
+        color: #4f4f4f;
+        }
+        
+        .awesomplete {
+            margin-left: 2.5rem;
+        }
+        /*ESTILOS DE ICONOS PREDETERMINADOS*/
+
+        #Icono_campana{
+            color: #fff !important
+        }
+block contenido
+    form(action='/info-cliente', method='POST')
+        .card
+            .card-header.text-center.alert-secondary.value Ingrese informacion de nuevo vehiculo
+            .card-body
+                //-.container-fluid.h-100
+                //-    .row.align-items-center.h-100
+                //-        .col-12
+                //-            .d-flex.justify-content-center
+                section.form-gradient
+                    .md-form
+                        i.fa.fa-car.prefix.mb-1
+                        input#placa.form-control-xl.text-center.text-uppercase.h4.orden(type='text',value= data.nueva_placa,maxlength='7', autocomplete='off' name="placa" ,readonly)
+                //-Centrar y ajustar 
+                .d-flex.align-items-center.justify-content-between
+                    .h6.mb-0 Datos del Vehiculo
+                    //-Centrar
+                    .d-flex.align-items-center.pr-1
+                        input#sendCase(type="hidden" name='case')
+                        //-input#sendSwitch(type="hidden" name='switch' value='0')
+                        //-input#Switch.switch_1(type="checkbox",value='0' , autocomplete='off',disabled)
+                        //-.ml-2
+                        //-    label.mb-0.text-muted(for="Switch") Nuevo Vehiculo
+                .form-row
+                    .form.col-md-6
+                        section.form-gradient
+                            .md-form
+                                i#ico_marca.fas.fa-car-side.prefix.mt-1
+                                input#id_marca_send(type='hidden',autocomplete='off',name='idMarca')
+                                input#id_marca.form-control(type='text',autocomplete='off', name= 'Marca' required)
+                                label#lb_marca(for='id_marca') Vehiculo Marca
+                    .form.col-md-6                              
+                        section.form-gradient
+                            .md-form
+                                .d-flex.bd-highlight
+                                    .modelo.flex-fill.bd-highlight
+                                        i#ico_modelo.fas.fa-car-side.prefix.mt-1
+                                        input#id_modelo_send(type='hidden',autocomplete='off',name='idModelo')
+                                        input#id_modelo.form-control(type='text',autocomplete='off',name='modelo' required)
+                                        label#lb_modelo(for='id_modelo') Modelo
+                                    button#btn_modelo.m-auto.border.mb-2.rounded-right.bg-transparent(type="button",disabled)
+                                        i.fas.fa-caret-down.m-2
+                .form-row
+                    .form.col-md-6
+                        section.form-gradient
+                            .md-form
+                                .d-flex.bd-highlight
+                                    .generacion.flex-fill.bd-highlight
+                                        i#ico_generacion.fas.fa-car-side.prefix.mt-1
+                                        input#id_generacion_send(type='hidden',autocomplete='off',name='idGeneracion')
+                                        input#id_generacion.form-control(type='text',autocomplete='off',name='anio' required)
+                                        label#lb_generacion(for='id_generacion') Año
+                                    button#btn_generacion.m-auto.border.mb-2.rounded-right.bg-transparent(type="button" disabled)
+                                        i.fas.fa-caret-down.m-2
+                    .form.col-md-6
+                        section.form-gradient
+                            .md-form
+                                i.fas.fa-car-side.prefix.mt-1
+                                input#color.form-control.orden(type='text' name='color' required)
+                                label#lbcolor(for='color') color
+                .row.m-1
+                    i.fas.fa-info-circle.prefix.text-info.mr-1
+                    small.text-info Porfavor ingrese datos correctos al formulario por que podria surgir un error
+                p3 Datos del Usuario
+                .container-fluid.px-0
+                    small.text-muted Solo buscar al usuario por "DNI" cuando desee registrar un nuevo vehiculo
+                    .row.mt-2
+                        .col-12.col-md-6
+                            section.form-gradient
+                                .md-form.mb-1.mt-0
+                                    .d-flex.bd-highlight
+                                        .flex-fill.bd-highlight
+                                            input#busqueda_id_cliente(type='hidden',autocomplete='off',name='id_cliente')
+                                            i#icon_busqueda.fas.fa-search.prefix.mt-1
+                                            input#idBusqueda.form-control.orden(type='text')
+                                            label#lb_busqueda(for='idBusqueda') Buscar Usuario por DNI o Nombre
+                        .col-12.col-md-6
+                            section.form-gradient
+                                .md-form.mb-1.mt-0
+                                    .d-flex.bd-highlight
+                                        .flex-fill.bd-highlight
+                                            input#tipo_cliente_send(type='hidden',autocomplete='off',name='tipo_cliente')
+                                            i#ico_tipo_cliente.fas.fa-user-friends.prefix.mt-1
+                                            input#tipo_cliente.form-control(type='text',autocomplete='off' required)
+                                            label#lb_tipo_cliente(for='tipo_cliente') Tipo Usuario del vehiculo ej. "propietario" *
+                                        button#btn_tipo_cliente.m-auto.border.mb-2.rounded-right.bg-transparent(type="button")
+                                            i.fas.fa-caret-down.m-2                        
+                .form-row
+                    .col-md-6
+                        section.form-gradient
+                            .md-form
+                                i#icoemail.fas.fa-at.prefix.mt-1
+                                input#email.form-control.orden(type='email',name='email')
+                                label#lbemail(for='email') email
+                                small#emailHelp.form-text.text-muted ejemplo@gmail.com
+                    .col-md-6
+                        section.form-gradient
+                            .md-form
+                                i#icotelefono.fas.fa-mobile-alt.prefix.mt-1
+                                input#telefono.form-control.orden(type='tel',name='telefono' required)
+                                label#lbtelefono(for='telefono') telefono *           
+                .form-row.mt-1
+                    //.col-md-6
+                    //    section.form-gradient
+                    //        .md-form
+                    //            i#icoemail.fas.fa-at.prefix.mt-1
+                    //            input#email.form-control.orden(type='email',name='email')
+                    //            label#lbemail(for='email') email
+                    //            small#emailHelp.form-text.text-muted ejemplo@gmail.com
+                    .col-md-6
+                        section.form-gradient
+                            .md-form.mb-1
+                                .d-flex.bd-highlight
+                                    .flex-fill.bd-highlight
+                                        i#icodni.far.fa-id-card.prefix.mt-1
+                                        input#dni.form-control.orden(type='number',name='dni' required)
+                                        label#lbdni(for='dni') DNI *
+                                    button#btn_dni.m-auto.border.mb-2.rounded-right.bg-transparent(type="button")
+                                        i.fas.fa-search.m-2
+                    //.col-md-6
+                    //    section.form-gradient
+                    //        .md-form
+                    //            i#icodni.far.fa-id-card.prefix.mt-1
+                    //            input#dni.form-control.orden(type='number',name='dni' required)
+                    //            label#lbdni(for='dni') DNI *
+                    .col-md-6
+                        section.form-gradient
+                            .md-form.mb-1
+                                .d-flex.bd-highlight
+                                    .flex-fill.bd-highlight
+                                        i#iconombre.fas.fa-user.prefix.mt-1
+                                        input#nombre_cliente.form-control.orden(type='text', autocomplete='off',name='nombre_cliente' required)
+                                        label#lbnombre(for='nombre_cliente') Usuario *
+                .form-row.mt-1
+                    .form-group.col-md-6
+                        //section.form-gradient
+                        //    .md-form
+                        //        i#icoRUC.fas.fa-id-card-alt.prefix.mt-1
+                        //        input#RUC.form-control.orden(type='number',name='ruc')
+                        //        label#lbRUC(for='RUC') RUC
+                        section.form-gradient
+                            .md-form.mb-1
+                                .d-flex.bd-highlight
+                                    .flex-fill.bd-highlight
+                                        i#icoRUC.fas.fa-id-card-alt.prefix.mt-1
+                                        input#RUC.form-control.orden(type='number',name='ruc')
+                                        label#lbRUC(for='RUC') RUC
+                                    button#btn_ruc.m-auto.border.mb-2.rounded-right.bg-transparent(type="button")
+                                        i.fas.fa-search.m-2
+                    .col-md-6
+                        section.form-gradient
+                            .md-form.mb-1
+                                .d-flex.bd-highlight
+                                    .flex-fill.bd-highlight
+                                        i#icorazon_social.fas.fa-id-card-alt.prefix.mt-1
+                                        input#razon_social.form-control.orden(type='text',name='razon_social')
+                                        label#lbrazon_social(for='razon_social') Razón Social
+                .form-group
+                    section.form-gradient
+                        .md-form
+                            i#icoDireccion.fas.fa-home.prefix.mt-1
+                            input#Direccion.form-control.orden(type='text',name='direccion')
+                            label#lbDireccion(for='Direccion') Direccion
+            .card-footer
+                .row
+                    .col-6.d-flex.justify-content-center
+                        button#btnclean.btn.btn-info.rounded-pill(type='reset') Limpiar
+                    .col-6.d-flex.justify-content-center
+                        button#btnSend.btn.btn-success.rounded-pill(type='submit') Registrar
+block area-scripts
+    script.
+        $(document).ready(() => {
+
+            var sk_nuevoCliente = io();
+
+            let val_check = $('#Switch').val();// es 0 o 1
+            let tipo_entrada =[];
+
+            // === === === AWESOMPLETE === === ===
+
+                // Autocompletado ==> MARCA
+                    // - variables 
+                        const data    = !{JSON.stringify(data)}, //Recuperar las marcas de autos de las rutas ¡¡
+                            id      = data.id ,               // indice y marca recuperada
+                            marca   = data.marca ,            
+                            etiquetaInputMarca = $('#id_marca').get(0),
+                            AWSPMarca = new Awesomplete(etiquetaInputMarca, { maxItems: 5,filter: Awesomplete.FILTER_STARTSWITH});
+                        let val_select_marca;
+                    AWSPMarca.list = marca;
+                    $('#id_marca').on('awesomplete-selectcomplete',function() {
+                        //$('#id_modelo').prop('disabled',false)
+                        //$('#btn_modelo').prop('disabled',false)
+                        val_select_marca = this.value;
+                        //$('#id_marca').attr('readonly','readonly');
+
+                        AWSPModelo = CrearDropCombo_AWSP_Modelo(AWSPModelo,etiquetaInputModelo,AWSPGeneracion);
+                        let i = marca.indexOf(this.value);
+                        console.log("id de marca",id[i]); //Ver id seleccionado de marca
+                        $('#id_marca_send').val(id[i]);
+                        sk_nuevoCliente.emit('marca_auto',id[i]);
+                        if(val_check == 1){
+                            //limpiar sugestiones si check esta habilitado
+                            let id_modelo = $('.modelo').find('ul').attr('id');
+                            let id_generacion = $('.modelo').find('ul').attr('id');
+                            $('#'+id_modelo).remove();
+                            $('#'+id_generacion).remove();
+
+
+
+                        }else{
+                            console.log('hacer nada')
+                        }
+                    });
+
+                // Autocompletado ==> MODELO 
+                    // - variables
+                        let id_de_Modelos,
+                            Modelos_de_Marcas,
+                            AWSPModelo,
+                            etiquetaInputModelo     = $('#id_modelo').get(0),
+                            val_select_modelo;
+
+                    // - accion click obcion
+                        $('#id_modelo').on('awesomplete-selectcomplete',function () {
+                            //$('#id_modelo').attr('readonly','readonly');
+                            //$('#btn_modelo').hide()
+                            
+                            //$('#id_generacion').attr('disabled',false)
+                            //$('#btn_generacion').attr('disabled',false)
+
+                            if(this.value == 'N/D'){
+                                $('#id_modelo').val('');
+                                $('#id_modelo_send').val('');
+                                val_select_modelo = '';
+                            }else{
+                                val_select_modelo = this.value;
+                                AWSPGeneracion = CrearDropCombo_AWSP_Generacion(AWSPGeneracion,etiquetaInputGeneracion);
+                                console.log('AWSPGeneracion es ',typeof AWSPGeneracion);
+                                // retornar el in de la marca seleccionada
+                                let i = Modelos_de_Marcas.indexOf(this.value);
+                                $('#id_modelo_send').val(id_de_Modelos[i]);
+                                sk_nuevoCliente.emit('generacion_modelo',id_de_Modelos[i]);
+                            }
+                        });
+
+                // Autocompletado ==> GENERACION
+                    // - variables
+                        let AWSPGeneracion,
+                            Nombre_Generacion,
+                            Id_Generacion,
+                            etiquetaInputGeneracion     = $('#id_generacion').get(0),
+                            val_select_generacion;
+
+                    // - accion click obcion
+                        $('#id_generacion').on('awesomplete-selectcomplete',function () {
+                            
+                            //$('#id_generacion').attr('readonly','readonly');
+                            //$('#btn_generacion').hide()
+                            if(this.value == 'N/D'){
+                                $('#id_generacion').val('');
+                                $('#id_generacion_send').val('');
+                                val_select_generacion = '';
+                            }else{
+                                // Enviaremos los datos a un aentrada oculta
+                                console.log(this.value);
+                                val_select_generacion = this.value;
+                                let i = Nombre_Generacion.indexOf(this.value);
+                                $('#id_generacion_send').val(Id_Generacion[i]);
+                                console.log('nombre generacion: ',this.value,'id generacion',Id_Generacion[i]);
+
+                                $('#Switch').prop('disabled',true)
+                                $('#Switch').prop('checked',false)
+                                val_check = 0;
+                            }
+                        });
+
+                // Autocompletado ==> DNI_NOMBRE
+                    // - variables 
+                        const datos    = !{JSON.stringify(data)}, //Recuperar las marcas de autos de las rutas ¡¡
+                            nombre_dni      = datos.nombre_dni,
+                            id_cliente      = datos.pId_cliente,
+                            nombre_cliente      = datos.pnombre_cliente,
+                            // indice y marca recuperada            
+                            etiquetaInputBusqueda = $('#idBusqueda').get(0);
+                            //AWSPBusqueda = new Awesomplete(etiquetaInputBusqueda, { maxItems: 5,filter: Awesomplete.FILTER_STARTSWITH});
+                            AWSPBusqueda = new Awesomplete(etiquetaInputBusqueda, { maxItems: 5});
+                            AWSPBusqueda.list = nombre_dni;
+                            console.log('lista de nombres y dni',nombre_dni);
+
+                    // - accion click obcion
+                        console.log(id_cliente);
+                        $('#idBusqueda').on('awesomplete-selectcomplete',function () {
+                            //El método indexOf () devuelve la posición de la primera aparición de un valor especificado en una cadena.
+                            let i = nombre_cliente.indexOf(this.value); 
+                            console.log(this.value,'id es',id_cliente[i])
+                            sk_nuevoCliente.emit('data_cliente',id_cliente[i])
+                            $('#idBusqueda').val('')
+                            $('#idBusqueda').blur()
+                            
+                            $('#busqueda_id_cliente').val(id_cliente[i])
+                            // Aca me quede Crear socket para recuperar datos de cliente enc campo
+                        });
+
+                // Autocompletado ==> TIPO-CLIENTE
+                    // - variables 
+                        const data_Tipo_cliente    = !{JSON.stringify(data)}, //Recuperar las marcas de autos de las rutas ¡¡
+                            id_Tipo_cliente      = data_Tipo_cliente.Tipos_Cliente.idTipo_cliente,               // indice y marca recuperada
+                            Tipo_cliente   = data_Tipo_cliente.Tipos_Cliente.Tipo_cliente,          
+                            etiquetaInputTipoCliente = $('#tipo_cliente').get(0),
+                            AWSPTipoCliente = new Awesomplete(etiquetaInputTipoCliente, { sort : false,maxItems: 5,filter: Awesomplete.FILTER_STARTSWITH});
+                        console.log('Tipo_cliente',Tipo_cliente)
+                        AWSPTipoCliente.list = Tipo_cliente;
+                        $('#tipo_cliente').on('awesomplete-selectcomplete',function() {
+                            let i = Tipo_cliente.indexOf(this.value);
+                            console.log("id de Tipo_cliente",id_Tipo_cliente[i]); //Ver id seleccionado de marca
+                            //$('#tipo_cliente_send').val(id_Tipo_cliente[i]);
+                        });
+
+            // === === FUNCIONES === ===
+
+                //crea y retorna un objeto Awesomplate de modelo o generacion
+                CrearDropCombo_AWSP_Modelo = (pAWSPModelo,pInput,pAWSGeneracion) => {
+                    if(typeof pAWSPModelo === 'undefined'){         //si existe pAWSPModelo ?
+                        if(typeof pAWSGeneracion === 'undefined'){    //si existe pAWSGeneracion ?
+                            console.log('1) (Marca) no existe pAWSPModelo y no existe pAWSGeneracion');
+                            console.log('Creando pAWSPModelo');
+                            $('#id_modelo').removeAttr('disabled','false');
+                            $("#id_modelo").val('');
+
+                            $('#btn_modelo').prop('disabled',false)
+                            return pAWSPModelo = new Awesomplete(pInput, { maxItems: 5,minChars: 0,sort: false}); // creando modelo
+                        }else{                              // si existe pAWSPModelo y no existe pAWSGeneracion 
+                            console.log('3) (Marca) si existe pAWSPModelo y no existe pAWSGeneracion ')
+                            pAWSPModelo.destroy();
+                            console.log('Eliminando pAWSPModelo Y creando pAWSPModelo');
+                            return pAWSPModelo = new Awesomplete(pInput, { maxItems: 5,minChars: 0,sort: false}); // creando modelo
+                        }
+                    }else{                                  // no existe pAWSPModelo y no existe pAWSGeneracion
+                        console.log('2) (Marca) AWP modelo existe y AWP generacion existe')
+                        console.log('pAWSPModelo es '+typeof pAWSPModelo +' y '+ 'pAWSGeneracion es '+typeof pAWSPModelo)
+                        pAWSPModelo.destroy();
+
+                        // MODELO
+
+                        //$('#id_generacion').attr('disabled','true');
+                        $("#id_generacion").val('');
+
+                        //$('#btn_generacion').attr('disabled','true');
+                        $('#lb_generacion').removeClass('active');
+                        $('#ico_generacion').removeClass('active');
+
+                        // GENERACION
+
+                        //$('#id_modelo').removeAttr('disabled','false');
+                        $("#id_modelo").val('');
+
+                        //$('#btn_modelo').removeAttr('disabled','false');
+                        $("#lb_modelo").removeClass('active');
+                        $('#ico_modelo').removeClass('active');
+                        return pAWSPModelo = new Awesomplete(pInput, { maxItems: 5,minChars: 0,sort: false}); // creando modelo
+                    }
+                } 
+
+                CrearDropCombo_AWSP_Generacion = (pAWSGeneracion,pInput) => {
+                    console.log('pAWSGeneracion es ',typeof pAWSGeneracion);
+                    if(typeof pAWSGeneracion === 'undefined'){
+                        $('#id_generacion').removeAttr('disabled','false');
+                        $("#id_generacion").val('');
+
+                        $('#btn_generacion').prop('disabled',false)
+                        console.log('1) (Modelo) no existe generacion');
+                        return pAWSGeneracion = new Awesomplete(pInput, { maxItems: 5,minChars: 0,sort: false}); // creando modelo
+                    }else{
+                        $('#id_generacion').removeAttr('disabled','false');
+                        $("#id_generacion").val('');
+
+                        $('#btn_generacion').removeAttr('disabled','false');
+                        $('#lb_generacion').removeClass('active');
+                        $('#ico_generacion').removeClass('active');
+                        console.log('2) (Modelo) si existe generacion');
+                        pAWSGeneracion.destroy();
+                        console.log('Eliminando generacion Y creando generacion');                  
+                        return pAWSGeneracion = new Awesomplete(pInput, { maxItems: 5,minChars: 0,sort: false}); // creando modelo
+                    }
+                }
+
+                //Busca un valor en un array y retorna true (si existe) false (no existe)
+                Busqueda_en_Array = (valor, array) => {
+                    return (array.indexOf(valor) > -1);
+                }
+
+            // === === EVENTOS_DE_BOTONES_Y_ENTRADAS === ===
+
+                // Si escribe un valor diferente a la marca que ya habia seleccionado
+                // No aparecera las sugestiones de esa seleccion
+
+                $('#id_marca').keyup(function (){
+                    let send_marca       = $('#id_marca_send');
+
+                    if(typeof AWSPModelo !== 'undefined'){ // si se creo AWSPModelo
+                        console.log('SE creó AWSPModelo')
+                        console.log('Valor seleccionado ',val_select_marca)
+                        let sugestion_modelo = $('.modelo').find('ul').attr('id'); // Buscar el id de ul de clase .modelo
+                        if(this.value != val_select_marca){ //ha cambiado de valor seleccionado?
+                            console.log('No es igual al valor seleccionado')
+                            $('#'+sugestion_modelo).hide();
+                            // borrar el indice si no es la Marca correcta
+                            send_marca.val('')
+                        }else{ // si es igual al seleccionado aparecer
+                            console.log('SI es igual al valor seleccionado')
+                            $('#'+sugestion_modelo).show();
+                            // buscar en modelos el valor del campo y dar valor al "send_marca"
+                            let i_marca = marca.indexOf(this.value);
+                            send_marca.val(id[i_marca]);
+                        }
+                    }else{ // no se creo AWSPModelo
+                        console.log('NO creó AWSPModelo')
+                    }
+
+                    //console.log('Modo edicion /'+val_check)
+                    console.log(this.value.length)
+                    let campo_marca = $.trim(this.value).length;
+                    if(campo_marca <= 0){ //vacio
+                        console.log('vacio')
+
+                        // desabilitar-descheck=0 => Switch
+                        //$('#Switch').prop('disabled',true)
+                        //$('#Switch').prop('checked',false)
+                        //val_check = 0;
+
+                        // verCampo-desHabilitarBtn => modelo,generacion
+                        $('#btn_modelo').prop('disabled',true)
+                        $('#btn_generacion').prop('disabled',true)
+                        //$('#id_modelo').prop('disabled',true)
+                        //$('#id_generacion').prop('disabled',true)
+
+                        // borrartexto-blur => modelo,generacion
+                        $('#id_modelo').val('')
+                        $('#id_modelo').blur()
+                        $('#id_generacion').val('')
+                        $('#id_generacion').blur()
+
+                        //destruccion de AWSP => modelo,generacion
+                    }else{ //no vacio
+                        $('#Switch').prop('disabled',false)
+                        console.log('no vacio')
+                    }
+                });
+                
+                $('#id_modelo').keyup(function(){
+                    let send_modelo      = $('#id_modelo_send');
+
+                    if(typeof AWSPGeneracion !== 'undefined'){ // si se creo?
+                        let sugestion_modelo = $('.generacion').find('ul').attr('id'); // Buscar el id de ul de clase modelo
+                        
+                        console.log('SE creó AWSPGeneracion')
+                        console.log('Valor seleccionado ',val_select_modelo)
+                        if(this.value != val_select_modelo){ //ha cambiado de valor seleccionado?
+                            console.log('No es igual al valor seleccionado')
+                            $('#'+sugestion_modelo).hide();
+                            send_modelo.val('');
+                            //send_modelo.val('') //borramos el id que selecciono para que no envie
+                        }else{
+                            console.log('SI es igual al valor seleccionado')
+                            let i_modelo = Modelos_de_Marcas.indexOf(this.value);
+                            send_modelo.val(id_de_Modelos[i_modelo]);
+                            $('#'+sugestion_modelo).show();
+                        }
+                    }else{
+                        console.log('NO creó AWSPGeneracion')
+                    }
+                });
+
+                $('#id_generacion').keyup(function(){
+                    let send_generacion      = $('#id_generacion_send');
+                    if(typeof AWSPGeneracion !== 'undefined'){ // si se creo?
+                        if(this.value != val_select_generacion){ //ha cambiado de valor seleccionado?
+                            console.log('No es igual al valor seleccionado')
+                            send_generacion.val('');
+                        }else{
+                            console.log('SI es igual al valor seleccionado')
+                            let i_generacion = Nombre_Generacion.indexOf(this.value);
+                            send_generacion.val(Id_Generacion[i_generacion]);
+                        }
+                    }else{
+                        console.log('NO creó AWSPGeneracion')
+                    }
+                });
+                //$('#Switch').click(() => {
+                //    val_check == 0 ? val_check = 1:val_check = 0;
+                //        //let val_modelo = $('#id_modelo').val();
+                //        console.log('val_check es=',val_check)
+                //        if(val_check != 0 ){ //esta activado
+                //            if(typeof AWSPModelo == 'undefined'){//obcion 3 // AWSPModelo NO fue creado
+                //                console.log('NO Removiendo el Ul de modelo')
+                //                $('#id_marca').prop('disabled',true)
+                //                $('#id_modelo').prop('disabled',false)
+                //                $('#id_generacion').prop('disabled',false)
+                //                console.log('no marca - no modelo - no generacion')
+                //                tipo_entrada = [val_check,1] // F F F 1 nuevo
+                //                $('#sendSwitch').val(tipo_entrada);
+                //                $('#id_marca_send').val('');
+                //                $('#id_modelo_send').val('');
+                //                $('#id_generacion_send').val('');
+                //            }else{
+                //                if(typeof AWSPGeneracion == 'undefined'){//obcion 3 
+                //                    console.log('NO Removiendo el Ul')
+                //                    $('#id_marca').prop('disabled',true)
+                //                    $('#id_modelo').prop('disabled',true)
+                //                    $('#id_generacion').prop('disabled',false)
+                //                    console.log('si marca - no modelo - no generacion')
+                //                    tipo_entrada = [val_check,2] // v f f 2
+                //                    $('#sendSwitch').val(tipo_entrada);
+                //                    $('#id_modelo_send').val('');
+                //                    $('#id_generacion_send').val('');
+                //                }else if($('#id_modelo').val().length <= 0 && $('#id_generacion').val().length <= 0 ){// obcion 1
+                //                    //alert('Error! desactiva "Nuevo vehiculo" o actualiza la pagina para volver a ingresar')
+                //                    location.reload();
+                //                }else{
+                //                    let campo_generacion = $('.generacion').find('ul').attr('id');
+                //                    $('#'+campo_generacion).remove();
+                //                    // desabilitamos marca y modelo para solo ingresar el año
+                //                    $('#id_marca').prop('disabled',true)
+                //                    $('#id_modelo').prop('disabled',true)
+                //                    $('#id_generacion').prop('disabled',false)
+                //                    console.log('si marca - si modelo - no generacion')
+                //                    tipo_entrada = [val_check,3] // v v f 3 no año'
+                //                    $('#sendSwitch').val(tipo_entrada);
+                //                    $('#id_generacion_send').val('');
+                //                }     
+                //            //obcion 2  // AWSPModelo fue creado al hacer click en una marca // si marca - si modelo - no generacion
+                //                let campo_modelo = $('.modelo').find('ul').attr('id');
+                //                $('#'+campo_modelo).remove();
+                //            }
+                //            $('#btn_modelo').hide();
+                //            $('#btn_generacion').hide();
+                //        }else{ // esta desactivado
+                //            console.log('desactivando check')
+                //            $('#sendSwitch').val(val_check);
+                //            if(typeof AWSPModelo != 'undefined'){
+                //                console.log('si existe AWSPModelo modelo')
+                //                $('#btn_modelo').prop('disabled',true)
+                //                //$('#id_generacion').prop('disabled',true)
+                //            }else{
+                //                console.log('NO existe modelo')
+                //                $('#id_modelo').prop('disabled',true)
+                //            }
+                //            AWSPMarca.evaluate()
+                //            AWSPMarca.goto(0)
+                //            AWSPMarca.select()
+                //            $('#btn_modelo').show();
+                //            $('#btn_generacion').show();
+                //            $('#id_marca').prop('disabled',false)
+                //            //$('#id_modelo').prop('disabled',true)
+                //            $('#id_generacion').prop('disabled',true)
+                //            // borrartexto-blur => modelo,generacion
+                //            $('#id_modelo').val('')
+                //            $('#id_modelo').blur()
+                //            $('#id_generacion').val('')
+                //            $('#id_generacion').blur()
+                //        }                  
+                //});
+
+                $("#btnclean").click(() => {
+                    $('#busqueda_id_cliente').val('');
+
+                    $('#lb_tipo_cliente').removeClass("active");
+                    $('#ico_tipo_cliente').removeClass("active");
+                    $('#tipo_cliente').prop('disabled',true)
+                    $('#btn_tipo_cliente').prop('disabled',false)
+                    $('#tipo_cliente').prop('disabled',false)
+
+                    $('#lbcolor').removeClass("active");
+                    $('#icocolor').removeClass("active");
+
+                    $('#lb_generacion').removeClass("active");
+                    $('#ico_generacion').removeClass("active");
+
+                    //$('#id_generacion').prop('disabled',true)
+                    //$('#btn_generacion').prop('disabled',true)
+                    //$('#id_generacion').attr('readonly',false);
+
+                    $('#lb_modelo').removeClass("active");
+                    $('#ico_modelo').removeClass("active");
+
+                    //$('#id_modelo').prop('disabled',true)
+                    //$('#btn_modelo').prop('disabled',true)
+                    //$('#id_modelo').attr('readonly',false);
+
+                    $('#lb_marca').removeClass("active");
+                    $('#ico_marca').removeClass("active");
+                    $('#id_marca').attr('readonly',false);
+
+                    $('#lbnombre').removeClass("active");
+                    $('#iconombre').removeClass("active");
+                    $('#nombre_cliente').attr('readonly',false);
+
+                    $('#lbtelefono').removeClass("active");
+                    $('#icotelefono').removeClass("active");
+                    $('#telefono').attr('readonly',false);
+
+                    $('#lbemail').removeClass("active");
+                    $('#icoemail').removeClass("active");
+                    $('#email').attr('readonly',false);
+
+                    $('#lbdni').removeClass("active");
+                    $('#icodni').removeClass("active");
+                    $('#dni').attr('readonly',false);
+                    $('#btn_dni').prop('disabled',false);
+
+                    $('#lbRUC').removeClass("active");
+                    $('#icoRUC').removeClass("active");
+                    $('#RUC').attr('readonly',false);
+                    $('#btn_ruc').prop('disabled',false);
+
+                    $('#lbrazon_social').removeClass("active");
+                    $('#icorazon_social').removeClass("active");
+                    $('#razon_social').attr('readonly',false);
+
+                    $('#lbDireccion').removeClass("active");
+                    $('#icoDireccion').removeClass("active");
+                    $('#Direccion').attr('readonly',false);
+
+                    // borrar tods los valores a enviar
+                    $('#id_marca_send').val('');
+                    $('#id_modelo_send').val('');
+                    $('#id_generacion_send').val('');
+                });
+
+                $("#btnSend").click(() => {
+                    //event.preventDefault();
+                    let val_marca       = $('#id_marca'),
+                        val_modelo      = $('#id_modelo'),
+                        val_generacion  = $('#id_generacion'),
+
+                        send_marca          = $('#id_marca_send'),
+                        send_modelo         = $('#id_modelo_send'),
+                        send_generacion     = $('#id_generacion_send'),
+                        caso                = $('#sendCase');
+                    let index_0,index_1,index_2;
+
+                    let val_tipo_cliente = $('#tipo_cliente').val();
+                    val_arr = [];
+                    //event.preventDefault();
+                    //$('#placa').prop('disabled',false)
+                    //$('#id_marca').prop('disabled',false)
+                    //$('#id_modelo').prop('disabled',false)
+                    //$('#id_generacion').prop('disabled',false)
+
+                    console.log('busqueda esta en el indice :',Busqueda_en_Array($('#tipo_cliente').val(),Tipo_cliente));
+
+                    // Validacion de vehiculo
+                    //console.log('val_marca',$('#id_marca').val());
+
+                    if(Busqueda_en_Array(val_marca.val(),marca)){
+                        index_0 = marca.indexOf(val_marca.val()); // V
+                        console.log('existe marca:',val_marca.val(),'con id:',id[index_0])
+                        //Incertar todo nuevo
+                        if(Busqueda_en_Array(val_modelo.val(),Modelos_de_Marcas)){
+                            index_1 = Modelos_de_Marcas.indexOf(val_modelo.val());  // VV
+                            console.log('y su modelo:',val_modelo.val(),'con id:',id_de_Modelos[index_1])
+                            if(Busqueda_en_Array(val_generacion.val(),Nombre_Generacion)){
+                                index_2 = Nombre_Generacion.indexOf(val_generacion.val());    // VVV
+                                send_marca .val(id[index_0])
+                                send_modelo.val(id_de_Modelos[index_1])
+                                send_generacion.val(Id_Generacion[index_2])
+                                caso.val(0)
+                                console.log('y su año:',val_generacion.val(),'con id:',Id_Generacion[index_2])
+                            }else{ // VVF
+                                // Enviar id (marca,modelo) y valor de generacion
+                                console.log('No existe esta Generacion:',val_generacion.val())
+                                send_marca .val(id[index_0])
+                                send_modelo.val(id_de_Modelos[index_1])
+                                caso.val(3)
+                            }
+                        }else{ // VF
+                            // Enviar solo el id de marca y valores de campos modelo y generacion
+                            console.log('pero no existe modelo:',val_modelo.val())
+                            console.log('y ni esta generacion :',val_generacion.val())
+                            send_marca.val(id[index_0])
+                            caso.val(2);
+                        }
+                    }else{
+                        // Al no tener esta marca enviar los valores de los campos ingresados
+                        // Ponemos caso en ( 1 )
+                        caso.val(1)
+                        console.log('No existe marca y se llenara todo') // FFF
+                    }
+
+                    let tipo_persona = Busqueda_en_Array(val_tipo_cliente,Tipo_cliente)
+                    if(!tipo_persona){ // si agregamos
+                        // envia el texto escribido para incertar en tabla tipo persona
+                        val_arr = [val_tipo_cliente,1]; // si agregamos 1
+                        $('#tipo_cliente_send').val(val_arr);
+                    }else{ // no agregamos
+                        // envia el indice del tipo persona
+                        let i = Tipo_cliente.indexOf(val_tipo_cliente);
+                        console.log('seleccionado:',id_Tipo_cliente[i],'valor:',val_tipo_cliente)
+                        val_arr = [id_Tipo_cliente[i],0]; // no agregamos 0
+                        $('#tipo_cliente_send').val(val_arr);
+                    }
+                });
+
+                //BOTON MODELO ( BLUR ) 
+                    $("#btn_modelo").blur(() => {
+                        if($("#id_modelo").val() == "" ||  $ ("#id_modelo").val() == null ){
+                            console.log('blur cerrado por desenfoque y nulo')
+                            AWSPModelo.close();
+                            Estilo_Estado(id_modelo,lb_modelo,'nocss');
+                            Estilo_input_AWSP(lb_modelo,ico_modelo,'#4f4f4f','remove');
+                        }else{
+                            AWSPModelo.close();
+                            console.log('blur cerrado por desenfoque')
+                            $(id_modelo).removeAttr("style")
+                            Estilo_input_AWSP(lb_modelo,'','#4f4f4f','');
+                        }
+                    });
+
+                //BOTON MODELO ( CLICK )
+                    $('#btn_modelo').click(() => {
+                        Estilo_input_AWSP(lb_modelo,ico_modelo,'#D2202E','add');
+                        if (AWSPModelo.ul.childNodes.length === 0) {
+                            AWSPModelo.minChars = 0;
+                            AWSPModelo.evaluate();
+                            Estilo_Estado(id_modelo,'','sicss');
+                            console.log('btn abriendo por evaluate')       
+                        }else if (AWSPModelo.ul.hasAttribute('hidden')) {
+                            Estilo_Estado(id_modelo,'','sicss');
+                            console.log('btn abriendo por click')
+                            AWSPModelo.open();
+                        }else if($("#id_modelo").val() == "" ||  $ ("#id_modelo").val() == null ){
+                            AWSPModelo.close();
+                            console.log('btn cerrado por texto vacio')
+                            Estilo_Estado(id_modelo,lb_modelo,'nocss');
+                            Estilo_input_AWSP(lb_modelo,ico_modelo,'#4f4f4f','remove');
+                            }else{
+                                AWSPModelo.close();
+                                console.log('btn cerrando')
+                                Estilo_Estado(id_modelo,'','nocss');
+                                Estilo_input_AWSP(lb_modelo,'','#4f4f4f','');
+                            }
+                    });
+
+                //BOTON GENERACION ( BLUR )    
+                    $("#btn_generacion").blur(() => {
+                        if($("#id_generacion").val() == "" ||  $ ("#id_generacion").val() == null ){
+                            console.log('blur cerrado por desenfoque y nulo')
+                            AWSPGeneracion.close();
+                            Estilo_Estado(id_generacion,lb_generacion,'nocss');
+                            Estilo_input_AWSP(lb_generacion,ico_generacion,'#4f4f4f','remove');
+                        }else{
+                            AWSPGeneracion.close();
+                            console.log('blur cerrado por desenfoque')
+                            $(id_generacion).removeAttr("style")
+                            Estilo_input_AWSP(lb_generacion,'','#4f4f4f','');
+                        }
+                    });
+
+                //BOTON GENERACION ( CLICK )    
+                    $('#btn_generacion').click(() => {
+                        Estilo_input_AWSP(lb_generacion,ico_generacion,'#D2202E','add');
+                        if (AWSPGeneracion.ul.childNodes.length === 0) {
+                            AWSPGeneracion.minChars = 0;
+                            AWSPGeneracion.evaluate();
+                            Estilo_Estado(id_generacion,'','sicss');
+                            console.log('btn abriendo por evaluate')       
+                        }else if (AWSPGeneracion.ul.hasAttribute('hidden')) {
+                            Estilo_Estado(id_generacion,'','sicss');
+                            console.log('btn abriendo por click')
+                            AWSPGeneracion.open();
+                        }else if($("#id_generacion").val() == "" ||  $ ("#id_generacion").val() == null ){
+                            AWSPGeneracion.close();
+                            console.log('btn cerrado por texto vacio')
+                            Estilo_Estado(id_generacion,lb_generacion,'nocss');
+                            Estilo_input_AWSP(lb_generacion,ico_generacion,'#4f4f4f','remove');
+                            }else{
+                                AWSPGeneracion.close();
+                                console.log('btn cerrando')
+                                Estilo_Estado(id_generacion,'','nocss');
+                                Estilo_input_AWSP(lb_generacion,'','#4f4f4f','');
+                            }
+                    });
+
+                //BOTON TIPO CLIENTE ( BLUR )    
+                    $("#btn_tipo_cliente").blur(() => {
+                        if($("#tipo_cliente").val() == "" ||  $ ("#tipo_cliente").val() == null ){
+                            console.log('blur cerrado por desenfoque y nulo')
+                            AWSPTipoCliente.close();
+                            Estilo_Estado(tipo_cliente,lb_tipo_cliente,'nocss');
+                            Estilo_input_AWSP(lb_tipo_cliente,ico_tipo_cliente,'#4f4f4f','remove');
+                        }else{
+                            AWSPTipoCliente.close();
+                            console.log('blur cerrado por desenfoque')
+                            $(tipo_cliente).removeAttr("style")
+                            Estilo_input_AWSP(lb_tipo_cliente,'','#4f4f4f','');
+                        }
+                    });
+
+                //BOTON TIPO_CLIENTE ( CLICK )
+                    $('#btn_tipo_cliente').click(() => {
+                        Estilo_input_AWSP(lb_tipo_cliente,ico_tipo_cliente,'#D2202E','add');
+                        if (AWSPTipoCliente.ul.childNodes.length === 0) {
+                            AWSPTipoCliente.minChars = 0;
+                            AWSPTipoCliente.evaluate();
+                            Estilo_Estado(tipo_cliente,'','sicss');
+                            console.log('btn abriendo por evaluate')       
+                        }else if (AWSPTipoCliente.ul.hasAttribute('hidden')) {
+                            Estilo_Estado(tipo_cliente,'','sicss');
+                            console.log('btn abriendo por click')
+                            AWSPTipoCliente.open();
+                        }else if($("#tipo_cliente").val() == "" ||  $ ("#tipo_cliente").val() == null ){
+                            AWSPTipoCliente.close();
+                            console.log('btn cerrado por texto vacio')
+                            Estilo_Estado(tipo_cliente,lb_tipo_cliente,'nocss');
+                            Estilo_input_AWSP(lb_tipo_cliente,ico_tipo_cliente,'#4f4f4f','remove');
+                            }else{
+                                AWSPTipoCliente.close();
+                                console.log('btn cerrando')
+                                Estilo_Estado(tipo_cliente,'','nocss');
+                                Estilo_input_AWSP(lb_tipo_cliente,'','#4f4f4f','');
+                            }
+                    });
+                //BOTON BUSCAR_DNI (CLICK)
+                    $('#btn_dni').click(() => {
+                        const dni = $('#dni').val();
+                        $('#nombre_cliente').val('Cargando espere...');
+                        $('#lbnombre').addClass("active");
+                        $('#iconombre').removeClass("active");
+
+                        sk_nuevoCliente.emit('solicitar_info_dni',dni)
+                    });
+
+                //BOTON BUSCAR_RUC (CLICK)
+                    $('#btn_ruc').click(() => {
+                        const ruc = $('#RUC').val();
+                        $('#razon_social').val('Cargando espere...');
+                        $('#lbrazon_social').addClass("active");
+                        $('#icorazon_social').removeClass("active");
+
+                        $('#Direccion').val('Cargando espere...');
+                        $('#lbDireccion').addClass("active");
+                        $('#icoDireccion').removeClass("active");
+                        
+                        sk_nuevoCliente.emit('solicitar_info_ruc',ruc)
+                    });
+            // === === ESTILOS === ===
+
+                // Agrega o remueve clases de estilo y cambia de color al label
+                    Estilo_input_AWSP = (pIdLabel='',pIdico='',pColor ='',pEstado='') => {
+                        if(pEstado == 'add'){
+                            $(pIdLabel).addClass("active");
+                            $(pIdico).addClass("active");
+                            $(pIdLabel).css({"color": pColor});
+                        }else if(pEstado != ''){
+                            $(pIdLabel).removeClass("active");
+                            $(pIdico).removeClass("active");
+                            $(pIdLabel).css({"color": pColor});
+                        }else{
+                            $(pIdLabel).css({"color": pColor});
+                        }
+                    }
+
+                // Agregar o quitar estilo agregado
+                    Estilo_Estado = (pIdInput='',pIdLabel='',pEstado='sicss') =>{
+                        if(pEstado == 'sicss'){
+                            $(pIdInput).css({ "border-bottom":"1px solid #D2202E",
+                                "box-shadow":"0 1px 0 0 #D2202E"});
+                        }else{
+                            console.log('removiendo estilos')
+                            $(pIdInput).removeAttr("style")
+                            $(pIdLabel).removeAttr("style")
+                        }
+                    }
+                //Establece un estilo a Combo_tipo_Awesomplete al hacer focus y deshacer focus
+                    Awesome_Combo_Bootstrap = (id_input,lb_input,ico_input='',idButton ='') => {
+                        $(id_input).focus(() =>  {
+                            Estilo_input_AWSP(lb_input,ico_input,'#D2202E','add');     
+                        });
+                        $(id_input).focusout(() => {
+                            if ($(id_input).val() == "" ||  $ (id_input).val () == null ){
+                                Estilo_input_AWSP(lb_input,ico_input,'#4f4f4f','remove'); 
+                            }else{
+                                Estilo_input_AWSP(lb_input,'','#4f4f4f','');
+                            }   
+                        })    
+                    }
+
+                // Ejecutar Awesome_Combo_Bootstrap para dar formato de estilo personalizado
+                    Awesome_Combo_Bootstrap(idBusqueda,lb_busqueda,icon_busqueda);
+                    Awesome_Combo_Bootstrap(tipo_cliente,lb_tipo_cliente,ico_tipo_cliente);
+                    Awesome_Combo_Bootstrap(id_marca,lb_marca,ico_marca);
+                    Awesome_Combo_Bootstrap(id_modelo,lb_modelo,ico_modelo,btn_modelo);
+                    Awesome_Combo_Bootstrap(id_generacion,lb_generacion,ico_generacion,btn_generacion);            
+
+            // === === SOCKETS === ===
+
+                sk_nuevoCliente.on('data_info_cliente',data =>{
+                    
+                    //$('#tipo_cliente').val(data.tipo_cliente);
+                    //$('#lb_tipo_cliente').addClass("active");
+                    //$('#ico_tipo_cliente').addClass("active");
+                    //$('#tipo_cliente').attr('readonly','readonly');
+                    //$('#btn_tipo_cliente').prop('disabled',true),
+
+                    $('#nombre_cliente').val(data.nombre_cliente);
+                    $('#lbnombre').addClass("active");
+                    $('#iconombre').addClass("active");
+                    $('#nombre_cliente').attr('readonly','readonly');
+
+                    $('#telefono').val(data.telefono);
+                    $('#lbtelefono').addClass("active");
+                    $('#icotelefono').addClass("active");
+                    $('#telefono').attr('readonly','readonly');
+
+                    $('#email').val(data.email);
+                    $('#lbemail').addClass("active");
+                    $('#icoemail').addClass("active");
+                    $('#email').attr('readonly','readonly');
+
+                    $('#dni').val(data.dni);
+                    $('#lbdni').addClass("active");
+                    $('#icodni').addClass("active");
+                    $('#dni').attr('readonly','readonly');
+                    $('#btn_dni').prop('disabled',true);
+                    
+                    $('#RUC').val(data.ruc);
+                    $('#lbRUC').addClass("active");
+                    $('#icoRUC').addClass("active");
+                    $('#RUC').attr('readonly','readonly');
+                    $('#btn_ruc').prop('disabled',true);
+
+                    $('#razon_social').val(data.razon_social);
+                    $('#lbrazon_social').addClass("active");
+                    $('#icorazon_social').addClass("active");
+                    $('#razon_social').attr('readonly','readonly');
+
+                    $('#Direccion').val(data.direccion);
+                    $('#lbDireccion').addClass("active");
+                    $('#icoDireccion').addClass("active");
+                    $('#Direccion').attr('readonly','readonly');
+                });
+
+                sk_nuevoCliente.on('placa_enviada',placa =>{
+                    $("#placa").val(placa);
+                });
+
+                //Escucha las generaciones para LISTAR LAS GENERACIONES DE EL MODELO SELECCIONADO
+                sk_nuevoCliente.on('generacion_auto',(idGeneracion) => {
+                    Nombre_Generacion = idGeneracion.generacion;
+                    Id_Generacion = idGeneracion.id;
+                    AWSPGeneracion.list = idGeneracion.generacion;
+                    console.log(idGeneracion.generacion);
+                });
+
+                //Escucha los modelos para RECUPERAR LOS MODELOS DE MARCA SELECCIONADA
+                sk_nuevoCliente.on('modelo_auto',(idModelo) => {
+                    AWSPModelo.list = idModelo.modelo;
+                    id_de_Modelos = idModelo.id
+                    Modelos_de_Marcas = idModelo.modelo
+                    console.log(Modelos_de_Marcas) //Ver en consola nombres de id_modelo seleccionado de marca
+                });
+
+                // Recibir apis de dni e Ruc
+                sk_nuevoCliente.on('recuperar_info_dni',(data) => {
+                    if(data != 'DESCONECCION'){
+                        if(data != 'An error has occurred.'){
+                            $('#lbnombre').addClass("active");
+                            $('#iconombre').addClass("active");
+                            $('#nombre_cliente').val(data);
+                                 // caso todo bien
+                        }else{
+                            $('#nombre_cliente').val('');
+                            $('#lbnombre').removeClass("active");
+                            $('#iconombre').removeClass("active");
+                            alert(data)                         // caso que no encuentre el DNI
+                        }  
+                    }else{
+                        $('#lbnombre').removeClass("active");
+                        $('#iconombre').removeClass("active");
+                        $('#nombre_cliente').val('');
+                        alert('No hay coneccion a internet')    // caso Sin internet :'(
+                    }
+                });
+
+                sk_nuevoCliente.on('recuperar_info_ruc',(data) => {
+                    if(data != 'DESCONECCION RUC'){
+                        $('#lbrazon_social').addClass("active");
+                        $('#icorazon_social').addClass("active");
+                        $('#razon_social').val(data.razon_social);     // caso todo bien
+
+                        $('#lbDireccion').addClass("active");
+                        $('#icoDireccion').addClass("active");
+                        $('#Direccion').val(data.domicilio_fiscal);     // caso todo bien
+                    }else{
+                        $('#lbrazon_social').removeClass("active");
+                        $('#icorazon_social').removeClass("active");
+                        $('#razon_social').val('');     
+
+                        $('#lbDireccion').removeClass("active");
+                        $('#icoDireccion').removeClass("active");
+                        $('#Direccion').val('');     
+                        alert('No hay coneccion a internet o ruc invalido')    // caso Sin internet :'(
+                    }
+                });
+        });//309
+

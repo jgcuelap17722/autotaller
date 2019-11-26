@@ -1,0 +1,385 @@
+extends ../layouts/main
+prepend head
+    // CSS Awesomplate
+    link(rel='stylesheet', href='lib/lib_awesomplete/awesomplete.css')
+append area-librerias-scripts
+    //JavaScript de awesomplate 
+    script(src='lib/lib_awesomplete/awesomplete.js')
+append styles
+    style.
+        .awesomplete {
+            margin-left: 2.5rem;
+        }
+
+append contenido
+    //-.container.p-4
+    //-    .row
+    //-        .col-md-4.mx-auto
+    //-            .card.text-center
+    //-                .card-header
+    //-                    h3 Registro Usuarios
+    //-                .card-body
+    //-                    form(action='/signup', method='POST')
+    //-                        .form-group
+    //-                            input.form-control(type='type', name='fullname', placeholder='Full Name', autofocus='')
+    //-                        .form-group
+    //-                            input.form-control(type='text', name='username', placeholder='Username')
+    //-                        .form-group
+    //-                            input.form-control(type='password', name='password', placeholder='Password')
+    //-                        .form-group
+    //-                            button.btn.btn-success.btn-block
+    //-                                | SingIn
+block contenido
+    form#Registro_Usuario(action='/registro-completo', method='POST')
+        .card
+            .card-header.text-center
+                h3 Registro de Usuarios
+            .card-body
+                p3 Datos del Usuario   
+                .form-row
+                    .col-12.col-md-6.my-3
+                        section.form-gradient
+                            .md-form.mb-1.mt-0
+                                .d-flex.bd-highlight
+                                    .flex-fill.bd-highlight
+                                        input#TipoUsuario_send(type='hidden',autocomplete='off' name='tipo_usuario')
+                                        i#icoTipoUsuario.fas.fa-user.prefix.mt-1
+                                        input#TipoUsuario.form-control(type='text',autocomplete='off' placeholder='Selecciona un tipo usuario' readonly='readonly' required)
+                                        label#lbTipoUsuario(for='TipoUsuario') Tipo Usuario *
+                                    button#btn_TipoUsuario.m-auto.border.mb-2.rounded-right.bg-transparent(type="button")
+                                        i.fas.fa-caret-down.m-2
+                    .col-12.col-md-6.my-3
+                        section.form-gradient
+                            .md-form.mb-1.mt-0
+                                .d-flex.bd-highlight
+                                    .flex-fill.bd-highlight
+                                        i#icoNombre.fas.fa-user.prefix.mt-1
+                                        input#Nombre.form-control.orden(type='text' name='nombre' required)
+                                        label#lbNombre(for='Nombre') Nombres *                 
+                .form-row
+                    .col-md-6
+                        section.form-gradient
+                            .md-form
+                                i#icoApellido_paterno.fas.fa-user.prefix.mt-1
+                                input#Apellido_paterno.form-control.orden(type='text',name='apellido_paterno'  required)
+                                label#lbApellido_paterno(for='Apellido_paterno') Apellido Paterno *
+
+                    .col-md-6
+                        section.form-gradient
+                            .md-form
+                                i#icoApellido_materno.fas.fa-user.prefix.mt-1
+                                input#Apellido_materno.form-control.orden(type='text',name='apellido_materno'  required)
+                                label#lbApellido_materno(for='Apellido_materno') Apellido Materno *       
+                .form-row
+                    .form-group.col-md-6
+                        section.form-gradient
+                            .md-form
+                                i#icoTelefono.fas.fa-mobile-alt.prefix.mt-1
+                                input#Telefono.form-control.orden(type='tel',name='telefono')
+                                label#lbTelefono(for='Telefono') telefono
+                    .form-group.col-md-6
+                        section.form-gradient
+                            .md-form
+                                i#icoDni.far.fa-id-card.prefix.mt-1
+                                input#Dni.form-control.orden(type='number',name='dni' required)
+                                label#lbdni(for='Dni') DNI *
+                .form-row
+                    .col-12
+                        section.form-gradient
+                            .md-form
+                                i#icoDireccion.fas.fa-home.prefix.mt-1
+                                input#Direccion.form-control.orden(type='text',name='direccion')
+                                label#lbDireccion(for='Direccion') Direccion
+                .form-row
+                    .col-12.col-md-6.my-3
+                        section.form-gradient
+                            .md-form.mb-1.mt-0
+                                .d-flex.bd-highlight
+                                    .flex-fill.bd-highlight
+                                        i#icoSexo.fas.fa-user.prefix.mt-1
+                                        input#Sexo.form-control(type='text',autocomplete='off' placeholder='Selecciona un Genero' name='sexo' readonly='readonly' required)
+                                        label#lbSexo(for='Sexo') Sexo *
+                                    button#btn_Sexo.m-auto.border.mb-2.rounded-right.bg-transparent(type="button")
+                                        i.fas.fa-caret-down.m-2
+                    .col-12.col-md-6.my-3
+                        section.form-gradient
+                            .md-form.mb-1.mt-0
+                                .d-flex.bd-highlight
+                                    .flex-fill.bd-highlight
+                                        i#icoEdad.fas.fa-user.prefix.mt-1
+                                        input#Edad.form-control.orden(type='number' ,name='edad' required)
+                                        label#lbEdad(for='Edad') Edad *            
+                .form-row     
+                    .col-md-12
+                        section.form-gradient
+                            .md-form
+                                i#icoEmail.fas.fa-at.prefix.mt-1
+                                input#Email.form-control.orden(type='email',name='email')
+                                label#lbEmail(for='Email') email *
+                                small#emailHelp.form-text.text-muted ejemplo@gmail.com
+            .card-footer
+                .row
+                    .col-6.d-flex.justify-content-center
+                        button#btnclean.btn.btn-info.rounded-pill(type='reset') Limpiar
+                    .col-6.d-flex.justify-content-center
+                        button#btnSend.btn.btn-success.rounded-pill(type='submit') Registrar
+block area-scripts
+    script.
+        $(document).ready(() => {
+        // === === AWESOMPLETE's === ===
+            
+            // Autocompletado ==> TIPO_USUARIO
+                // - variables
+                //Recuperar las marcas de autos de las rutas ¡¡
+                const data  = !{JSON.stringify(data)},
+                        // indice y marca recuperada 
+                        idTipo_Usuario  = data.Tipos_Usuario.idTipo_Usuario,               
+                        Tipo_Usuario    = data.Tipos_Usuario.Tipo_Usuario,         
+                        etiquetaInputTipoUsuario = $('#TipoUsuario').get(0),
+                        AWSPTipo_Usuario = new Awesomplete(etiquetaInputTipoUsuario,{sort : false});
+
+                console.log('data',data.Tipos_Usuario.Tipo_Usuario);
+                    AWSPTipo_Usuario.list = Tipo_Usuario;
+
+                    $('#TipoUsuario').on('awesomplete-selectcomplete',function() {
+                        let i = Tipo_Usuario.indexOf(this.value);
+                        console.log("id de Tipo_Usuario",idTipo_Usuario[i]); //Ver id seleccionado de marca
+                        //Estilo_input_AWSP(lbTipoUsuario,icoTipoUsuario,'#4f4f4f','remove');
+                        Estilo_Estado(TipoUsuario,lbTipoUsuario,'nocss');
+                        $('#TipoUsuario_send').val(idTipo_Usuario[i]);
+                    });
+
+            // Autocompletado ==> SEXO
+                // - variables
+                //Recuperar las marcas de autos de las rutas ¡¡
+                const etiquetaInputSexo = $('#Sexo').get(0),
+                      sexo = ['Mujer','Hombre','Otro'],
+                      AWSPSexo = new Awesomplete(etiquetaInputSexo,{sort : false});
+                    AWSPSexo.list = sexo;
+                    $('#Sexo').on('awesomplete-selectcomplete',function() {
+                        Estilo_Estado(Sexo,lbSexo,'nocss');
+                    });
+        // === === ESTILOS === ===
+            // Agrega o remueve clases de estilo y cambia de color al label
+                Estilo_input_AWSP = (pIdLabel='',pIdico='',pColor ='',pEstado='') => {
+                    if(pEstado == 'add'){
+                        $(pIdLabel).addClass("active");
+                        $(pIdico).addClass("active");
+                        $(pIdLabel).css({"color": pColor});
+                    }else if(pEstado != ''){
+                        $(pIdLabel).removeClass("active");
+                        $(pIdico).removeClass("active");
+                        $(pIdLabel).css({"color": pColor});
+                    }else{
+                        $(pIdLabel).css({"color": pColor});
+                    }
+                }
+
+            // Agregar o quitar estilo agregado
+                Estilo_Estado = (pIdInput='',pIdLabel='',pEstado='sicss') =>{
+                    if(pEstado == 'sicss'){
+                        $(pIdInput).css({ "border-bottom":"1px solid #D2202E",
+                            "box-shadow":"0 1px 0 0 #D2202E"});
+                    }else{
+                        console.log('removiendo estilos')
+                        $(pIdInput).removeAttr("style")
+                        $(pIdLabel).removeAttr("style")
+                    }
+                }
+
+            //Establece un estilo a Combo_tipo_Awesomplete al hacer focus y deshacer focus
+                Awesome_Combo_Bootstrap = (id_input,lb_input,ico_input='',idButton ='') => {
+                    $(id_input).focus(() =>  {
+                        Estilo_input_AWSP(lb_input,ico_input,'#D2202E','add');     
+                    });
+                    $(id_input).focusout(() => {
+                        if ($(id_input).val() == "" ||  $ (id_input).val () == null ){
+                            Estilo_input_AWSP(lb_input,ico_input,'#4f4f4f','remove'); 
+                        }else{
+                            Estilo_input_AWSP(lb_input,'','#4f4f4f','');
+                        }   
+                    })    
+                }
+
+            //Esta funcion quita estilo de labels y icono 'i' 
+            // los 2 ultimos parametros sirven para evitar que surjan cambios 
+            // en determinados id de abels e iconos (Obcional)
+                Refrescar_Estilos = (idForm,noIcon=[],noLabel=[]) => {
+                    let idLabel = $('#'+$(idForm).attr('id')+' label'),
+                    idIcons = $('#'+$(idForm).attr('id')+' i'),
+                    
+                    ids = [],Labels = [],Icons = [];
+
+                    idLabel.each(function (index){
+                        Labels[index] = $(this).attr('id');
+                    });
+
+                    idIcons.each(function (index){
+                        Icons[index] = $(this).attr('id');
+                    });
+
+                    console.log('Arrays entrada',Labels,' Y ',Icons);
+
+                    Icons = Icons.filter(val => !noIcon.includes(val));
+                    Labels = Labels.filter(val => !noLabel.includes(val));
+                    
+                    console.log('Arrays Salida',Labels,' Y ',Icons);
+
+                    for (let i = 0; i < Labels.length-1; i++) {
+                        $('#'+Icons[i]).removeClass("active");
+                        $('#'+Labels[i]).removeClass("active");
+                    }
+                }
+
+            // Ejecutar Awesome_Combo_Bootstrap para dar formato de estilo personalizado
+                //Awesome_Combo_Bootstrap(TipoUsuario,lbTipoUsuario,icoTipoUsuario);
+
+        // === === EVENTOS Y FUNCIONES === ===
+            //BOTON TIPO_USUARIO ( BLUR ) 
+                $("#btn_TipoUsuario").blur(() => {
+                    if($("#TipoUsuario").val() == "" ||  $ ("#TipoUsuario").val() == null ){
+                        console.log('blur cerrado por desenfoque y nulo')
+                        AWSPTipo_Usuario.close();
+                        Estilo_Estado(TipoUsuario,lbTipoUsuario,'nocss');
+                        //Estilo_input_AWSP(lbTipoUsuario,icoTipoUsuario,'#4f4f4f','remove');
+                    }else{
+                        AWSPTipo_Usuario.close();
+                        console.log('blur cerrado por desenfoque')
+                        $(TipoUsuario).removeAttr("style")
+                        Estilo_input_AWSP(lbTipoUsuario,'','#4f4f4f','');
+                    }
+                });
+
+            // BOTON LIMPIAR FORMULARIO
+                $("#btnclean").click(function () {
+                    $('#TipoUsuario_send').val('');
+                    $('#Sexo').val('');
+                    let NoEstilos_icon = ['icoTipoUsuario','icoSexo'];
+                    let NoEstilo_label= ['lbTipoUsuario','lbSexo'];
+                    Refrescar_Estilos(Registro_Usuario,NoEstilos_icon,NoEstilo_label);
+                })
+
+            //BOTON TIPO_USUARIO ( CLICK )
+                $('#btn_TipoUsuario').click(() => {
+                    Estilo_input_AWSP(lbTipoUsuario,icoTipoUsuario,'#D2202E','add');
+                    if (AWSPTipo_Usuario.ul.childNodes.length === 0) {
+                        AWSPTipo_Usuario.minChars = 0;
+                        AWSPTipo_Usuario.evaluate();
+                        Estilo_Estado(TipoUsuario,'','sicss');
+                        console.log('btn abriendo por evaluate')       
+                    }else if (AWSPTipo_Usuario.ul.hasAttribute('hidden')) {
+                        Estilo_Estado(TipoUsuario,'','sicss');
+                        console.log('btn abriendo por click')
+                        AWSPTipo_Usuario.open();
+                    }else if($("#TipoUsuario").val() == "" ||  $ ("#TipoUsuario").val() == null ){
+                        AWSPTipo_Usuario.close();
+                        console.log('btn cerrado por texto vacio')
+                        Estilo_Estado(TipoUsuario,lbTipoUsuario,'nocss');
+                        //Estilo_input_AWSP(lbTipoUsuario,icoTipoUsuario,'#4f4f4f','remove');
+                        }else{
+                            AWSPTipo_Usuario.close();
+                            console.log('btn cerrando')
+                            Estilo_Estado(TipoUsuario,'','nocss');
+                            Estilo_input_AWSP(lbTipoUsuario,'','#4f4f4f','');
+                            Estilo_Estado(TipoUsuario,lbTipoUsuario,'nocss');
+                        }
+                });
+            //INPUT TIPO_USUARIO ( CLICK )
+                $('#TipoUsuario').click(() => {
+                    Estilo_input_AWSP(lbTipoUsuario,icoTipoUsuario,'#D2202E','add');
+                    if (AWSPTipo_Usuario.ul.childNodes.length === 0) {
+                        AWSPTipo_Usuario.minChars = 0;
+                        AWSPTipo_Usuario.evaluate();
+                        Estilo_Estado(TipoUsuario,'','sicss');
+                        console.log('btn abriendo por evaluate')       
+                    }else if (AWSPTipo_Usuario.ul.hasAttribute('hidden')) {
+                        Estilo_Estado(TipoUsuario,'','sicss');
+                        console.log('btn abriendo por click')
+                        AWSPTipo_Usuario.open();
+                    }else if($("#TipoUsuario").val() == "" ||  $ ("#TipoUsuario").val() == null ){
+                        AWSPTipo_Usuario.close();
+                        console.log('btn cerrado por texto vacio')
+                        Estilo_Estado(TipoUsuario,lbTipoUsuario,'nocss');
+                        //Estilo_input_AWSP(lbTipoUsuario,icoTipoUsuario,'#4f4f4f','remove');
+                        }else{
+                            AWSPTipo_Usuario.close();
+                            console.log('btn cerrando')
+                            Estilo_Estado(TipoUsuario,lbTipoUsuario,'nocss');
+                            Estilo_Estado(TipoUsuario,'','nocss');
+                            Estilo_input_AWSP(lbTipoUsuario,'','#4f4f4f','');
+                        }
+                });
+            //INPUT TIPO_USUARIO ( BLUR )
+                $("#TipoUsuario").blur(() => {
+                    Estilo_Estado(TipoUsuario,lbTipoUsuario,'nocss');
+                });
+
+            //BOTON SEXO ( BLUR ) 
+                $("#btn_Sexo").blur(() => {
+                    if($("#Sexo").val() == "" ||  $ ("#Sexo").val() == null ){
+                        console.log('blur cerrado por desenfoque y nulo')
+                        AWSPSexo.close();
+                        Estilo_Estado(Sexo,lbSexo,'nocss');
+                        //Estilo_input_AWSP(lbTipoUsuario,icoTipoUsuario,'#4f4f4f','remove');
+                    }else{
+                        AWSPSexo.close();
+                        console.log('blur cerrado por desenfoque')
+                        $(Sexo).removeAttr("style")
+                        Estilo_input_AWSP(lbSexo,'','#4f4f4f','');
+                    }
+                });
+            //BOTON SEXO ( CLICK )
+                $('#btn_Sexo').click(() => {
+                    Estilo_input_AWSP(lbSexo,icoSexo,'#D2202E','add');
+                    if (AWSPSexo.ul.childNodes.length === 0) {
+                        AWSPSexo.minChars = 0;
+                        AWSPSexo.evaluate();
+                        Estilo_Estado(Sexo,'','sicss');
+                        console.log('btn abriendo por evaluate')       
+                    }else if (AWSPSexo.ul.hasAttribute('hidden')) {
+                        Estilo_Estado(Sexo,'','sicss');
+                        console.log('btn abriendo por click')
+                        AWSPSexo.open();
+                    }else if($("#Sexo").val() == "" ||  $ ("#Sexo").val() == null ){
+                        AWSPSexo.close();
+                        console.log('btn cerrado por texto vacio')
+                        Estilo_Estado(Sexo,lbSexo,'nocss');
+                        //Estilo_input_AWSP(lbTipoUsuario,icoTipoUsuario,'#4f4f4f','remove');
+                        }else{
+                            AWSPSexo.close();
+                            console.log('btn cerrando')
+                            Estilo_Estado(Sexo,'','nocss');
+                            Estilo_input_AWSP(lbSexo,'','#4f4f4f','');
+                            Estilo_Estado(Sexo,lbSexo,'nocss');
+                        }
+                });
+            //INPUT SEXO ( CLICK )
+                $('#Sexo').click(() => {
+                    Estilo_input_AWSP(lbSexo,icoSexo,'#D2202E','add');
+                    if (AWSPSexo.ul.childNodes.length === 0) {
+                        AWSPSexo.minChars = 0;
+                        AWSPSexo.evaluate();
+                        Estilo_Estado(Sexo,'','sicss');
+                        console.log('btn abriendo por evaluate')       
+                    }else if (AWSPSexo.ul.hasAttribute('hidden')) {
+                        Estilo_Estado(Sexo,'','sicss');
+                        console.log('btn abriendo por click')
+                        AWSPSexo.open();
+                    }else if($("#Sexo").val() == "" ||  $ ("#Sexo").val() == null ){
+                        AWSPSexo.close();
+                        console.log('btn cerrado por texto vacio')
+                        Estilo_Estado(Sexo,lbSexo,'nocss');
+                        //Estilo_input_AWSP(lbTipoUsuario,icoTipoUsuario,'#4f4f4f','remove');
+                        }else{
+                            AWSPSexo.close();
+                            console.log('btn cerrando')
+                            Estilo_Estado(Sexo,lbSexo,'nocss');
+                            Estilo_Estado(Sexo,'','nocss');
+                            Estilo_input_AWSP(lbSexo,'','#4f4f4f','');
+                        }
+                });
+            //INPUT SEXO ( BLUR )
+                $("#Sexo").blur(() => {
+                    Estilo_Estado(Sexo,lbSexo,'nocss');
+                });
+        });

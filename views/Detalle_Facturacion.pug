@@ -1,0 +1,180 @@
+extends layouts/main
+append head
+    // Libreria Socket
+    //script(src='/socket.io/socket.io.js')
+append message
+block contenido
+    form(action="detalle-pedido-facturacion" method="post")
+        .card.rounded-0.p-0
+            .card-body.p-0
+                .card.rounded-0.mb-1 
+                    .card-body.p-0
+                        .d-flex.justify-content-around.border-bottom
+                            h5.my-auto.p-2.text-muted.text-uppercase  Placa: #{data.Detalle_Pedido[0].placa}
+                            h5.my-auto.p-2.text-danger Orden: N° #{data.Detalle_Pedido[0].nro_orden}
+                            //input(name='pNro_Orden' type="hidden" value= '123') 
+                .card.rounded-0.mb-1 
+                    .card-header.py-2.border-bottom-0 
+                        i#iconombre.fas.fa-car.text-muted.mr-2
+                        strong.text-muted Información Vehiculo
+                    .card-body.p-1
+                        .container-fluid
+                            .row
+                                .col-12.col-sm.p-0
+                                    .m-1.border.border-muted.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Marca
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center #{data.Detalle_Pedido[0].vehiculo_marca}
+                                .col-6.col-sm.p-0
+                                    .m-1.border.border-muted.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Modelo
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center #{data.Detalle_Pedido[0].modelo}
+                                .col-6.col-sm.p-0
+                                    .m-1.border.border-muted.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Color
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center #{data.Detalle_Pedido[0].color}
+                .card.rounded-0.mb-1 
+                    .card-header.py-2.border-bottom-0 
+                        i#iconombre.fas.fa-user.text-muted.mr-2
+                        strong.text-muted Información Usuario
+                    .card-body.p-1
+                        .container-fluid
+                            .row
+                                .col-12.col-sm.p-0
+                                    .m-1.border.border-muted.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Nombre
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center #{data.Detalle_Pedido[0].nombre_cliente}
+                                .col-6.col-sm.p-0
+                                    .m-1.border.border-muted.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Telefono
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center #{data.Detalle_Pedido[0].telefono}
+                                .col-6.col-sm.p-0
+                                    .m-1.border.border-muted.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Tipo Usuario
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center #{data.Detalle_Pedido[0].tipo_cliente}
+                                .col-6.col-sm.p-0
+                                    .m-1.border.border-muted.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Dni
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center #{data.Detalle_Pedido[0].dni}
+                                .col-6.col-sm.p-0
+                                    .m-1.border.border-muted.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Ruc
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center #{data.Detalle_Pedido[0].ruc}
+                .card.rounded-0.mb-1 
+                    .card-header.py-2.border-bottom-0
+                        i#iconombre.fas.fa-clipboard-list.text-muted.mr-2
+                        strong.text-muted Información Pedido
+                    .card-body.p-1
+                        .container-fluid
+                            .row
+                                mixin Detalle_Pedido(pNombre_Servicio,pObs_Client,pNombre_Client)
+                                    .col-12.col-sm-6.p-0.mb-2
+                                        i.fas.fa-angle-double-right.ml-1
+                                        strong.m-1 #{pNombre_Servicio}
+                                        .m-1.border.border-muted.rounded
+                                            .container-fluid
+                                                .row.text-danger.d-flex.justify-content-center
+                                                    small Observacion del Cliente ( #{pNombre_Client} )
+                                                .row.text-left.px-2
+                                                    p6.text-justify.font-weight-light #{pObs_Client}
+                                - let i = 0;
+                                each val in data.Detalle_Pedido 
+                                    +Detalle_Pedido(data.Detalle_Pedido[i].nombre_servicio,data.Detalle_Pedido[i].descripcion_cliente,data.Detalle_Pedido[i].nombre_cliente)
+                                    - i++
+                .card.rounded-0.mb-1 
+                    .card-header.py-2.border-bottom-0
+                        i#iconombre.fas.fa-clipboard-list.text-muted.mr-2
+                        strong.text-muted Información descripcion Usuario
+                    .card-body.p-1
+                        .container-fluid
+                            .row
+                                .col-12.col-sm.p-0.mb-2
+                                    .m-1.border.border-muted.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Observacion del Usuario ( #{data.Detalle_Pedido[0].nombre} #{data.Detalle_Pedido[0].apellido_paterno} )
+                                            .row.text-left.px-2
+                                                p6.text-justify.font-weight-light #{data.Detalle_Pedido[0].Detalle_usuario}
+                .card.rounded-0.mb-1 
+                    .card-header.py-2.border-bottom-0
+                        i#iconombre.fas.fa-clipboard-list.text-muted.mr-2
+                        strong.text-muted Información de Requerimiento
+                    .card-body.p-1
+                        .md-form
+                            textarea#misRequerimientos.md-textarea.form-control(name='mis_Observaciones' ,rows='9',style='overflow:auto' readonly) #{data.Detalle_Pedido[0].Detalle_requerimiento}
+                            label(for='misObservaciones') Escribe los requerimientos
+            .card-footer.py-2.d-flex.justify-content-center
+                button#btn_factuar_pedido.btn.btn-success.rounded-pill(type='submit') Facturar ya
+                input#id_detalle_pedido(type="hidden" value=data.Detalle_Pedido[0].id_detallePedido name='id_detalle_pedido')
+                input#id_Notificacion(type="hidden" value=data.idDNotificacion name='id_Notificacion')
+                input#id_vehiculo(type="hidden" value=data.Detalle_Pedido[0].id_vehiculo name='id_vehiculo')
+                input#id_cliente(type="hidden" value=data.Detalle_Pedido[0].id_cliente name='id_cliente')
+block area-scripts
+    script.
+        $(document).ready(() => {
+
+            $('#btn_factuar_pedido').click(()=>{
+                //let min = parseInt($('#Minuto').val(), 10);
+                let id_cliente          = $('#id_cliente').val();
+                let id_vehiculo         = $('#id_vehiculo').val();
+                let id_detalle_pedido   = $('#id_detalle_pedido').val();
+
+                let info_seguimiento = {
+                    id_usuario:My_id_Usuario,
+                    id_cliente:id_cliente,
+                    id_vehiculo:id_vehiculo,
+                    id_detalle_pedido:id_detalle_pedido,
+                };
+                sk_Navigation.emit('Registrar_Seguimiento',info_seguimiento)
+            })
+            //let sk_detallePedido = io();
+            //const Detalle_Pedido    = !{JSON.stringify(Detalle_Pedido)},
+            //    nro_orden_Detalle_Pedido = data.Detalle_Pedido[0].nro_orden,
+            //    fecha_Detalle_Pedido = data.Detalle_Pedido[0].fecha,
+            //    id_Detalle_Pedido = data.Detalle_Pedido[0].id_detallePedido,
+            //    pId_caja_asignado = 100,
+            //    pId_asignador = data.Detalle_Pedido[0].id_usuario_asignado;
+
+            //Click_Facturar = () => {
+            //    sk_Navigation.emit('Enviar_Notificacion_detallePedido_terminada',pId_caja_asignado,pId_asignador,nro_orden_Detalle_Pedido); 
+            //}
+            //$('#btn_guardar').click(()=>{
+            //    let mis_requerimientos = $('#misRequerimientos').val()
+            //    let detalle_pedido = {mis_requerimientos,id_Detalle_Pedido};
+            //    sk_detallePedido.emit('Guardar_detalle_pedido',detalle_pedido);
+            //});
+            // sk_detallePedido.on('Actualizo_detalle_pedido',()=>{
+            //    alert('Se ha actualizado esta orden');
+            //})
+
+        })
+
+        
+
+
+
+
+                    

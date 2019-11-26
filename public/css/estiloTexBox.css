@@ -1,0 +1,63 @@
+.form-gradient .font-small {
+    font-size: 0.8rem; }
+    
+    .form-gradient .header {
+        border-top-left-radius: .3rem;
+        border-top-right-radius: .3rem; }
+    
+    .form-gradient input[type=tel]:focus:not([readonly]) {
+        border-bottom: 1px solid #D2202E;
+        -webkit-box-shadow: 0 1px 0 0 #D2202E;
+        box-shadow: 0 1px 0 0 #D2202E; }
+
+    .form-gradient input[type=number]:focus:not([readonly]) {
+        border-bottom: 1px solid #D2202E;
+        -webkit-box-shadow: 0 1px 0 0 #D2202E;
+        box-shadow: 0 1px 0 0 #D2202E; }
+    
+    .form-gradient input[type=text]:focus:not([readonly]) {
+    border-bottom: 1px solid #D2202E;
+    -webkit-box-shadow: 0 1px 0 0 #D2202E;
+    box-shadow: 0 1px 0 0 #D2202E; }
+    
+    .form-gradient input[type=email]:focus:not([readonly]) {
+        border-bottom: 1px solid #D2202E;
+        -webkit-box-shadow: 0 1px 0 0 #D2202E;
+        box-shadow: 0 1px 0 0 #D2202E; }
+
+    /*Solo para mi entrada*/
+    .mi_entrada input[type=number]:focus:not([readonly]) {
+        border-bottom: 0px solid #D2202E;
+        -webkit-box-shadow: 0 0px 0 0 #D2202E;
+        box-shadow: 0 0px 0 0 #D2202E; }
+
+    /*Estilo para texbox form-gradient*/
+    .form-gradient textarea[type=text]:focus:not([readonly]) {
+        border-bottom: 1px solid #D2202E;
+        -webkit-box-shadow: 0 1px 0 0 #D2202E;
+        box-shadow: 0 1px 0 0 #D2202E; }
+
+
+    .form-gradient textarea[type=text]:focus:not([readonly]) + label {
+        color: #D2202E; }
+
+    .form-gradient input[type=text]:focus:not([readonly]) + label {
+    color: #D2202E; }
+
+    .form-gradient input[type=email]:focus:not([readonly]) + label {
+        color: #D2202E; }
+
+    .form-gradient input[type=tel]:focus:not([readonly]) + label {
+    color: #D2202E; }
+
+    
+    .form-gradient input[type=number]:focus:not([readonly]) + label {
+        color: #D2202E; }
+    
+    .form-gradient input[type=password]:focus:not([readonly]) {
+    border-bottom: 1px solid #D2202E;
+    -webkit-box-shadow: 0 1px 0 0 #D2202E;
+    box-shadow: 0 1px 0 0 #D2202E; }
+    
+    .form-gradient input[type=password]:focus:not([readonly]) + label {
+    color: #4f4f4f; }

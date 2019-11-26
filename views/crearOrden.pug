@@ -1,0 +1,515 @@
+extends layouts/main.pug
+prepend head
+    // Librerias Awesomplate
+    link(rel='stylesheet', href='lib/lib_awesomplete/awesomplete.css')
+    // Socket.io
+    script(src='/socket.io/socket.io.js')
+append area-librerias-scripts
+    // JavaScript de awesomplate 
+    script(src='lib/lib_awesomplete/awesomplete.js')
+prepend area-scripts
+    script.
+        let sk_CrearOrden = io();
+        // === === ESTILOS === ===
+            // Agrega o remueve clases de estilo y cambia de color al label
+                Estilo_input_AWSP = (pIdLabel='',pIdico='',pColor ='',pEstado='') => {
+                    if(pEstado == 'add'){
+                        $(pIdLabel).addClass("active");
+                        $(pIdico).addClass("active");
+                        $(pIdLabel).css({"color": pColor});
+                    }else if(pEstado != ''){
+                        $(pIdLabel).removeClass("active");
+                        $(pIdico).removeClass("active");
+                        $(pIdLabel).css({"color": pColor});
+                    }else{
+                        $(pIdLabel).css({"color": pColor});
+                    }
+                }
+
+                Awesome_Combo_Bootstrap = (id_input,lb_input,ico_input,idButton ='') => {
+                    $(id_input).focus(() =>  {
+                        Estilo_input_AWSP(lb_input,ico_input,'#D2202E','add');     
+                    });
+                    $(id_input).focusout(() => {
+                        if ($(id_input).val() == "" ||  $ (id_input).val () == null ){
+                            Estilo_input_AWSP(lb_input,ico_input,'#4f4f4f','remove'); 
+                        }else{
+                            Estilo_input_AWSP(lb_input,'','#4f4f4f','');
+                        }   
+                    })    
+                }
+
+        Awesome_Combo_Bootstrap(idBusqueda,lb_busqueda,icon_busqueda);
+
+        // === === AWESOMPLETE's === ===
+            
+            // Autocompletado ==> M A R C A
+            // - variables
+            //Recuperar las marcas de autos de las rutas ¡¡
+            const data  = !{JSON.stringify(data)},
+                  // indice y marca recuperada 
+                  idService               = data.allServices.id,               
+                  nombre_servicio         = data.allServices.nombre_servicio ,
+                  Mec_Habilitados         = data.Mecanicos_Habilitados,
+                  etiquetaInputBusqueda   = $('#idBusqueda').get(0),
+                  awesompleteBusqueda     = new Awesomplete(etiquetaInputBusqueda, { maxItems: 5});
+                  //console.log(data);
+
+                  awesompleteBusqueda.list = nombre_servicio;
+
+
+
+        // === === SOCKETS === ===
+
+            $('#idBusqueda').on('awesomplete-selectcomplete',function() {
+                let i = nombre_servicio.indexOf(this.value);
+                console.log(idService);
+                console.log("id de marca",idService[i]); //Ver id seleccionado de marca
+                Crear_Nombre_Orden(this.value,idService[i]);
+                Estilo_input_AWSP(lb_busqueda,icon_busqueda,'#4f4f4f','remove');
+                $('#idBusqueda').val('');
+                $('#idBusqueda').blur(); //desenfocar para desactivar esos efectos
+                $('#modalPush').modal('toggle');
+                //sk_nuevoCliente.emit('marca_auto',id[i]);
+            });
+
+            $('#btnCrear').click(()=>{
+                const valor = $('#idBusqueda').val();
+                if(valor.length <= 0){
+                    alert('Es necesario el nombre de servicio');
+                }else{
+                    let id ="#{data.InfoUser.id_usuario}",
+                        Nombre = $('#idBusqueda').val();
+                    //console.log('enviar'+Nombre_Servicio+' y '+id_person)
+                    const NewService = {id,Nombre}
+                    sk_CrearOrden.emit('Crear_Servicio',NewService);
+                    $('#idBusqueda').val('');
+                    $('#lb_busqueda').removeClass("active");
+                    $('#modalPush').modal('toggle');
+                }
+            });
+
+            sk_CrearOrden.on('Servicio_agregado',(NewService) => {
+                let Nombre = NewService.nombre_servicio;
+                let i = NewService.id_servicios_generales;
+                Crear_Nombre_Orden(Nombre,i);
+            });
+
+            // LISTAR LOS MEANICOS DESOCUPADOS
+            sk_CrearOrden.on('Mecanico_Asignado',(data) => {
+                $('#panel_mecanicos').empty();
+                $('#panel_Modal_Confirm').empty();
+                Crear_List_Mecanicos_Modals2(data);
+                console.log('Nueva lista de mecanicos desocupados es:',data)
+            });
+
+        // === === EVENTOS_FUNCIONES === ===
+    
+            Crear_List_Mecanicos_Modals2 = (data) => {
+                for (let cont2 = 0; cont2 <= data.length-1; cont2++) {
+                    Crear_Modal_Confirm(
+                    data[cont2].id_usuario,
+                    data[cont2].nombre,
+                    data[cont2].apellido_paterno);
+                    Listar_Mecanicos(
+                    data[cont2].id_usuario,
+                    data[cont2].nombre,
+                    data[cont2].apellido_paterno,
+                    data[cont2].nro_ordenes);
+                }
+            }
+
+            Crear_List_Mecanicos_Modals = () => {
+
+                for (let cont = 0; cont <= Mec_Habilitados.length-1; cont++) {
+                    Crear_Modal_Confirm(
+                    Mec_Habilitados[cont].id_usuario,
+                    Mec_Habilitados[cont].nombre,
+                    Mec_Habilitados[cont].apellido_paterno);
+                    Listar_Mecanicos(
+                    Mec_Habilitados[cont].id_usuario,
+                    Mec_Habilitados[cont].nombre,
+                    Mec_Habilitados[cont].apellido_paterno,
+                    Mec_Habilitados[cont].nro_ordenes);
+                }
+            }
+            
+            Crear_List_Mecanicos_Modals();
+
+            Valores_de_Servicios = () => {
+                let Todos_Servicios = $("#Panel_Servicios input")
+                let Val_services = [],id_servicio=[];
+
+                for(let i = 0; i <= Todos_Servicios.length-1; i++){
+                    if(i%2==0){
+                        Val_services.push(parseInt(Todos_Servicios[i].value,10));
+                    }else{
+                        id_servicio.push(Todos_Servicios[i].value);
+                    }
+                }
+
+                console.log('Salida de valores de servicio',Val_services);
+                console.log('Salida de id_valores de servicio',id_servicio);
+                console.log($("#Panel_Servicios input").length);
+                return Val_services;
+            }
+
+            // Validar si El kilometrage esta vacio
+                Validar_Kilometrage = () => {
+                    let km_inicial = $('#km_inicial').val();
+                    if (km_inicial == null || km_inicial.length == 0 || km_inicial.trim() == ""){
+                        return false;
+                    }else{
+                        return true;
+                    }
+                }
+
+            //Busca en un Array (true) = si existe (false) = no existe
+            Busqueda_en_Array = (valor, array) => {return (array.indexOf(valor) > -1)}
+            var even = function(element) {return element != 0;};
+
+            // Click en confirmar Asignacion de orden.
+            Modal_Click = (pId_Usuario_receptor,pId_Usuario_emisor) => {
+                const Validacion = Valores_de_Servicios().some(even);
+                const Validacion_Kilometrage = Validar_Kilometrage();
+
+                console.log('Existencia de nulo',Validacion);
+                if(Validacion && Validacion_Kilometrage){
+                    $('#idUsuario_'+pId_Usuario_receptor).attr('name','idUsuario_'+pId_Usuario_receptor);
+                    $('#idUsuario_'+pId_Usuario_receptor).val(pId_Usuario_receptor)
+                    const Nro_orden = $('#Nro_Orden').val()
+                    console.log('oie pId_Usuario_receptor es ',pId_Usuario_receptor)
+                    // sicket actualiza la ccion de Mecanico Asignado
+                        
+                    // sicket emite una notificacion
+                        sk_CrearOrden.emit('Asignar_Mecanico',pId_Usuario_receptor)
+                        sk_Navigation.emit('Enviar_Notificacion',pId_Usuario_receptor,pId_Usuario_emisor,Nro_orden); 
+                }else{
+                    $('.modal.fade.show').modal('toggle');
+                    alert('Esta orden No tiene servicios asignados o kilometrage nulo¡');
+                }
+            }
+
+            $('#btnCancelar').click(()=>{
+                $('#idBusqueda').val('');
+                $('#lb_busqueda').removeClass("active");
+            });
+
+            function Crear_Modal_Confirm (pIdUsuario,pNombre,pApellidoPaterno){ // saque una coma pId,
+                let Mensage,Boton_OK,Color,propiedad,Titulo_Modal;
+                    Mensage = 'Estas seguro de asignar esta orden a '+pNombre+','+pApellidoPaterno+' ?';
+                    Boton_OK = 'No'
+                    Color = 'info'
+                    propiedad = 'block'
+                    Titulo_Modal = 'Confirmación de pedido'
+                
+                $('#panel_Modal_Confirm').prepend('<div class="modal fade" id=\'modalConfirm_'+pIdUsuario+'\' tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">\
+                    <div class="modal-dialog modal-notify modal-'+Color+' rounded" role="document">\
+                        <!-- Content-->\
+                        <div class="modal-content">\
+                            <!-- Header-->\
+                            <div class="modal-header d-flex justify-content-center">\
+                                <p class="heading">'+Titulo_Modal+'</p>\
+                                <button class="close" type="button" data-dismiss="modal" aria-label="Close">\
+                                <span class="white-text" aria-hidden="true">×</span></button></div>\
+                            <!-- Body-->\
+                            <div class="modal-body">\
+                                <p class="text-center mb-0 font-weight-bold">'+Mensage+'</p>\
+                            </div>\
+                            <!-- Footer-->\
+                            <div class="modal-footer flex-center">\
+                            <button onClick=\"Modal_Click('+pIdUsuario+','+data.InfoUser.id_usuario+')\" class="btn btn-'+Color+' rounded rounded-pill" id=\'btnCrear_'+pIdUsuario+'\' type="submit" '+propiedad+'>SI</button>\
+                            <button class="btn btn-outline-'+Color+' waves-effect rounded rounded-pill" id=\'btnCancelar_'+pIdUsuario+'\' type="button" data-dismiss="modal">'+Boton_OK+'</button></div>\
+                        </div>\
+                    </div>\
+                </div>'
+                ); 
+            }
+
+            function Listar_Mecanicos (pIdUsuario,pNombre,pApellidoPaterno,pNro_Ordenes) { // saque una coma pId,
+                
+                $('#panel_mecanicos').prepend('<div class="col-12 col-sm-4 mb-4">\
+                    <div class="card border-success">\
+                        <div class="card-header text-center value text-uppercase bg-white d-flex justify-content-center border-'+Color+' ">\
+                            <p5 class="text-success font-weight-bold mr-2">N° Ordenes</p5>\
+                            <div class="rounded-circle bg-success bg-success">\
+                                <span class="font-weight-bold text-white p-2">'+pNro_Ordenes+'</span>\
+                            </div>\
+                        </div>\
+                        <div class="card-body p-1">\
+                            <div class="row d-flex align-items-center">\
+                                <div class="col-12 col-lg-6 text-center text-capitalize">\
+                                    <div class="h5 my-2 pb-0">'+pNombre+','+pApellidoPaterno+'</div>\
+                                </div>\
+                                <div class="col-12 col-lg-6 d-flex justify-content-center">\
+                                    <input id=\'idUsuario_'+pIdUsuario+'\' type="hidden"/>\
+                                    <button class="btn btn-success btn-block" id=\'id_btn_asignar_add_'+pIdUsuario+'\' type="button" data-toggle="modal" data-target=\'#modalConfirm_'+pIdUsuario+'\'>\
+                                        <p5 class="text-white">Asignar Orden</p5>\
+                                    </button>\
+                                </div>\
+                            </div>\
+                        </div>\
+                    </div>\
+                </div>'
+                ); 
+            }
+            
+            Crear_Nombre_Orden = (pNombre,pId) => { // saque una coma pId,
+                $('#agregado').prepend('<div class="card m-1">\
+                        <div class="card-header d-flex bd-highlight px-2">\
+                            <div class="mr-auto bd-highlight d-flex align-items-center">\
+                                <div class="custom-control custom-checkbox"><input class="custom-control-input" id=\'input_id_add_'+pId+'\' onClick=\"fnCheck(\'input_id_add_'+pId+'\',\'colapsList_id_add_'+pId+'\',\'detalle_id_add_'+pId+'\',\'icono_id_add_'+pId+'\',\'texarea_id_add_'+pId+'\',\'id_input_servicio_add_'+pId+'\')\" value="0" type="checkbox" data-toggle="collapse" data-target=\'#colapsList_id_add_'+pId+'\' />\
+                                <label class="custom-control-label" for=\'input_id_add_'+pId+'\'>\
+                                <a class="ml-2 text-break">'+pNombre+'</a>\
+                                <input id=\'id_input_servicio_add_'+pId+'\' type="hidden" value='+pId+' />\
+                                </label>\
+                                </div>\
+                            </div>\
+                            <div class="pr-1 bd-highlight d-flex align-items-center"> <a class="fa fa-fw fa-eye field-icon toggle-password" id=\'icono_id_add_'+pId+'\' onClick=\"fnSmall(\'detalle_id_add_'+pId+'\',\'icono_id_add_'+pId+'\')\" data-toggle="collapse" data-target=\'#colapsList_id_add_'+pId+'\' toggle=\'#colapsList_id_add_'+pId+'\' style="display:none;"></a></div>\
+                            <div class="pl-1 bd-highlight d-flex align-items-center">\
+                            <a data-toggle="collapse" data-target=\'#colapsList_id_add_'+pId+'\' toggle=\'#colapsList_id_add_'+pId+'\'><small id=\'detalle_id_add_'+pId+'\' onClick=\"fnSmall(\'detalle_id_add_'+pId+'\',\'icono_id_add_'+pId+'\')\" style="display:none;">ocultar detalles</small></a></div>\
+                        </div>\
+                        <div class="collapse" id=\'colapsList_id_add_'+pId+'\'>\
+                            <div class="card-body">\
+                                <h5>Observaciones del Cliente\
+                                    <div class="md-form"><textarea class="md-textarea form-control" id=\'texarea_id_add_'+pId+'\' rows="8" style="overflow:auto"></textarea><label for=\'texarea_id_add_'+pId+'\'>Escribe observaciones del cliente</label></div>\
+                                </h5>\
+                            </div>\
+                        </div>\
+                    </div>'
+                ); 
+            }
+            
+        //- Alternar texto Ocultar icono 0jo y Validar Checkbox 
+        fnCheck = (id_check,colapsador,detalle,ojo,pId_TextArea,pIdNombreServicio) => {
+            $('#'+id_check).val() == 0 ? $('#'+id_check).val(1):$('#'+id_check).val(0);
+            var valor = $('#'+id_check).val()
+            if(valor != 0){
+                $('#'+pIdNombreServicio).attr("name",pIdNombreServicio);
+                $('#'+pId_TextArea).attr("name",pId_TextArea);
+                $('#'+colapsador).attr("class","collapse");
+                $('#'+detalle).text("ocultar detalles");
+                $('#'+detalle).css("display", "block");
+                $('#'+ojo).css("display", "block");
+                $('#'+ojo).removeClass("fa-eye-slash");
+                $('#'+ojo).addClass("fa-eye");
+            }else{
+                $('#'+pIdNombreServicio).removeAttr("name");
+                $('#'+pId_TextArea).removeAttr("name");
+                $('#'+pId_TextArea).val('')
+                $('#'+colapsador).attr("class","collapse show"); //-nada
+                $('#'+ojo).css("display", "none");
+                $('#'+detalle).css("display", "none");
+            }
+        }
+
+        //- Cambiar el texto "detalles" al precionarlo
+        fnSmall = (id,id_ojo) => cambiarEstado(id,id_ojo)
+
+        //- Cambiar el texto "detalles" y imagen del Ojo al precionarlo
+        cambiarEstado = (id,id_ojo) => {
+            $('#'+id_ojo).toggleClass("fa-eye fa-eye-slash"); 
+            $('#'+id).text() == "ver detalles" ? $('#'+id).text("ocultar detalles") : $('#'+id).text("ver detalles")
+        }
+
+        //Agregar 0 en la lista de text area al precionar enter
+        //ListarTexarea = (id_textArea) => event.keyCode == 13 && $('#'+id_textArea).val($('#'+id_textArea).val()+')
+
+        //Agregar atributo 'Name' solo si est marcada la opción
+        
+append styles
+    style.
+        ul {
+            list-style: circle;
+            padding-left: 20px;
+        }
+
+        .collapsing {
+            -webkit-transition: none;
+            transition: none;
+            /*display: none;*/
+        }
+        /*Estilos de Checkbox*/
+            .custom-control-input:checked~.custom-control-label::before {
+                color: #fff;
+                border-color: rgb(0, 200, 81);
+                background-color: rgb(0, 200, 81);
+            }
+            .custom-control-label::before {
+                position: absolute;
+                top: .0rem;
+                left: -1.5rem;
+                display: block;
+                width: 1.5rem;
+                height: 1.5rem;
+                pointer-events: none;
+                content: "";
+                background-color: #fff;
+                border: #8A8A8A solid 2px;
+            }
+            .custom-control-label::after {
+                position: absolute;
+                top: .0rem;
+                left: -1.5rem;
+                display: block;
+                width: 1.5rem;
+                height: 1.5rem;
+                content: "";
+                background: no-repeat 50%/50% 50%;
+            }
+        /*Estilos para eliminar el pading de colService*/
+            #colService{   
+                padding-left: 0px;
+                padding-right: 0px;
+            }
+block contenido
+    form#formCrear_Orden.mb-0(action='/profile', method='POST')
+        .card.rounded-0
+            .card-body.p-0
+                .card.rounded-0.mb-1 
+                    .card-body.p-0
+                        .d-flex.justify-content-around.border-bottom
+                            h5.my-auto.p-2.text-muted.text-uppercase  Placa: #{data.placa}
+                            h5.my-auto.p-2.text-danger Orden: N° #{data.NroOrden}
+                            input#Nro_Orden(name='pNro_Orden' type="hidden" value= data.numero_Orden)
+                            small#id_person(style="display:none") #{data.InfoUser.id_usuario}
+                .card.rounded-0.mb-1 
+                    //-.card-header.py-2.border-bottom-0 
+                    //-    i#iconombre.fas.fa-car.text-muted.mr-2
+                    //-    strong.text-muted Información Vehiculo
+                    .card-body.p-1
+                        .container-fluid
+                            .row
+                                .col-6.col-sm.p-0
+                                    .m-1.border.border-muted.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Marca
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center prueba
+                                .col-6.col-sm.p-0
+                                    .m-1.border.border-muted.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Modelo
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center prueba
+                                .col-6.col-sm.p-0
+                                    .m-1.border.border-muted.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Color
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center prueba
+                                .col-6.col-sm.p-0
+                                    .m-1.border.border-danger.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Km Inicial
+                                            .row.text-left.d-flex.justify-content-center
+                                                .mi_entrada.md-form.m-0
+                                                    input#km_inicial.form-control.p-0.m-0.border-0.text-center(type="number" name='km_inicial' placeholder='Km Inicial' required)
+            //-.d-flex.justify-content-around.border-bottom
+            //-    h5.my-auto.p-2 Placa: #{data.placa}
+            //-    h5.my-auto.p-2.text-danger Orden: #{data.NroOrden}
+            //-    input#Nro_Orden(name='pNro_Orden' type="hidden" value= data.numero_Orden)
+            //-    small#id_person(style="display:none") #{data.InfoUser.id_usuario}
+            .card.rounded-0
+                //-.card-header.text-center.value.text-uppercase Servicios solicitados (inspección , mantenimiento , Reparaciónes)
+                .card-header.py-2.border-bottom-0.text-center.value.text-uppercase
+                    strong.text-muted Servicios mas Solicitados
+                .card-body.pt-1.pb-1
+                    // Modal: modalPush
+                    #modalPush.modal.fade(tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true")
+                        .modal-dialog.modal-notify.modal-danger.rounded(role="document")
+                            // Content
+                            .modal-content
+                                // Header
+                                .modal-header.d-flex.justify-content-center
+                                    p.heading Crear o Busca un Servicio !
+                                    button.close(type="button" data-dismiss="modal" aria-label="Close")
+                                        span.white-text(aria-hidden="true") ×
+                                // Body
+                                .modal-body
+                                    p.text-center Introduce el nombre del servicio que desees agregar o buscar
+                                    .form-row
+                                        .form-group.col-12
+                                            section.form-gradient
+                                                .md-form.mb-1.mt-0
+                                                    .d-flex.bd-highlight
+                                                        .flex-fill.bd-highlight
+                                                            input#idBusqueda.form-control(type='text',autocomplete='off')
+                                                            label#lb_busqueda(for='idBusqueda') Buscar Servicio
+                                                        .m-auto.bg-transparent
+                                                            i#icon_busqueda.fas.fa-search.m-2
+                                .modal-footer.flex-center
+                                    button#btnCrear.btn.btn-danger.rounded.rounded-pill(type="button") Crear
+                                    button#btnCancelar.btn.btn-outline-danger.waves-effect.rounded.rounded-pill(type="button" data-dismiss="modal") Cancelar
+                            // /.Content
+                    // Modal: modalPush
+                    .row
+                        //- Mixin Lista creado para reutilizar y agregar
+                        mixin lista(id_input,servicio,id_icono,colapsador,id_small,id_textArea,id_nombreServicio,id_input_servicio)
+                            .card.m-1
+                                .card-header.d-flex.bd-highlight.px-2
+                                    .mr-auto.bd-highlight.d-flex.align-items-center 
+                                        .custom-control.custom-checkbox
+                                            input.custom-control-input(onClick="fnCheck('"+id_input+"','"+colapsador+"','"+id_small+"','"+id_icono+"','"+id_textArea+"','"+id_input_servicio+"')",id=id_input,value="0",type='checkbox',data-toggle='collapse', data-target="#"+colapsador)
+                                            label.custom-control-label(for=id_input)
+                                                a.ml-2.text-break #{servicio}
+                                                input(id=id_input_servicio type="hidden" value= id_nombreServicio) 
+                                    .pr-1.bd-highlight.d-flex.align-items-center
+                                        a.fa.fa-fw.fa-eye.field-icon.toggle-password(onClick="fnSmall('"+id_small+"','"+id_icono+"')",id=id_icono, data-toggle='collapse', data-target="#"+colapsador,toggle="#"+colapsador style="display:none")
+                                    .pl-1.bd-highlight.d-flex.align-items-center 
+                                        a(data-toggle='collapse', data-target="#"+colapsador,toggle="#"+colapsador)
+                                            small(id=id_small onClick="fnSmall('"+id_small+"','"+id_icono+"')",style="display:none") ocultar detalles
+                                .collapse(id=colapsador)
+                                    .card-body
+                                        h5 Observaciones del Cliente 
+                                            .md-form
+                                                textarea.md-textarea.form-control(id=id_textArea, rows='8',style='overflow:auto')
+                                                label(for=id_textArea) Escribe observaciones del cliente
+
+                        #colService.col-sm-6
+   
+                            #Panel_Servicios                  
+                                #agregado.agregado                                      
+                                - var i = 0;
+                                each val in data.Servicio.nombre_servicio
+                                    +lista('id_input'+i,data.Servicio.nombre_servicio[i],'id_icono'+i,'colapsador'+i,'id_small'+i,'text_area'+i,data.Servicio.id_servicio[i],'id_ServicioInput_'+i)
+                                    - i++
+                            // Button modal para crear SERVICIOS
+                            .d-flex.justify-content-center
+                                button.btn.btn-danger.rounded-pill(type="button" data-toggle="modal" data-target="#modalPush")
+                                    i.fas.fa-plus-circle
+                                    |   agregar o Buscar servicio
+                            h5.my-3.mx-3 Servicios mas Solicitados
+                        //-Columna 2            
+                        #colService.col-sm-6
+                            .card.m-1
+                                .card-header Mis Observaciones
+                                .card-body
+                                    .md-form
+                                        textarea#misObservaciones.md-textarea.form-control(name='mis_Observaciones' ,rows='9',style='overflow:auto')
+                                        label(for='misObservaciones') Escribe tus observaciones
+        .card.rounded-0
+            #panel_Modal_Confirm
+            .card-header.text-center.value.text-uppercase Asigna a un persona que este disponible
+            .card-body.px-0
+                .container-fluid
+                    #panel_mecanicos.row
+                    #panel_mecanicos_v2.row
+                        //-.col-12.col-sm-4.mb-4
+                        //-    .card.border-success
+                        //-        .card-header.text-center.value.text-uppercase.bg-white.border-success.d-flex.justify-content-center
+                        //-            p5.text-success.font-weight-bold.mr-2 N° Ordenes
+                        //-            .rounded-circle.bg-success.bg-success
+                        //-                span.font-weight-bold.text-white.p-2 3
+                        //-        .card-body.p-1
+                        //-            .row.d-flex.align-items-center
+                        //-                .col-12.col-lg-6.text-center.text-capitalize
+                        //-                    .h5.my-2.pb-0 nombre,apellido
+                        //-                .col-12.col-lg-6.d-flex.justify-content-center
+                        //-                    input(id="id_oculto" type="hidden")
+                        //-                    button.btn.btn-block.btn-success(type="button" data-toggle="modal" data-target="")
+                        //-                        p5.text-white Asignar Orden

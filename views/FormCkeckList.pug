@@ -1,0 +1,532 @@
+extends layouts/main.pug
+
+prepend head
+    // Librerias Awesomplate
+    link(rel='stylesheet', href='lib/lib_awesomplete/awesomplete.css')
+    // Socket.io
+    script(src='/socket.io/socket.io.js')
+append area-librerias-scripts
+    // JavaScript de awesomplate 
+    script(src='lib/lib_awesomplete/awesomplete.js')
+
+append styles
+    style.
+        ul {
+            list-style: circle;
+            padding-left: 20px;
+        }
+        /*Efecto al colapsar los cards*/
+            .collapsing {
+                -webkit-transition: none;
+                transition: none;
+                /*display: none;*/
+            }
+        /*Por defecto el ojo esta oculto*/
+            #ojo{
+                display:none
+            }
+            #notas{
+                display:none
+            }
+        /*Estilos de Radio button*/
+
+            .verde.custom-control-input:checked~.custom-control-label::before {
+                color: #fff;
+                border-color: #28a745;
+                background-color: #28a745;
+            }
+
+            .rojo.custom-control-input:checked~.custom-control-label::before {
+                color: #fff;
+                border-color: #dc3545;  
+                background-color: #dc3545;
+            }
+            .amarillo.custom-control-input:checked~.custom-control-label::before {
+                color: #fff;
+                border-color: #ffc107;
+                background-color: #ffc107;
+            }
+
+            .custom-control-label::before {
+                position: absolute;
+                top: .0rem;
+                left: -1.5rem;
+                display: block;
+                width: 1.5rem;
+                height: 1.5rem;
+                pointer-events: none;
+                content: "";
+                background-color: #fff;
+                border: #8A8A8A solid 2px;
+            }
+            .custom-control-label::after {
+                position: absolute;
+                top: .0rem;
+                left: -1.5rem;
+                display: block;
+                width: 1.5rem;
+                height: 1.5rem;
+                content: "";
+                background: no-repeat 50%/50% 50%;
+            }
+        /*Estilos para eliminar el pading de colService*/
+            #colService{   
+                padding-left: 0px;
+                padding-right: 0px;
+            }
+block contenido
+    form#form1(action='/crear-checklist', method='POST')
+        .card
+            .card-body.p-0
+                .m-1
+                    .d-flex.flex-row-reverse.bd-highlight
+                        .bd-highlight.px-2
+                            p6.text-center jueves 15 de agosto de 2019 
+                        .bd-highlight.text-danger.pr-1
+                            p5 Fecha : 
+                .d-flex.justify-content-around.border-bottom
+                    h5.my-auto.p-2 Placa: #{crearCheckList.placa}
+                    h5.my-auto.p-2.text-danger Orden: #{crearCheckList.nro_orden}
+                    input(name='pNro_Orden' type="hidden" value= crearCheckList.nro_orden) 
+                .card.mb-1
+                    .card-header DATOS DEL PROPIETARIO
+                    .card-body.p-0
+                        .d-flex.justify-content-around.border-bottom
+                            h5.my-auto.p-2 Nombre: #{crearCheckList.pedido_cliente.nombre}
+                            h5.my-auto.p-2 Teléfono: #{crearCheckList.pedido_cliente.telefono}
+                .card
+                    .card-header DATOS DEL VEHICULO
+                    .card-body.p-0
+                        .container-fluid
+                            .row
+                                .col-12.col-sm.p-0
+                                    .m-1.border.border-danger.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Marca
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center #{crearCheckList.pedido_cliente.vehiculo_marca}
+                                .col-6.col-sm.p-0
+                                    .m-1.border.border-danger.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Modelo
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center #{crearCheckList.pedido_cliente.modelo}
+                                .col-6.col-sm.p-0
+                                    .m-1.border.border-danger.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Color
+                                            .row.text-left.d-flex.justify-content-center
+                                                p6.text-center #{crearCheckList.pedido_cliente.color}
+                                .col-6.col-sm.p-0
+                                    .m-1.border.border-danger.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Km Inicial
+                                            .row.text-left.d-flex.justify-content-center
+                                                .mi_entrada.md-form.m-0
+                                                    input#imp_KmInicial.form-control.p-0.m-0.border-0.text-center(type="number" placeholder='Km Inicial')
+                                .col-6.col-sm.p-0
+                                    .m-1.border.border-danger.rounded
+                                        .container-fluid
+                                            .row.text-danger.d-flex.justify-content-center
+                                                small Prox Mnto
+                                            .row.text-left.d-flex.justify-content-center
+                                                .mi_entrada.md-form.m-0
+                                                    input#imp_ProxM.form-control.p-0.m-0.border-0.text-center(type="number" placeholder='Prox Mnto')
+                                                
+                    // Modal: modalPush
+                #modalPush.modal.fade(tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true")
+                    .modal-dialog.modal-notify.modal-danger.rounded(role="document")
+                        // Content
+                        .modal-content.text-center
+                            // Header
+                            .modal-header.d-flex.justify-content-center
+                                p.heading Crear Item
+                                button.close(type="button" data-dismiss="modal" aria-label="Close")
+                                    span.white-text(aria-hidden="true") ×
+                            // Body
+                            .modal-body
+                                p Introduce el nombre del Nuevo Item que desees agregar
+                                .form-row
+                                    .form-group.col-12
+                                        section.form-gradient
+                                            .md-form
+                                                input#Nombre_CheckList_Nuevo.form-control.orden(type='text', autocomplete='off')
+                                                label(for='Nombre_CheckList_Nuevo') Nombre de Item
+                                // i.fas.fa-bell.fa-4x.animated.rotateIn.mb-4
+
+                            // Footer
+                            .modal-footer.flex-center
+                                button#btnCrear.btn.btn-danger.rounded.rounded-pill(type="button" data-dismiss="modal") Crear
+                                button.btn.btn-outline-danger.waves-effect.rounded.rounded-pill(type="button" data-dismiss="modal") Cancelar          
+                //- Para que no se salga de el area container fluid
+                .container-fluid
+                    .row
+
+                        //- Mixins checkList creado para reutilizar y agregar
+                        mixin lista(id_input,servicio,id_icono,colapsador,id_small,id_textArea)
+                            .card.m-1
+                                .card-header.d-flex.bd-highlight
+                                    .mr-auto.bd-highlight.d-flex.align-items-center 
+                                        .custom-control.custom-checkbox
+                                            input.custom-control-input(onClick="fnCheck('"+id_input+"','"+colapsador+"','"+id_small+"','"+id_icono+"')",id=id_input,value="0",type='checkbox',data-toggle='collapse', data-target="#"+colapsador)
+                                            label.custom-control-label(for=id_input)
+                                                a.ml-3 #{servicio}
+                                    .pr-1.bd-highlight.d-flex.align-items-center
+                                        a.fa.fa-fw.fa-eye.field-icon.toggle-password(onClick="fnSmall('"+id_small+"','"+id_icono+"')",id=id_icono, data-toggle='collapse', data-target="#"+colapsador,toggle="#"+colapsador style="display:none")
+                                    .pl-1.bd-highlight.d-flex.align-items-center 
+                                        a(data-toggle='collapse', data-target="#"+colapsador,toggle="#"+colapsador)
+                                            small(id=id_small onClick="fnSmall('"+id_small+"','"+id_icono+"')",style="display:none") ocultar notas
+                                .collapse(id=colapsador)
+                                    .card-body
+                                        h5 NOTAS 
+                                            .md-form
+                                                textarea.md-textarea.form-control(onkeyup="ListarTexarea('"+id_textArea+"');",id=id_textArea, rows='9',style='overflow:auto') 
+                                                label(for=id_textArea) Escribe notas correspondientes
+                                    .card-footer
+                                        .custom-control.custom-checkbox
+                                            input.custom-control-input(onClick="fnCheck('"+id_input+"','"+colapsador+"','"+id_small+"','"+id_icono+"')",id=id_input,value="0",type='checkbox',data-toggle='collapse', data-target="#"+colapsador)
+                                            label.custom-control-label(for=id_input)
+                                                a.ml-3 #{servicio}
+                        mixin checkList(pId_Card,id_CardFooter,id_label,id_Title,pTexto,id_Collapse,id_TextArea,id_Rbgood,id_Rbbad,id_Rbcorrect,pName)
+                            .card.m-1.bg-transparent.rounded-0.border-top-0.border-left-0.border-right-0.delete(id=pId_Card)
+                                .card-header.pl-1.bg-transparent.border-bottom-0.border-right-0
+                                    label.m-auto(id=id_label,data-toggle='collapse', data-target='#'+id_Collapse)
+                                        a.h6.delete(id=id_Title) #{pTexto}   
+                                .collapse(id=id_Collapse)
+                                    .card-footer.d-flex.justify-content-around.bg-transparent.border-bottom.delete(id=id_CardFooter)
+                                        //-BIEN
+                                        .custom-control.custom-radio.custom-control-inline
+                                            input.verde.check.custom-control-input(onclick = "Cambio_de_Color('"+pId_Card+"','"+id_CardFooter+"','"+id_Title+"','"+id_Rbgood+"','success')",id=id_Rbgood,type='radio', name=pName)
+                                            label.custom-control-label(for=id_Rbgood)
+                                                a.ml-2.text-success.font-weight-bold BIEN
+                                        //-MAL
+                                        .custom-control.custom-radio.custom-control-inline
+                                            input.rojo.check.custom-control-input(onclick = "Cambio_de_Color('"+pId_Card+"','"+id_CardFooter+"','"+id_Title+"','"+id_Rbgood+"','danger')",id=id_Rbbad,type='radio', name=pName)
+                                            label.custom-control-label(for=id_Rbbad)
+                                                a.ml-2.text-danger.font-weight-bold MAL
+                                        //-CORREGIR
+                                        .custom-control.custom-radio.custom-control-inline
+                                            input.amarillo.check.custom-control-input(onclick = "Cambio_de_Color('"+pId_Card+"','"+id_CardFooter+"','"+id_Title+"','"+id_Rbgood+"','warning')",id=id_Rbcorrect,type='radio', name=pName)
+                                            label.custom-control-label(for=id_Rbcorrect)
+                                                a.ml-2.text-warning.font-weight-bold CORREGIR
+                                    .card-body
+                                        h5 NOTAS 
+                                            .md-form.form-gradient
+                                                textarea.md-textarea.form-control(id=id_TextArea,rows='8',style='overflow:auto' type='text') 
+                                                label(for=id_TextArea) Escribe notas correspondientes
+                                    .card-footer
+                                        .d-flex.justify-content-center
+                                            button.btn.btn-success.rounded-pill(type='button') Limpiar
+                        
+                        #colService.col-12
+                            // Button trigger modal
+                            .d-flex.justify-content-end
+                                button.btn.btn-danger.rounded.btn-sm.p-auto.ml-auto(type="button" data-toggle="modal" data-target="#modalPush")
+                                    i.fas.fa-plus-circle
+                                    |   agregar Item
+                            .px-1
+                                section.form-gradient
+                                    .md-form.mb-1.mt-0
+                                        .d-flex.bd-highlight
+                                            .flex-fill.bd-highlight
+                                                input#idBusqueda.form-control(type='text',autocomplete='off')
+                                                label#lb_busqueda(for='idBusqueda') Buscar Nombre de Item
+                                            .m-auto.bg-transparent
+                                                i#icon_busqueda.fas.fa-search.m-2
+                            .card
+                                .card-header CHECKLIST
+                                .card-body.p-0
+                                    #agregado.agregado 
+                                    - var n = 0
+                                    each val in crearCheckList.Checklist.nombre_checklist       
+                                        +checkList('id_card'+n,'id_CardFooter'+n,'id_label'+n,'id_Title'+n,crearCheckList.Checklist.nombre_checklist[n],'id_Collapse'+n,'id_TextArea'+n,'id_Rbgood'+n,'id_Rbbad'+n,'id_Rbcorrect'+n,'pNname_Rb'+n)
+                                        - n++
+                                    #pId_Card_id.card.m-1.bg-transparent.rounded-0.border-top-0.border-left-0.border-right-0.delete
+                                        .card-header.pl-1.bg-transparent.border-bottom-0.border-right-0
+                                            label#id_label_id.m-auto(data-toggle='collapse', data-target='#id_Collapse_id')
+                                                a#id_Title_id.h6.delete Servicio de prueba XD XD  
+
+                                        #id_Collapse_id.collapse
+                                            #id_CardFooter_id.card-footer.d-flex.justify-content-around.bg-transparent.border-bottom.delete
+                                                //-BIEN
+                                                .custom-control.custom-radio.custom-control-inline
+                                                    input#id_Rbgood_id.verde.check.custom-control-input(onclick = "Cambio_de_Color('pId_Card_id','id_CardFooter_id','id_Title_id','id_Rbgood_id','success')",type='radio', name='pName_id')
+                                                    label.custom-control-label(for='id_Rbgood_id')
+                                                        a.ml-2.text-success.font-weight-bold BIEN
+                                                //-MAL
+                                                .custom-control.custom-radio.custom-control-inline
+                                                    input#id_Rbbad_id.rojo.check.custom-control-input(onclick = "Cambio_de_Color('pId_Card_id','id_CardFooter_id','id_Title_id','id_Rbgood_id','danger')",type='radio', name='pName_id')
+                                                    label.custom-control-label(for='id_Rbbad_id')
+                                                        a.ml-2.text-danger.font-weight-bold MAL
+                                                //-CORREGIR
+                                                .custom-control.custom-radio.custom-control-inline
+                                                    input#id_Rbcorrect.amarillo.check.custom-control-input(onclick = "Cambio_de_Color('pId_Card_id','id_CardFooter_id','id_Title_id','id_Rbgood_id','warning')",type='radio', name='pName_id')
+                                                    label.custom-control-label(for='id_Rbcorrect')
+                                                        a.ml-2.text-warning.font-weight-bold CORREGIR
+                                            .card-body
+                                                h5 NOTAS 
+                                                    .md-form.form-gradient
+                                                        textarea#id_TextArea_id.md-textarea.form-control(rows='8',style='overflow:auto' type='text') 
+                                                        label(for='id_TextArea_id') Escribe notas correspondientes
+                                            .card-footer
+                                                .d-flex.justify-content-center
+                                                    button.btn.btn-success.rounded-pill(type='button') Limpiar
+                                    
+
+                                    
+
+
+            .card-footer.d-flex.justify-content-around
+                button#btnclean.btn.btn-info.rounded-pill(type='button') Omitir CheckLis
+                button#btnSend.btn.btn-success.rounded-pill(type='button') Crear Item
+prepend area-scripts
+    script.
+
+        // === === ESTILOS === ===
+
+            // Agrega o remueve clases de estilo y cambia de color al label
+                Estilo_input_AWSP = (pIdLabel='',pIdico='',pColor ='',pEstado='') => {
+                    if(pEstado == 'add'){
+                        $(pIdLabel).addClass("active");
+                        $(pIdico).addClass("active");
+                        $(pIdLabel).css({"color": pColor});
+                    }else if(pEstado != ''){
+                        $(pIdLabel).removeClass("active");
+                        $(pIdico).removeClass("active");
+                        $(pIdLabel).css({"color": pColor});
+                    }else{
+                        $(pIdLabel).css({"color": pColor});
+                    }
+                }
+
+            Awesome_Combo_Bootstrap = (id_input,lb_input,ico_input,idButton ='') => {
+                $(id_input).focus(() =>  {
+                    Estilo_input_AWSP(lb_input,ico_input,'#D2202E','add');     
+                });
+                $(id_input).focusout(() => {
+                    if ($(id_input).val() == "" ||  $ (id_input).val () == null ){
+                        Estilo_input_AWSP(lb_input,ico_input,'#4f4f4f','remove'); 
+                    }else{
+                        Estilo_input_AWSP(lb_input,'','#4f4f4f','');
+                    }   
+                })    
+            }
+
+            Awesome_Combo_Bootstrap(idBusqueda,lb_busqueda,icon_busqueda);
+
+        let sk_CrearChecklist = io();
+
+        // === === AWESOMPLETE's === ===
+            
+            // Autocompletado ==> M A R C A
+            // - variables
+            //Recuperar las marcas de autos de las rutas ¡¡
+            const Aux_Ckecklist = !{JSON.stringify(crearCheckList.Checklist_Aux)},
+                    // indice y marca recuperada 
+                    id_Checklist        = Aux_Ckecklist.id,               
+                    nombre_Checklist    = Aux_Ckecklist.nombre ,            
+                    etiquetaInputBusqueda = $('#idBusqueda').get(0),
+                    awesompleteBusqueda = new Awesomplete(etiquetaInputBusqueda, { maxItems: 5});
+                    console.log(Aux_Ckecklist);
+                    
+                awesompleteBusqueda.list = nombre_Checklist;
+
+                $('#idBusqueda').on('awesomplete-selectcomplete',function() {
+                    let i = nombre_Checklist.indexOf(this.value);
+                    console.log("id de Checklist",id_Checklist[i]); //Ver id seleccionado de marca
+                    Crear_Nombre_CheckList(this.value,id_Checklist[i]);
+                    //sk_nuevoCliente.emit('marca_auto',id[i]);
+                });
+
+         // === === SOCKETS === ===
+
+         $('#btnCrear').click(()=>{
+             let id ="#{crearCheckList.usuario.id_person}";
+             let Nombre = $('#Nombre_CheckList_Nuevo').val();
+             //console.log('enviar'+Nombre_Servicio+' y '+id_person)
+             const NewCheckList = {id,Nombre}
+             sk_CrearChecklist.emit('Crear_CheckList',NewCheckList);
+         });
+
+
+        sk_CrearChecklist.on('Checklist_agregado',(NewCheckList) => {
+                let Nombre = NewCheckList.nombre_checklist;
+                let i = NewCheckList.id_check_list;
+                console.log('Nuevo CheckList',Nombre,i)
+                Crear_Nombre_CheckList(Nombre,i);
+        });
+
+        Crear_Nombre_CheckList = (pNombre,pId) => {
+            $('#agregado').prepend('<div class="card m-1 bg-transparent rounded-0 border-top-0 border-left-0 border-right-0 delete" id=\'pId_Card_id_'+pId+'\'>\
+                  <div class="card-header pl-1 bg-transparent border-bottom-0 border-right-0">\
+                  <label class="m-auto" data-target=\'#id_Collapse_id_'+pId+'\' data-toggle="collapse" id=\'id_label_id_'+pId+'\'>\
+                  <a class="h6 delete" id=\'id_Title_id_'+pId+'\'>'+pNombre+'</a></label></div>\
+                  <div class="collapse" id=\'id_Collapse_id_'+pId+'\'>\
+                    <div class="card-footer d-flex justify-content-around bg-transparent border-bottom delete" id=\'id_CardFooter_id_'+pId+'\'>\
+                      <div class="custom-control custom-radio custom-control-inline">\
+                      <input class="verde check custom-control-input" id=\'id_Rbgood_id_'+pId+'\' name="pName_id" onclick=\"Cambio_de_Color(\'pId_Card_id_'+pId+'\',\'id_CardFooter_id_'+pId+'\',\'id_Title_id_'+pId+'\',\'id_Rbgood_id_'+pId+'\',\'success\')\" type="radio">\
+                      <label class="custom-control-label" for=\'id_Rbgood_id_'+pId+'\'><a class="ml-2 text-success font-weight-bold">BIEN</a></label>\
+                      </div>\
+                      <div class="custom-control custom-radio custom-control-inline">\
+                      <input class="rojo check custom-control-input" id=\'id_Rbbad_id_'+pId+'\' name="pName_id" onclick=\"Cambio_de_Color(\'pId_Card_id_'+pId+'\',\'id_CardFooter_id_'+pId+'\',\'id_Title_id_'+pId+'\',\'id_Rbgood_id_'+pId+'\',\'danger\')\" type="radio">\
+                      <label class="custom-control-label" for=\'id_Rbbad_id_'+pId+'\'>\
+                      <a class="ml-2 text-danger font-weight-bold">MAL</a>\
+                      </label>\
+                      </div>\
+                      <div class="custom-control custom-radio custom-control-inline">\
+                      <input class="amarillo check custom-control-input" id=\'id_Rbcorrect_'+pId+'\' name="pName_id" onclick=\"Cambio_de_Color(\'pId_Card_id_'+pId+'\',\'id_CardFooter_id_'+pId+'\',\'id_Title_id_'+pId+'\',\'id_Rbgood_id_'+pId+'\',\'warning\')\" type="radio">\
+                      <label class="custom-control-label" for=\'id_Rbcorrect_'+pId+'\'>\
+                      <a class="ml-2 text-warning font-weight-bold">CORREGIR</a>\
+                      </label>\
+                      </div>\
+                    </div>\
+                    <div class="card-body">\
+                      <h5>NOTAS<div class="md-form form-gradient">\
+                      <textarea class="md-textarea form-control" id=\'id_TextArea_id_'+pId+'\' rows="8" style="overflow:auto" type="text"></textarea>\
+                      <label for=\'id_TextArea_id_'+pId+'\'>Escribe notas correspondientes</label>\
+                      </div>\
+                      </h5>\
+                    </div>\
+                    <div class="card-footer">\
+                      <div class="d-flex justify-content-center">\
+                      <button class="btn btn-success rounded-pill" type="button">Limpiar</button>\
+                      </div>\
+                    </div>\
+                  </div>\
+                </div>'
+            ); 
+        }
+
+        Cambio_de_Color = (pIdCard,pIdCardFooter,pIdText,pidInput,pColor) => {
+
+            let lastClass_Card = $('#'+pIdCard).attr('class').split(' ').pop(),
+                lastClass_CardFooter = $('#'+pIdCardFooter).attr('class').split(' ').pop(),
+                lastClass_Text = $('#'+pIdText).attr('class').split(' ').pop()
+
+            $('#'+pIdCard).removeClass(lastClass_Card);
+            $('#'+pIdCardFooter).removeClass(lastClass_CardFooter);
+            $('#'+pIdText).removeClass(lastClass_Text);
+
+            $('#'+pIdCard).addClass('border-'+pColor)
+            $('#'+pIdCardFooter).addClass('border-'+pColor)
+            $('#'+pIdText).addClass('text-'+pColor)
+        }
+
+        $("#id_check").click(function() {
+            this.value = this.checked ? 1 : 0;
+            if(this.value != 0){
+                $('#collapsList').attr("class","collapse"); //-colapsa
+                $('#notas').text("ocultar notas"); 
+                $("#notas").css("display", "block");
+                $("#ojo").css("display", "block");
+                $("#ojo").removeClass("fa-eye-slash");
+                $("#ojo").addClass("fa-eye");
+            }else{
+                $('#collapsList').attr("class","collapse show"); //-nada
+                $("#ojo").css("display", "none");
+                $("#notas").css("display", "none");
+            }
+        });
+
+        cambiar_estado = () => {
+            if($('#notas').text() == "ver notas"){
+                $('#notas').text("ocultar notas"); 
+            }else{
+                $('#notas').text("ver notas"); 
+            }
+            $('#ojo').toggleClass("fa-eye fa-eye-slash");
+        }
+
+        $("#notas").click(function() {
+            cambiar_estado()
+        })
+
+        $("#ojo").click(function() {
+            cambiar_estado()
+        })
+
+        //$("#id_label").click(function() {
+        //    let NameClass = $("#collapsList")[0].className
+        //    if(NameClass == 'collapse'){
+        //        $("#notas").css("display", "block");
+        //        $("#ojo").css("display", "block");
+        //        $("#ojo").removeClass("fa-eye-slash");
+        //        $("#ojo").addClass("fa-eye");
+        //    }else{
+        //        $("#notas").css("display", "none");
+        //        $("#ojo").css("display", "none");
+        //        $("#ojo").addClass("fa-eye-slash");
+        //        $("#ojo").removeClass("fa-eye");
+        //    }
+        //    console.log($("#collapsList")[0].className);
+        //});
+
+        $("#id_check").click(function() { //Al hacer click en cualquier elemento con este id
+            this.value = this.checked ? 1 : 0;
+            if(this.value != 0){
+                $('#collapsList').attr("class","collapse"); //-colapsa
+                $('#notas').text("ocultar notas"); 
+                $("#notas").css("display", "block");
+                $("#ojo").css("display", "block");
+                $("#ojo").removeClass("fa-eye-slash");
+                $("#ojo").addClass("fa-eye");
+            }else{
+                $('#collapsList').attr("class","collapse show"); //-nada
+                $("#ojo").css("display", "none");
+                $("#notas").css("display", "none");
+            }
+        });
+
+        //- Alternar texto Ocultar icono 0jo y Validar Checkbox 
+        function fnCheck(id_check,colapsador,detalle,ojo,pid_Texarea){
+            $('#'+id_check).val() == 0 ? $('#'+id_check).val(1):$('#'+id_check).val(0);
+            let valor = $('#'+id_check).val()
+            if(valor != 0){
+                $('#'+colapsador).attr("class","collapse");
+                $('#'+detalle).text("ocultar notas");
+                $('#'+detalle).css("display", "block");
+                $('#'+ojo).css("display", "block");
+                $('#'+ojo).removeClass("fa-eye-slash");
+                $('#'+ojo).addClass("fa-eye");
+            }else{
+                $('#'+colapsador).attr("class","collapse show"); //-nada
+                $('#'+ojo).css("display", "none");
+                $('#'+detalle).css("display", "none");
+            }
+        }
+
+        //- Cambiar la imagen del Ojo al precionarlo
+        fnOjo = (id,id_ojo) => cambiarEstado(id,id_ojo)
+
+        //- Cambiar el texto "notas" al precionarlo
+        fnSmall = (id,id_ojo) => cambiarEstado(id,id_ojo)
+
+        //- Cambiar el texto "notas" y imagen del Ojo al precionarlo
+        cambiarEstado = (id,id_ojo) => {
+            $('#'+id_ojo).toggleClass("fa-eye fa-eye-slash"); 
+            $('#'+id).text() == "ver notas" ? $('#'+id).text("ocultar notas") : $('#'+id).text("ver notas")
+        }
+
+        //Agregar 0 en la lista de text area al precionar enter
+        ListarTexarea = (id_textArea) => event.keyCode == 13 && $('#'+id_textArea).val($('#'+id_textArea).val()+'')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

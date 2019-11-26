@@ -1,0 +1,648 @@
+extends partials/messages.pug
+append head
+  // Librerias Awesomplate
+  link(rel='stylesheet', href='lib/lib_awesomplete/awesomplete.css')
+  script(src='/socket.io/socket.io.js')
+  link(href="lib/MDBootstrap 4.8.7/css/addons/datatables.min.css" rel="stylesheet")
+append area-librerias-scripts
+  // JavaScript de awesomplate 
+  script(src='lib/lib_awesomplete/awesomplete.js')
+  script(type="text/javascript" src="lib/MDBootstrap 4.8.7/js/addons/datatables.min.js")
+append styles
+
+  style.
+    .modal-dialog.modal-notify.modal-danger .fas{
+      color: #4f4f4f;
+    }
+    .modal-dialog.modal-notify.modal-danger .far{
+      color: #4f4f4f;
+    }
+    .awesomplete {
+      margin-left: 2.5rem;
+    }
+
+    .dtHistorialCliente {
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    #dtHistorialCliente th, td {
+      white-space: nowrap;
+    }
+
+    table.dataTable thead .sorting:after,
+    table.dataTable thead .sorting:before,
+    table.dataTable thead .sorting_asc:after,
+    table.dataTable thead .sorting_asc:before,
+    table.dataTable thead .sorting_asc_disabled:after,
+    table.dataTable thead .sorting_asc_disabled:before,
+    table.dataTable thead .sorting_desc:after,
+    table.dataTable thead .sorting_desc:before,
+    table.dataTable thead .sorting_desc_disabled:after,
+    table.dataTable thead .sorting_desc_disabled:before {
+      bottom: .5em;
+    }
+
+prepend area-scripts
+  script.
+    $(document).ready(() => {
+      var sk_InfoCliente = io();
+      // === === === AWESOMPLETE === === ===
+      // Autocompletado ==> TIPO-CLIENTE
+      // - variables 
+        const data_Tipo_cliente     = !{JSON.stringify(data)}, //Recuperar las marcas de autos de las rutas ¡¡
+          id_Tipo_cliente         = data_Tipo_cliente.Tipos_Cliente.idTipo_cliente,               // indice y marca recuperada
+          Tipo_cliente            = data_Tipo_cliente.Tipos_Cliente.Tipo_cliente,
+          val_id_Vehiculo         = data_Tipo_cliente.ClientCarr[0].id_vehiculo,
+          id_persona              = data_Tipo_cliente.InfoUser.id_usuario,    
+          etiquetaInputTipoCliente = $('#tipo_cliente').get(0),
+          AWSPTipoCliente = new Awesomplete(etiquetaInputTipoCliente, { sort : false,maxItems: 5,filter: Awesomplete.FILTER_STARTSWITH});
+        console.log('Tipo_cliente',Tipo_cliente)
+        console.log('Tipo_cliente',Tipo_cliente)
+        AWSPTipoCliente.list = Tipo_cliente;
+        $('#tipo_cliente').on('awesomplete-selectcomplete',function() {
+          let i = Tipo_cliente.indexOf(this.value);
+          console.log("id de Tipo_cliente",id_Tipo_cliente[i]); //Ver id seleccionado de marca
+          //$('#tipo_cliente_send').val(id_Tipo_cliente[i]);
+        });
+      // === === ESTILOS === ===
+        $('#dtHistorialCliente').DataTable({
+          "scrollX": true
+        });
+
+
+        $('#dtHistorialLlamadas').DataTable({
+            "scrollX": true
+        });
+
+        $('.dataTables_length').addClass('bs-select');
+
+        // Agrega o remueve clases de estilo y cambia de color al label
+          Estilo_input_AWSP = (pIdLabel='',pIdico='',pColor ='',pEstado='') => {
+            if(pEstado == 'add'){
+              $(pIdLabel).addClass("active");
+              $(pIdico).addClass("active");
+              $(pIdLabel).css({"color": pColor});
+            }else if(pEstado != ''){
+              $(pIdLabel).removeClass("active");
+              $(pIdico).removeClass("active");
+              $(pIdLabel).css({"color": pColor});
+            }else{
+              $(pIdLabel).css({"color": pColor});
+            }
+          }
+
+        // Agregar o quitar estilo agregado
+          Estilo_Estado = (pIdInput='',pIdLabel='',pEstado='sicss') =>{
+            if(pEstado == 'sicss'){
+              $(pIdInput).css({ "border-bottom":"1px solid #D2202E",
+                "box-shadow":"0 1px 0 0 #D2202E"});
+            }else{
+              console.log('removiendo estilos')
+              $(pIdInput).removeAttr("style")
+              $(pIdLabel).removeAttr("style")
+            }
+          }
+        //Establece un estilo a Combo_tipo_Awesomplete al hacer focus y deshacer focus
+          Awesome_Combo_Bootstrap = (id_input,lb_input,ico_input='',idButton ='') => {
+            $(id_input).focus(() =>  {
+              Estilo_input_AWSP(lb_input,ico_input,'#D2202E','add');     
+            });
+            $(id_input).focusout(() => {
+              if ($(id_input).val() == "" ||  $ (id_input).val () == null ){
+                Estilo_input_AWSP(lb_input,ico_input,'#4f4f4f','remove'); 
+              }else{
+                Estilo_input_AWSP(lb_input,'','#4f4f4f','');
+              }   
+            })    
+          }
+
+        // Ejecutar Awesome_Combo_Bootstrap para dar formato de estilo personalizado
+          Awesome_Combo_Bootstrap(tipo_cliente,lb_tipo_cliente,ico_tipo_cliente);
+
+      // === FUNCIONES === ===
+        Busqueda_en_Array = (valor, array) => {
+          return (array.indexOf(valor) > -1);
+        }
+
+        Crear_Nombre_Orden = (Data) => {
+          $('#agregado').prepend('<form action="abrir-orden" method="POST">\
+            <div class="row mt-3">\
+              <div class="col-sm-12">\
+                <div class="card">\
+                  <h4 class="card-header d-flex justify-content-between">\
+                    <div class="row justify-content-center align-items-center ml-1 text-capitalize">\
+                    <small>'+Data.DataUser.nombre_cliente+' '+Data.DataUser.tipo_cliente+'</small></div>\
+                    <button class="btn btn-success btn-sm" type="button">\
+                      <i class = "fas fa-phone"></i>\
+                    </button>\
+                  </h4>\
+                  <div class="card-body">\
+                    <div class="row">\
+                      <div class="form-group col-md-5">\
+                        <div class="row">\
+                          <div class="col-6"><label>DNI:</label></div>\
+                          <div class="col-6">\
+                            <p class="card-text">'+Data.DataUser.dni+'</p>\
+                          </div>\
+                        </div>\
+                      </div>\
+                      <div class="form-group col-md-5">\
+                        <div class="row">\
+                          <div class="col-6"><label>E-mail:</label></div>\
+                          <div class="col-6">\
+                            <p class="card-text">'+Data.DataUser.email+'</p>\
+                          </div>\
+                        </div>\
+                      </div>\
+                    </div>\
+                    <div class="row">\
+                      <div class="form-group col-md-5">\
+                        <div class="row">\
+                          <div class="col-6"><label>RUC:</label></div>\
+                          <div class="col-6">\
+                            <p class="card-text">'+Data.DataUser.ruc+'</p>\
+                          </div>\
+                        </div>\
+                      </div>\
+                      <div class="form-group col-md-5">\
+                        <div class="row">\
+                          <div class="col-5"><label>Direccion:</label></div>\
+                          <div class="col-7">\
+                            <p class="card-text">'+Data.DataUser.direccion+'</p>\
+                          </div>\
+                        </div>\
+                      </div>\
+                    </div>\
+                  </div>\
+                  <div class="card-footer">\
+                    <div class="row">\
+                      <div class="col-6"><input name="id_usuario" type="hidden" value='+Data.DataUser.id_cliente+'>\
+                      <input name="id_vehiculo" type="hidden" value='+Data.val_id_Vehiculo+'>\
+                      <input name="id_tipo_cliente" type="hidden" value='+Data.DataUser.id_tipo_cliente+'>\
+                      <button class="btn btn-success btn-block rounded-pill" type="submit">Crear Pedido</button></div>\
+                    </div>\
+                  </div>\
+                </div>\
+              </div>\
+            </div>\
+          </form>'); 
+      }
+        Limpiar_Modal_Form = (Estado)=>{
+          $('#tipo_cliente').val('')
+          $('#lb_tipo_cliente').removeClass("active")
+          $('#nombre').val('')
+          $('#lbnombre').removeClass("active")
+          $('#telefono').val('')
+          $('#lbtelefono').removeClass("active")
+          $('#email').val('')
+          $('#lbemail').removeClass("active")
+          $('#dni').val('')
+          $('#lbdni').removeClass("active")
+          $('#RUC').val('')
+          $('#lbRUC').removeClass("active")
+          $('#Direccion').val('')
+          $('#lbDireccion').removeClass("active")
+
+          $('#modalPush').modal(Estado)
+        }
+
+        Validacion_Campos = (array) => {
+          // ingresar los valores de los inputs en un array
+          // La funcion retornara un true si esta correcto o false si falta algun input rellenar
+          let contador = 0;
+          for(let i = 0 ;i <= array.length-1;i++){
+            var length = $.trim(array[i]).length;
+            if(length != 0){
+              contador++;
+            }
+          }
+          if(contador != array.length){return false}else{return true}
+          }
+
+      // === EVENTOS === ===
+      //BOTON TIPO CLIENTE ( BLUR )    
+        $("#btn_tipo_cliente").blur(() => {
+          if($("#tipo_cliente").val() == "" ||  $ ("#tipo_cliente").val() == null ){
+            console.log('blur cerrado por desenfoque y nulo')
+            AWSPTipoCliente.close();
+            Estilo_Estado(tipo_cliente,lb_tipo_cliente,'nocss');
+            Estilo_input_AWSP(lb_tipo_cliente,ico_tipo_cliente,'#4f4f4f','remove');
+          }else{
+            AWSPTipoCliente.close();
+            console.log('blur cerrado por desenfoque')
+            $(tipo_cliente).removeAttr("style")
+            Estilo_input_AWSP(lb_tipo_cliente,'','#4f4f4f','');
+          }
+        });
+
+      //BOTON TIPO_CLIENTE ( CLICK )
+        $('#btn_tipo_cliente').click(() => {
+          Estilo_input_AWSP(lb_tipo_cliente,ico_tipo_cliente,'#D2202E','add');
+          if (AWSPTipoCliente.ul.childNodes.length === 0) {
+            AWSPTipoCliente.minChars = 0;
+            AWSPTipoCliente.evaluate();
+            Estilo_Estado(tipo_cliente,'','sicss');
+            console.log('btn abriendo por evaluate')       
+          }else if (AWSPTipoCliente.ul.hasAttribute('hidden')) {
+            Estilo_Estado(tipo_cliente,'','sicss');
+            console.log('btn abriendo por click')
+            AWSPTipoCliente.open();
+          }else if($("#tipo_cliente").val() == "" ||  $ ("#tipo_cliente").val() == null ){
+            AWSPTipoCliente.close();
+            console.log('btn cerrado por texto vacio')
+            Estilo_Estado(tipo_cliente,lb_tipo_cliente,'nocss');
+            Estilo_input_AWSP(lb_tipo_cliente,ico_tipo_cliente,'#4f4f4f','remove');
+            }else{
+              AWSPTipoCliente.close();
+              console.log('btn cerrando')
+              Estilo_Estado(tipo_cliente,'','nocss');
+              Estilo_input_AWSP(lb_tipo_cliente,'','#4f4f4f','');
+            }
+        });
+      // BOTON REGISTRAR
+        $('#btnCrear').click(() => {
+          let nombre_cliente    = $('#nombre').val();
+            //-telefono  = $('#telefono').val(),
+            //-email     = $('#email').val(),
+            //-dni       = $('#dni').val(),
+            //-ruc       = $('#RUC').val(),
+            //-direccion = $('#Direccion').val();
+          let val_tipo_cliente = $('#tipo_cliente').val();
+        let Campos = [val_tipo_cliente,nombre_cliente]
+        if(Validacion_Campos(Campos)){
+
+          let tipo_persona = Busqueda_en_Array(val_tipo_cliente,Tipo_cliente),
+            val_arr = [];
+            //Puede enviar los datos nuevos del cliente 
+            // con val tipo existente e Inexistentes
+          if(!tipo_persona){ // si agregamos
+            // envia el texto escribido para incertar en tabla tipo persona
+            val_arr = [val_tipo_cliente,1]; // si agregamos 1
+            $('#tipo_cliente_send').val(val_arr); // sale un valor diferente
+
+          }else{ // no agregamos
+            // envia el indice del tipo persona
+            let i = Tipo_cliente.indexOf(val_tipo_cliente);
+            console.log('seleccionado:',id_Tipo_cliente[i],'valor:',val_tipo_cliente)
+            val_arr = [id_Tipo_cliente[i],0]; // no agregamos 0
+            $('#tipo_cliente_send').val(val_arr);
+          }
+          const NewUser = {nombre_cliente,telefono,email,dni,ruc,razon_social,direccion,val_arr,val_id_Vehiculo,id_persona}
+          sk_InfoCliente.emit('Registrar_Ususario',NewUser);
+          console.log('NewUser Envio',NewUser);
+
+          Limpiar_Modal_Form('toggle');
+        }else{
+          alert('Hay Uno o mas campos vacios')
+        }
+      });
+      // BOTON LIMPIAR
+        $('#btnLimpiar').click(() =>{Limpiar_Modal_Form('show');});
+      // === SOCKETS === ===
+      sk_InfoCliente.on('Nuevo_Cliente',(data) =>{
+        try{
+
+          const DataUser = {id_cliente,id_tipo_cliente,tipo_cliente,nombre_cliente,telefono,email,dni,ruc,razon_social,direccion} = data[0];
+
+          const NewUser = {DataUser,val_id_Vehiculo}
+          console.log('NewUser Recivido',NewUser)
+            console.log(DataUser);
+          Crear_Nombre_Orden(NewUser);
+        }catch(error){
+          console.log(error)
+        }
+      });
+
+    });
+append message
+block contenido
+  .container-fluid.px-0
+    .card.rounded-0
+      //-.card-header.text-center.alert-danger.value Datos de la placa
+      .card-body
+        .row.justify-content-center.align-items-center
+          section.form-gradient
+            .md-form
+              i.fa.fa-car.prefix.mb-1
+              input.form-control-xl.text-center.text-uppercase.h4.orden(name='placa',value = data.ClientCarr[0].placa , type='text', autocomplete='off' readonly="readonly")
+        h5.card-title Datos de Usuario
+        // Button trigger modal
+        if data.InfoUser.id_tipo_usuario == 2
+          .d-flex.justify-content-center
+            button.btn.btn-danger.rounded-pill.btn-sm(type="button" data-toggle="modal" data-target="#modalPush")
+              i.fas.fa-plus-circle
+              |   Agregar nuevo Usuario
+        // Modal: modalPush
+        #modalPush.modal.fade(tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true")
+          .modal-dialog.modal-notify.modal-danger.rounded(role="document")
+            // Content
+            .modal-content
+              // Header
+              .modal-header.d-flex.justify-content-center
+                p.heading Crear un Nuevo Usuario !
+                button.close(type="button" data-dismiss="modal" aria-label="Close")
+                  span.white-text(aria-hidden="true") ×
+              // Body
+              .modal-body
+                p3 Datos del Usuario
+                .container-fluid.px-0
+                  .row.mt-2
+                    .col-12
+                      section.form-gradient
+                        .md-form.mb-1.mt-0
+                          .d-flex.bd-highlight
+                            .flex-fill.bd-highlight
+                              input#tipo_cliente_send(type='hidden',autocomplete='off',name='tipo_cliente')
+                              i#ico_tipo_cliente.fas.fa-user-friends.prefix.mt-1
+                              input#tipo_cliente.form-control(type='text',autocomplete='off')
+                              label#lb_tipo_cliente(for='tipo_cliente') Tipo Cliente
+                            button#btn_tipo_cliente.m-auto.border.mb-2.rounded-right.bg-transparent(type="button")
+                              i.fas.fa-caret-down.m-2 
+                    .col-12
+                      section.form-gradient
+                        .md-form
+                          i#iconombre.fas.fa-user.prefix.mt-1
+                          input#nombre.form-control.orden(type='text', autocomplete='off',name='nombre')
+                          label#lbnombre(for='nombre') Usuario
+                    .col-12            
+                      section.form-gradient
+                        .md-form
+                          i#icotelefono.fas.fa-mobile-alt.prefix.mt-1
+                          input#telefono.form-control.orden(type='tel',name='telefono')
+                          label#lbtelefono(for='telefono') telefono               
+                    .col-12
+                      section.form-gradient
+                        .md-form
+                          i#icoemail.fas.fa-at.prefix.mt-1
+                          input#email.form-control.orden(type='email',name='email')
+                          label#lbemail(for='email') email
+                          small#emailHelp.form-text.text-muted ejemplo@gmail.com
+                    .col-12             
+                      section.form-gradient
+                        .md-form
+                          i#icodni.far.fa-id-card.prefix.mt-1
+                          input#dni.form-control.orden(type='number',name='dni')
+                          label#lbdni(for='dni') DNI
+                    .col-12
+                      section.form-gradient
+                        .md-form
+                          i#icoRUC.fas.fa-id-card-alt.prefix.mt-1
+                          input#RUC.form-control.orden(type='number',name='ruc')
+                          label#lbRUC(for='RUC') RUC
+                    .col-12
+                      section.form-gradient
+                        .md-form
+                          i#icorazon_social.fas.fa-id-card-alt.prefix.mt-1
+                          input#razon_social.form-control.orden(type='text',name='razon_social')
+                          label#lbrazon_social(for='razon_social') Razon social
+                    .col-12
+                      section.form-gradient
+                        .md-form
+                          i#icoDireccion.fas.fa-home.prefix.mt-1
+                          input#Direccion.form-control.orden(type='text',name='direccion')
+                          label#lbDireccion(for='Direccion') Direccion
+              .modal-footer.flex-center
+                button#btnCrear.btn.btn-danger.rounded.rounded-pill(type="button") Registrar
+                button#btnLimpiar.btn.btn-outline-danger.waves-effect.rounded.rounded-pill(type="button") Limpiar
+        // Modal: modalPush
+        //- NAVEGADOR
+        ul.nav.nav-tabs(role='tablist')
+          li.nav-item
+            a#client-tab.nav-link.active(data-toggle='tab', href='#client', role='tab', aria-controls='client', aria-selected='true') Usuarios
+          li.nav-item
+            a#car-tab.nav-link(data-toggle='tab', href='#car', role='tab', aria-controls='car', aria-selected='false') Automovil
+          //-li.nav-item
+          //-  a#history-tab.nav-link(data-toggle='tab', href='#history', role='tab', aria-controls='history', aria-selected='false') Historial
+
+        .tab-content
+          //- iNFO DEL CLIENTE
+          #client.tab-pane.fade.show.active(role='tabpanel', aria-labelledby='client-tab')
+            #agregado.agregado
+            - for (let i = 0; i < data.nResultados; ++i) {
+              form(action='abrir-orden' method='POST')
+                .row.mt-3
+                  .col-sm-12
+                    .card
+                      h4.card-header.d-flex.justify-content-between.py-2.border-bottom-0 
+                        .row.justify-content-center.align-items-center.ml-1.text-capitalize
+                          //small #{data.ClientCarr[i].nombre_cliente} #{data.ClientCarr[i].id_cliente} #{data.ClientCarr[i].tipo_cliente} #{data.ClientCarr[i].id_vehiculo}
+                          small.text-muted #{data.ClientCarr[i].nombre_cliente}
+                          small.text-success.ml-1 #{data.ClientCarr[i].tipo_cliente}
+                        a.btn.btn-success.btn-sm.rounded-pill(type='button' href='tel:'+data.ClientCarr[i].telefono+'')
+                          i.fas.fa-phone
+                      .card-body
+                        .row
+                          .form-group.col-md-4
+                            .row
+                              .col-6
+                                label DNI: 
+                              .col-6
+                                p.card-text #{data.ClientCarr[i].dni}
+                          .form-group.col-md-4
+                            .row
+                              .col-6
+                                label E-mail: 
+                              .col-6
+                                p.card-text #{data.ClientCarr[i].email}
+                          .form-group.col-md-4
+                            .row
+                              .col-6
+                                label Telefono: 
+                              .col-6
+                                p.card-text #{data.ClientCarr[i].telefono}
+                        .row
+                          .form-group.col-md-4
+                            .row
+                              .col-6
+                                label RUC: 
+                              .col-6
+                                p.card-text #{data.ClientCarr[i].ruc}
+                          .form-group.col-md-4
+                            .row
+                              .col-6
+                                label Razón Social: 
+                              .col-6
+                                p.card-text #{data.ClientCarr[i].razon_social}
+                        .row
+                          .form-group.col-md-4
+                            .row
+                              .col-5
+                                label Direccion: 
+                              .col-7
+                                p.card-text #{data.ClientCarr[i].direccion}
+                      .card-footer
+                        .row
+                          //.col-6
+                          //  button.btn.btn-info(type='button') Editar
+                          .col-12
+                            input(type="hidden" name='id_usuario' value= data.ClientCarr[i].id_cliente)
+                            input(type="hidden" name='id_vehiculo' value= data.ClientCarr[i].id_vehiculo)
+                            input(type="hidden" name='id_tipo_cliente' value= data.ClientCarr[i].id_tipo_cliente) 
+                            if data.InfoUser.id_tipo_usuario == 2
+                              button.btn.btn-success.btn-block.rounded-pill(type='submit') Crear Pedido
+            - }
+
+          //- iNFO DEL AUTOMOVIL
+          #car.tab-pane.fade(role='tabpanel', aria-labelledby='car-tab')
+            .row.mt-3
+              .col-sm-12
+                .card
+                  h4.card-header.d-flex.justify-content-between
+                    .row.justify-content-center.align-items-center.ml-1.text-capitalize
+                      small #{data.ClientCarr[0].vehiculo_marca}
+                  .card-body
+                    .row
+                      .form-group.col-md-5
+                        .row
+                          .col-6
+                            label Modelo: 
+                          .col-6
+                            p.card-text #{data.ClientCarr[0].modelo}
+                      .form-group.col-md-5
+                        .row
+                          .col-6
+                            label Año: 
+                          .col-6
+                            p.card-text #{data.ClientCarr[0].anio}
+                    .row
+                      .form-group.col-md-5
+                        .row
+                          .col-6
+                            label Color: 
+                          .col-6
+                            p.card-text #{data.ClientCarr[0].color}
+                      //.form-group.col-md-5
+                      //  .row
+                      //    .col-6
+                      //      label otros: 
+                      //    .col-6
+                      //      p.card-text #{data.ClientCarr[0].color}
+                  .card-footer
+                    .row
+                      .col-12
+                        // <button id="boton" type="button" class="btn btn-info text-nowrap">Nueva Orden</button>
+                        if data.InfoUser.id_tipo_usuario == 2
+                          button.btn.btn-success.btn-block.rounded-pill(type='submit') Crear Pedido
+
+          //- iNFO DEL HISTORIAL
+          
+          //#history.tab-pane( aria-labelledby='history-tab')
+          //    #accordion
+          //      .card.mt-3
+          //        .card-header
+          //          a.card-link.row.collapsed(data-toggle='collapse', href='#description1')
+          //            .col-10
+          //              | Historial de #{data.ClientCarr[0].vehiculo_marca} #{data.ClientCarr[0].modelo} 
+          //            .col-2
+          //              i.fa.fa-chevron-down.pull-right
+          //        .card-body
+          //            | aca ira 
+          //        .card-footer.text-center
+          //            a.card-link(href='#') Mas detalles    
+          //        #description1.collapse(data-parent='#accordion')
+          //          .card-body
+          //            | aca ira el reporte del historial
+          //          .card-footer.text-center
+          //            a.card-link(href='#') Mas detalles
+                    .card-footer
+                      .row
+                        .col-6
+                          button.btn.btn-danger(type='button') Editar
+                        .col-6
+                          <button id="boton" type="button" class="btn btn-info text-nowrap">Nueva Orden</button>
+                          button.btn.btn-info(type='submit') Crear Pedido
+          .card.rounded-0.mt-3 
+            .card-header.py-2.border-bottom-0
+                i#iconombre.fas.fa-clipboard-list.mr-2
+                strong Historial de servicios
+            .card-body.p-1
+                .container-fluid
+                if data.info_servicios.estado
+                  table#dtHistorialCliente.table.table-striped.table-bordered.table-sm(cellspacing="0" width="100%")
+                    thead
+                      tr
+                        th.th-sm Nro Orden
+                        //th.th-sm Placa
+                        //th.th-sm Marca
+                        th.th-sm Km Inicial
+                        th.th-sm Servicio
+                        th.th-sm Detalle de Cliente
+                        th.th-sm Detalle de Recepcion
+                        //th.th-sm Nombre Usuario
+                        th.th-sm Antiguedad de Visita
+                        th.th-sm Fecha de Visita
+                        th.th-sm Detalle Requerimiento
+                    tbody
+                      - var i = 0;
+                      each val in data.info_servicios.historial_servicios
+                        tr
+                          td #{data.info_servicios.historial_servicios[i].nro_orden}
+                          //-//td
+                          //-  a.font-weight-bold.text-uppercase(href='/info-cliente?id_vehiculo='+data.historial_servicios[i].id_vehiculo+'&placa='+data.historial_servicios[i].placa+'') #{data.historial_servicios[i].placa}
+                          //-  input(id='id_vehiculo_'+i type="hidden" value= 'data.historial_servicios[i].id_vehiculo') 
+                          //-//td #{data.historial_servicios[i].vehiculo_marca}
+                          td #{data.info_servicios.historial_servicios[i].km_inicial} km
+                          td #{data.info_servicios.historial_servicios[i].nombre_servicio}
+                          td #{data.info_servicios.historial_servicios[i].descripcion_cliente}
+                          td #{data.info_servicios.historial_servicios[i].Detalle_usuario}
+                          //td #{data.historial_servicios[i].nombre_cliente}
+                          td #{data.info_servicios.Tiempo_Inicio[i]}
+                          td #{data.info_servicios.Tiempo_Inicio_corto[i]}
+                          if data.info_servicios.historial_servicios[i].Detalle_requerimiento == null
+                            td.text-danger Hace falta los requerimientos
+                          else
+                            td #{data.info_servicios.historial_servicios[i].Detalle_requerimiento}
+                        - i++
+                    tfoot
+                      tr
+                        th Nro Orden
+                        //th Placa
+                        //th Marca
+                        th Km Inicial
+                        th Servicio
+                        th Detalle de Cliente
+                        th Detalle de Recepcion
+                        //th Nombre Usuario
+                        th Antiguedad de Visita
+                        th Fecha de Visita
+                        th Detalle Requerimiento
+                else
+                  p No existe Un historial de Servicios por el momento
+          .card.rounded-0.mt-3 
+            .card-header.py-2.border-bottom-0
+                i#iconombre.fas.fa-clipboard-list.mr-2
+                strong Historial de Seguimiento
+            .card-body.p-1
+                .container-fluid
+                    if data.info_seguimiento.estado
+                        table#dtHistorialLlamadas.table.table-striped.table-bordered.table-sm(cellspacing="0" width="100%")
+                            thead
+                                tr
+                                    th.th-sm Nro Orden
+                                    th.th-sm Usuario que llamó
+                                    th.th-sm Etapa de Seguimiento
+                                    th.th-sm Antiguedad de la llamada
+                                    th.th-sm Fecha de la llamada
+                                    th.th-sm Detalle Llamada
+                            tbody
+                                - var n = 0;
+                                each val in data.info_seguimiento.historial_seguimiento
+                                    tr
+                                        td #{data.info_seguimiento.historial_seguimiento[n].nro_orden}
+                                        td #{data.info_seguimiento.historial_seguimiento[n].nombre} #{data.info_seguimiento.historial_seguimiento[n].apellido_paterno} 
+                                        td #{data.info_seguimiento.historial_seguimiento[n].nombre_etapa_seguimineto}
+                                        td #{data.info_seguimiento.Tiempo_Seguimiento[n]}
+                                        td #{data.info_seguimiento.Tiempo_Seguimiento_corto[n]}
+                                        td #{data.info_seguimiento.historial_seguimiento[n].detalle_seguimiento}
+                                    - n++
+                            tfoot
+                                tr
+                                    th Nro Orden
+                                    th Usuario que llamó
+                                    th Etapa de Seguimiento
+                                    th Antiguedad de la llamada
+                                    th Fecha de la llamada
+                                    th Detalle Llamada
+                    else
+                        p No existe Un historial por el momento

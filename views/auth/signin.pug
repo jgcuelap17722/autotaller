@@ -1,0 +1,82 @@
+extends ../layouts/main
+append area-librerias-scripts
+    //JavaScript de awesomplate 
+    script(src='lib/Pushjs1.0/push.min.js')
+block contenido
+    //-.container-fluid.p-4
+    //-    .row
+    //-        .col-md-4.mx-auto
+    //-            .card.text-center.card-image(style="background-image: url('https://mdbootstrap.com/img/Photos/Others/pricing-table7.jpg')")
+    //-                .text-white.rgba-stylish-strong.py-5.px-5.z-depth-4
+    //-                    .card-header
+    //-                        .text-center
+    //-                            h3.white-text.mb-5.mt-4.font-weight-bold
+    //-                                strong INICIAR
+    //-                                a.green-text.font-weight-bold
+    //-                                    strong  SESION
+    //-                    img.card-img-top.mx-auto.m-2.rounded-circle.w-50(src='/img/logo-autolinea.jpg', alt='Logo Fazt')
+    //-                    .card-body
+    //-                        form(action='/signin', method='POST')
+    //-                            .md-form
+    //-                                input#entr1.form-control(type="text")
+    //-                                label(for="entr1") Usuario
+    //-                            .md-form.pb-1.pb-md-3
+    //-                                input#entr2.form-control(type="password")
+    //-                                label(for="entr2") Contraseña
+    //-                                p.font-small.grey-text.d-flex.justify-content-end
+    //-                                    | Forgot 
+    //-                                    a.dark-grey-text.ml-1.font-weight-bold(href="#")  Password?
+    //-                            //-.form-group
+    //-                            //-    input#entr1.form-control(type='text', name='username', placeholder='Username')
+    //-                            //-.form-group
+    //-                            //-    input#entr2.form-control(type='password', name='password', placeholder='Password')
+    //-                            button.btn.btn-primary.btn-block
+    //-                                | SingIn
+    .container-fluid.p-4
+        .row
+            .col-md-4.mx-auto
+                section.form-dark
+                    .card.card-image(style="background-image: url('/img/background.jpg');background-size: cover;")
+                        .text-white.rgba-stylish-strong.py-5.px-5.z-depth-4(style='background-color: rgba(58, 39, 39, 0.76);')
+                            // Header
+                            .text-center
+                                h2.white-text.mb-5.mt-4.font-weight-bold
+                                    strong Iniciar
+                                    a.font-weight-bold.text-danger
+                                        strong  Sesion
+                                i.fas.fa-user-circle.fa-10x
+                            form(action='/signin', method='POST')
+                                .md-form.form-gradient 
+                                    input#entr1.form-control.white-text(type="text" name='username' autocomplete='off')
+                                    label.text-white(for="entr1") Usuario
+                                .md-form.form-gradient.pb-3
+                                    input#entr2.form-control.white-text(type="password" name='password')
+                                    label.text-white(for="entr2") Contraseña
+                                .row.d-flex.align-items-center.mb-4
+                                    .text-center.mb-3.col-md-12
+                                        button#Btn_Iniciar.btn.btn-success.btn-block.btn-rounded.z-depth-1.rounded-pill(type="submit") Iniciar Sistema
+block area-scripts
+    script.
+        $(document).ready(() => {
+            // Con este escrip se enviara las notificaciones por el navegador firefox 
+            Notificacion = (pTitulo,pCuerpo) => {
+                window.navigator.vibrate([200, 100, 200]);
+                //window.navigator.vibrate([200, 100, 200, 100, 200, 100, 200]);    
+                Push.create(pTitulo, {
+                    body: pCuerpo,
+                    icon: '/img/logo-autolinea.jpg',
+                    timeout: 1000,
+                    requireInteraction: true,
+                    onClick: function () {
+                        //window.location = pDireccion;
+                        //window.focus();
+                        this.close();
+                    }
+                });
+            }
+
+            $("#Btn_Iniciar").click(()=>{
+                Notificacion('Bienvenido',':D');
+            });
+        });
+

@@ -1,0 +1,36 @@
+extends layouts/main
+block contenido
+    nav.navbar.navbar-light.navbar-expand-md
+        .container-fluid
+            a.navbar-brand(href='#') Brand
+            button.navbar-toggler(data-toggle='collapse', data-target='#navcol-1')
+                span.sr-only Toggle navigation
+                span.navbar-toggler-icon
+            #navcol-1.collapse.navbar-collapse
+                ul.nav.navbar-nav
+                    li.nav-item(role='presentation')
+                        a.nav-link.active(href='#') First Item
+                    li.nav-item(role='presentation')
+                        a.nav-link(href='#') Second Item
+                    li.nav-item(role='presentation')
+                        a.nav-link(href='#') Third Item
+                ul.nav.navbar-nav
+                    li.nav-item(role='presentation')
+                        a.nav-link.active(href='#') First Item
+                    li.nav-item(role='presentation')
+                        a.nav-link(href='#') Second Item
+                    li.nav-item(role='presentation')
+                        a.nav-link(href='#') Third Item
+    .login-clean
+        form(method='post')
+            h2.sr-only Login Form
+            .illustration
+                i.icon.ion-ios-navigate
+            .form-group
+                input.form-control(type='email', name='email', placeholder='Email')
+            .form-group
+                input.form-control(type='password', name='password', placeholder='Password')
+            .form-group
+                button.btn.btn-primary.btn-block(type='submit') Log In
+            a.forgot(href='#') Forgot your email or password?
+    button.btn.btn-primary(type='button') Button
