@@ -2,9 +2,6 @@ const pool = require('../database');
 const helpers = require('../lib/helpers');
 const ordenesCtr = {}
 
-// Funcion parahacer consultass
-Consulta = (pQuery) => {return pool.query(pQuery)};
-
 ordenesCtr.RecuperarOrden = async (req, res, next) => {
   res.send('REcuperando');
   next();
@@ -25,13 +22,13 @@ ordenesCtr.crearOrden = async (req, res, next) => { //CREAR NUEVA ORDEN
       id_cliente      = req.body.id_usuario,
       id_tipo_cliente = req.body.id_tipo_cliente;
 
-  let Fn_RecuperarPlaca = await Consulta('CALL SP_FN_RecuperarPlaca(' + id_vehiculo + ')');
+  let Fn_RecuperarPlaca = await pool.query('CALL SP_FN_RecuperarPlaca(' + id_vehiculo + ')');
   let placa = Fn_RecuperarPlaca[0][0].placa;
   console.log('Fn_RecuperarPlaca', placa)
 
   console.log('id_usuario', id_usuario, 'id_vehiculo', id_vehiculo);
   const query_Existencia_de_Vehiculo_Orden = 'CALL SP_FN_Existe_Registro_Orden_Vehiculo('+id_vehiculo+','+id_usuario+');';
-  const Existencia_de_Vehiculo_Orden = await Consulta(query_Existencia_de_Vehiculo_Orden);
+  const Existencia_de_Vehiculo_Orden = await pool.query(query_Existencia_de_Vehiculo_Orden);
 
   let { nro_ordenes_vehiculo } = Existencia_de_Vehiculo_Orden[0][0];
   console.log('nro_ordenes_vehiculo', Existencia_de_Vehiculo_Orden);
@@ -41,7 +38,7 @@ ordenesCtr.crearOrden = async (req, res, next) => { //CREAR NUEVA ORDEN
     next();
   } else {
     // === RECUPERAR SERVICIOS BUSCADOS O AGREGADOS :)
-    const SP_Services = await Consulta('CALL SP_GET_Servicios_noTop()');
+    const SP_Services = await pool.query('CALL SP_GET_Servicios_noTop()');
     const Get_Services = SP_Services[0];
 
     let idServices = [],nameServices = [];
@@ -56,7 +53,7 @@ ordenesCtr.crearOrden = async (req, res, next) => { //CREAR NUEVA ORDEN
 
     // === RECUPERAR LOS SERVICIOS MAS RANKEADOS :)
 
-    const Get_Servicio = await Consulta("SELECT id_servicio,nombre_servicio FROM v_primeros_servicios;");
+    const Get_Servicio = await pool.query("SELECT id_servicio,nombre_servicio FROM v_primeros_servicios;");
     const Primeros_Servicios = Get_Servicio;
     console.log("Primeros_Servicios", Primeros_Servicios);
 
@@ -78,7 +75,7 @@ ordenesCtr.crearOrden = async (req, res, next) => { //CREAR NUEVA ORDEN
     // e INCERTAR en tdetale_pedido y tordenes actuales
 
     const query = 'CALL SP_FN_generarNroOrden(' + id_vehiculo + ',' + id_cliente + ',' + id_usuario + ')';
-    const callNroOrden = await Consulta(query);
+    const callNroOrden = await pool.query(query);
     console.log('callNroOrden', callNroOrden)
     const { numero_Orden } = callNroOrden[0][0]
 
@@ -87,14 +84,14 @@ ordenesCtr.crearOrden = async (req, res, next) => { //CREAR NUEVA ORDEN
     // en deTalle pedido SIN datos del asignado y sin datos de detalle
     console.log('numero_Orden,id_usuario,id_cliente,id_vehiculo', numero_Orden, id_usuario, id_cliente, id_vehiculo);
     let query_insert_Dpedido = 'CALL SP_add_OrdenActual_DetallePedido(' + numero_Orden + ',' + id_vehiculo + ',' + id_cliente + ',' + id_tipo_cliente + ',' + id_usuario + ',"'+f_str+'")';
-    await Consulta(query_insert_Dpedido);
+    await pool.query(query_insert_Dpedido);
 
     const NroOrden = numero_Orden.toString().padStart(6, '0'); // Concatenamos el numero de ortden para mostrar
     console.log('NroOrden', NroOrden)
 
     // ==> Mostrar los Usuarios Mecanico
     const consulta_Mecanicos_Habilitados = 'SELECT id_usuario,nombre,apellido_paterno,nro_ordenes FROM v_mecanicos_hablilitados;';
-    let Mecanicos_Habilitados = await Consulta(consulta_Mecanicos_Habilitados);
+    let Mecanicos_Habilitados = await pool.query(consulta_Mecanicos_Habilitados);
 
     console.log('Mecanicos_Habilitados', Mecanicos_Habilitados); 
 
@@ -133,32 +130,32 @@ ordenesCtr.asinarOrden = async (req, res, next) => {
   console.log('ID_Servicio,Observacion_Cliente = ', ID_Servicio, Observacion_Cliente)
 
   // === RECUPERAR PLACA ATRAVEZ DE SU NUMERO DE ORDEN :)
-  const placa_recuperada = await Consulta("CALL SP_FN_GET_placa_orden('" + nro_orden + "')");
+  const placa_recuperada = await pool.query("CALL SP_FN_GET_placa_orden('" + nro_orden + "')");
   const { placa } = placa_recuperada[0][0];
   console.log('placa_recuperada = ', placa)
 
   // === CONSULTAR SI EXISTE EL DETALLE PEDIDO PARA ESE CHECKLIST :) para que no se repita el pedido al recargar la pagina
-  const Consulta_id_DetallePedido = await Consulta("select id_detallePedido as id_DetallePedido from tdetallepedido where nro_orden = '" + nro_orden + "'");
+  const Consulta_id_DetallePedido = await pool.query("select id_detallePedido as id_DetallePedido from tdetallepedido where nro_orden = '" + nro_orden + "'");
   const { id_DetallePedido }      = Consulta_id_DetallePedido[0];
   
-  const Get_Existencia_pedido     = await Consulta("CALL SP_FN_GET_pedido_Existente('" + id_DetallePedido + "')")
+  const Get_Existencia_pedido     = await pool.query("CALL SP_FN_GET_pedido_Existente('" + id_DetallePedido + "')")
   const { existencia }            = Get_Existencia_pedido[0][0];
 
   if (existencia != 0) { // Si existe algun dato
-    await Consulta('DELETE FROM tpedido WHERE id_detallePedido = ' + id_DetallePedido + '');
+    await pool.query('DELETE FROM tpedido WHERE id_detallePedido = ' + id_DetallePedido + '');
     for (let richar = 0; richar <= ID_Servicio.length - 1; richar++) {
-      await Consulta('CALL SP_NuevoPedido(' + ID_Servicio[richar] + ',' + id_DetallePedido + ',"' + Observacion_Cliente[richar] + '")');
+      await pool.query('CALL SP_NuevoPedido(' + ID_Servicio[richar] + ',' + id_DetallePedido + ',"' + Observacion_Cliente[richar] + '")');
     }
-    await Consulta('UPDATE tdetallepedido SET id_usuario_asignado = ' + id_user_asignado + ',Detalle_usuario = "' + MiObservacion + '",km_inicial = "' + km_inicial + '" WHERE id_detallePedido = ' + id_DetallePedido + '')
+    await pool.query('UPDATE tdetallepedido SET id_usuario_asignado = ' + id_user_asignado + ',Detalle_usuario = "' + MiObservacion + '",km_inicial = "' + km_inicial + '" WHERE id_detallePedido = ' + id_DetallePedido + '')
   } else { // no existe algun   
     for (let richar = 0; richar <= ID_Servicio.length - 1; richar++) {
-      await Consulta('CALL SP_NuevoPedido(' + ID_Servicio[richar] + ',' + id_DetallePedido + ',"' + Observacion_Cliente[richar] + '")');
+      await pool.query('CALL SP_NuevoPedido(' + ID_Servicio[richar] + ',' + id_DetallePedido + ',"' + Observacion_Cliente[richar] + '")');
     }
-    await Consulta('UPDATE tdetallepedido SET id_usuario_asignado = ' + id_user_asignado + ',Detalle_usuario = "' + MiObservacion + '",km_inicial = "' + km_inicial + '" WHERE id_detallePedido = ' + id_DetallePedido + '')
+    await pool.query('UPDATE tdetallepedido SET id_usuario_asignado = ' + id_user_asignado + ',Detalle_usuario = "' + MiObservacion + '",km_inicial = "' + km_inicial + '" WHERE id_detallePedido = ' + id_DetallePedido + '')
   }
   console.log('Consulta_id_DetallePedido', id_DetallePedido)
 
-  const Sp_Pedido_Cliente = await Consulta("Call SP_cliente_de_Pedido_actual('" + id_DetallePedido + "')");
+  const Sp_Pedido_Cliente = await pool.query("Call SP_cliente_de_Pedido_actual('" + id_DetallePedido + "')");
   const pedido_cliente = { nombre, telefono, vehiculo_marca, modelo, color } = Sp_Pedido_Cliente[0][0];
   console.log('pedido_cliente', pedido_cliente);
 

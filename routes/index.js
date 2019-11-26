@@ -45,7 +45,7 @@ router.post('/info-cliente',async (req, res, next) =>{
 
     // SABER SI YA EXISTE EL REGISTRO DE ESTE VEHICULO ( "prevenimos qeu actualizela pagina e incerte duplicado" )
     // 0 ==> no existe 1 ==> si existe
-    const Consulta_Existencia = await Consulta('CALL SP_FN_Existe_Registro_Vehiculo("'+placa+'");')
+    const Consulta_Existencia = await pool.query('CALL SP_FN_Existe_Registro_Vehiculo("'+placa+'");')
     const Existe = parseInt(Consulta_Existencia[0][0].Existencia,10)
     console.log('Salida de Consulta_Existencia es =>',Consulta_Existencia);
 
@@ -62,14 +62,14 @@ router.post('/info-cliente',async (req, res, next) =>{
                 const tipo_cliente = estado_tipo_cliente[0];
                 let query0_0 = 'CALL SP_ADD_Caso_0("'+placa+'",'+idMarca+','+idModelo+','+idGeneracion+',"'+color+'",'+id_cliente+',\
                 '+null+',"'+tipo_cliente+'","'+null+'","'+null+'","'+null+'",'+null+','+null+',"'+null+'","'+null+'",'+id_person+','+0+','+1+',"'+pFechaHoy+'")'
-                id_vehiculo = await Consulta(query0_0);
+                id_vehiculo = await pool.query(query0_0);
                 id_vehiculo = id_vehiculo[0][0].id_vehiculo;
               }else{
 
                 const id_tipo_cliente = estado_tipo_cliente[0];
                 let query0_1 = 'CALL SP_ADD_Caso_0("'+placa+'",'+idMarca+','+idModelo+','+idGeneracion+',"'+color+'",'+id_cliente+',\
                 '+id_tipo_cliente+',"'+null+'","'+null+'","'+null+'","'+null+'",'+null+','+null+',"'+null+'","'+null+'",'+null+','+0+','+0+',"'+pFechaHoy+'")'
-                id_vehiculo = await Consulta(query0_1);
+                id_vehiculo = await pool.query(query0_1);
                 id_vehiculo = id_vehiculo[0][0].id_vehiculo;
               }
               console.log('Datos a enviar',placa,idMarca,idModelo,idGeneracion,color,id_cliente,tipo_Caso);
@@ -94,7 +94,7 @@ router.post('/info-cliente',async (req, res, next) =>{
                 '+null+',"'+tipo_cliente+'","'+nombre_cliente+'","'+telefono+'","'+email+'",'+dni+','+newRuc+',"'+razon_social+'","'+direccion+'",'+id_person+','+1+','+null+',"'+pFechaHoy+'")';
                 
                 console.log('DATOS ENVIADOS :',query1);
-                id_vehiculo = await Consulta(query1);
+                id_vehiculo = await pool.query(query1);
                 id_vehiculo = id_vehiculo[0][0].id_vehiculo;
                 //  INSERT placa,idMarca,idModelo,idGeneracion,color a (tvehiculo)
                 //  SELECT el "id_vehiculo" ultimo agregado
@@ -123,7 +123,7 @@ router.post('/info-cliente',async (req, res, next) =>{
                 '+id_tipo_cliente+',"'+null+'","'+nombre_cliente+'","'+telefono+'","'+email+'",'+dni+','+newRuc+',"'+razon_social+'","'+direccion+'",'+null+','+2+','+null+',"'+pFechaHoy+'")';
                 
                 console.log('DATOS ENVIADOS :',query2);
-                //await Consulta(query2);
+                //await pool.query(query2);
 
                 //  INSERT idMarca,idModelo,idGeneracion,color a (tvehiculo)
                 //  SELECT el "id_vehiculo" ultimo agregado
@@ -134,7 +134,7 @@ router.post('/info-cliente',async (req, res, next) =>{
 
                 // aca no incertamos tipo cleinte solo usamos el que selecciono
                 
-                id_vehiculo = await Consulta(query2);
+                id_vehiculo = await pool.query(query2);
                 id_vehiculo = id_vehiculo[0][0].id_vehiculo;
 
               }
@@ -153,7 +153,7 @@ router.post('/info-cliente',async (req, res, next) =>{
                 '+id_person+','+0+','+1+',"'+pFechaHoy+'")'
                 
                 console.log('DATOS ENVIADOS :',query3_0)
-                id_vehiculo = await Consulta(query3_0);
+                id_vehiculo = await pool.query(query3_0);
                 id_vehiculo = id_vehiculo[0][0].id_vehiculo;
               }else{
                 const id_tipo_cliente = estado_tipo_cliente[0];
@@ -162,7 +162,7 @@ router.post('/info-cliente',async (req, res, next) =>{
                 '+id_person+','+0+','+0+',"'+pFechaHoy+'")'
                 
                 console.log('DATOS ENVIADOS :',query3_1)
-                id_vehiculo = await Consulta(query3_1);
+                id_vehiculo = await pool.query(query3_1);
                 id_vehiculo = id_vehiculo[0][0].id_vehiculo;
               }
 
@@ -183,7 +183,7 @@ router.post('/info-cliente',async (req, res, next) =>{
                 '+id_person+','+1+','+null+',"'+pFechaHoy+'")'; 
 
                 console.log('DATOS ENVIADOS :',query4)
-                id_vehiculo = await Consulta(query4);
+                id_vehiculo = await pool.query(query4);
                 id_vehiculo = id_vehiculo[0][0].id_vehiculo;
                 // aca incertamos el nuevo tipo cliente
               }else{ // tipo_cliente 0 2
@@ -201,7 +201,7 @@ router.post('/info-cliente',async (req, res, next) =>{
                 '+id_person+','+2+','+null+',"'+pFechaHoy+'")';
                 
                 console.log('DATOS ENVIADOS :',query5)
-                id_vehiculo = await Consulta(query5);
+                id_vehiculo = await pool.query(query5);
                 id_vehiculo = id_vehiculo[0][0].id_vehiculo;
               }
           break;
@@ -219,7 +219,7 @@ router.post('/info-cliente',async (req, res, next) =>{
                 '+id_person+','+0+','+1+',"'+pFechaHoy+'")'
                 
                 console.log('DATOS ENVIADOS :',query6_0)
-                id_vehiculo = await Consulta(query6_0);
+                id_vehiculo = await pool.query(query6_0);
                 id_vehiculo = id_vehiculo[0][0].id_vehiculo;
               }else{
                 const id_tipo_cliente = estado_tipo_cliente[0];
@@ -228,7 +228,7 @@ router.post('/info-cliente',async (req, res, next) =>{
                 '+id_person+','+0+','+0+',"'+pFechaHoy+'")'
                 
                 console.log('DATOS ENVIADOS :',query6_1)
-                id_vehiculo = await Consulta(query6_1);
+                id_vehiculo = await pool.query(query6_1);
                 id_vehiculo = id_vehiculo[0][0].id_vehiculo;
               }
 
@@ -250,7 +250,7 @@ router.post('/info-cliente',async (req, res, next) =>{
                 '+id_person+','+1+','+null+',"'+pFechaHoy+'")'; 
 
                 console.log('DATOS ENVIADOS :',query7)
-                id_vehiculo = await Consulta(query7);
+                id_vehiculo = await pool.query(query7);
                 id_vehiculo = id_vehiculo[0][0].id_vehiculo;
                 // aca incertamos el nuevo tipo cliente
 
@@ -270,7 +270,7 @@ router.post('/info-cliente',async (req, res, next) =>{
                 '+id_person+','+2+','+null+',"'+pFechaHoy+'")';
                 
                 console.log('DATOS ENVIADOS :',query8)
-                id_vehiculo = await Consulta(query8);
+                id_vehiculo = await pool.query(query8);
                 id_vehiculo = id_vehiculo[0][0].id_vehiculo;
               }
             break;
@@ -286,7 +286,7 @@ router.post('/info-cliente',async (req, res, next) =>{
                 '+id_person+','+0+','+1+',"'+pFechaHoy+'")'
                 
                 console.log('DATOS ENVIADOS :',query9_0)
-                id_vehiculo = await Consulta(query9_0);
+                id_vehiculo = await pool.query(query9_0);
                 id_vehiculo = id_vehiculo[0][0].id_vehiculo;
               }else{
                 const id_tipo_cliente = estado_tipo_cliente[0];
@@ -295,7 +295,7 @@ router.post('/info-cliente',async (req, res, next) =>{
                 '+id_person+','+0+','+0+',"'+pFechaHoy+'")'
                 
                 console.log('DATOS ENVIADOS :',query9_1)
-                id_vehiculo = await Consulta(query9_1);
+                id_vehiculo = await pool.query(query9_1);
                 id_vehiculo = id_vehiculo[0][0].id_vehiculo;
               }
               // aca usamos el id_tipo_cliente
@@ -316,7 +316,7 @@ router.post('/info-cliente',async (req, res, next) =>{
               '+id_person+','+1+','+null+',"'+pFechaHoy+'")'; 
 
               console.log('DATOS ENVIADOS :',query10)
-              id_vehiculo = await Consulta(query10);
+              id_vehiculo = await pool.query(query10);
               id_vehiculo = id_vehiculo[0][0].id_vehiculo;
               // aca incertamos el nuevo tipo cliente
 
@@ -336,14 +336,14 @@ router.post('/info-cliente',async (req, res, next) =>{
                 '+id_person+','+2+','+null+',"'+pFechaHoy+'")';
                 
                 console.log('DATOS ENVIADOS :',query11)
-                id_vehiculo = await Consulta(query11);
+                id_vehiculo = await pool.query(query11);
                 id_vehiculo = id_vehiculo[0][0].id_vehiculo;
               }
           break;
       }
 
 /*       // Consulta para los Tipo de Cliente
-      const Consulta_tipo_cliente = await Consulta('SELECT id_tipo_cliente,tipo_cliente FROM ttipo_cliente') 
+      const Consulta_tipo_cliente = await pool.query('SELECT id_tipo_cliente,tipo_cliente FROM ttipo_cliente') 
       const TipoCliente = {id_tipo_cliente,tipo_cliente} = Consulta_tipo_cliente;
 
       const idTipo_cliente=[];
@@ -359,7 +359,7 @@ router.post('/info-cliente',async (req, res, next) =>{
 
       // RECUPERAR LA NUEVA INFORMACION DEL CLIENTE - VEHICULO
       //Para despues mostrar en la vista formInfoCliente
-      await Consulta("CALL SP_recuperar_Cliente_Placa('"+placa+"')",(err,rows)=>{
+      await pool.query("CALL SP_recuperar_Cliente_Placa('"+placa+"')",(err,rows)=>{
         try {
           let SP_recuperar_Cliente = rows[0]
           if(SP_recuperar_Cliente.length == 0 || err){
@@ -398,7 +398,7 @@ router.post('/info-cliente',async (req, res, next) =>{
       console.log('placa',placa)
       const id_person = req.user.id_persona;
       // Consulta para los Tipo de Cliente
-      const Consulta_tipo_cliente = await Consulta('SELECT id_tipo_cliente,tipo_cliente FROM ttipo_cliente') 
+      const Consulta_tipo_cliente = await pool.query('SELECT id_tipo_cliente,tipo_cliente FROM ttipo_cliente') 
       const TipoCliente = {id_tipo_cliente,tipo_cliente} = Consulta_tipo_cliente;
 
       const idTipo_cliente=[];
@@ -412,7 +412,7 @@ router.post('/info-cliente',async (req, res, next) =>{
       const Tipos_Cliente = {idTipo_cliente,Tipo_cliente}
       console.log('idTipo_cliente,Tipo_cliente',Tipos_Cliente)
       
-      await Consulta("CALL SP_recuperar_Cliente_Placa('"+placa+"')",(err,rows) => {
+      await pool.query("CALL SP_recuperar_Cliente_Placa('"+placa+"')",(err,rows) => {
         try {
           let SP_recuperar_Cliente = rows[0]
           if(SP_recuperar_Cliente.length == 0 || err){
@@ -451,7 +451,7 @@ router.route('/info-cliente')
   .get(isLoggedIn,Recuperar_info_Cliente);
 
 router.get('/listar',isLoggedIn,async (req, res, next)=> {
-  const SP_misOrdenes = await Consulta('SELECT * FROM torden WHERE user_id = ?', [req.user.id]);
+  const SP_misOrdenes = await pool.query('SELECT * FROM torden WHERE user_id = ?', [req.user.id]);
   const misOrdenes = SP_misOrdenes;
   var index = 0;
   misOrdenes.forEach(element => {
@@ -472,7 +472,7 @@ router.post('/listar',isLoggedIn, async (req, res, next) => {
     description,
     user_id: req.user.id
   };
-  await Consulta('INSERT INTO torden set ?', [nueva_orden]);
+  await pool.query('INSERT INTO torden set ?', [nueva_orden]);
 /*     console.log("tamaño es",misOrdenes.length,"y",misOrdenes[0]); */
   console.log(req.flash('success',''),"post")
 /*   res.render("formListarOrdenes"); */
@@ -484,7 +484,7 @@ router.post('/listar',isLoggedIn, async (req, res, next) => {
 router.post('/nuevo-cliente',async (req, res, next) => {
   const {nueva_placa} = req.body
   const InfoUser      = await helpers.InfoUser(req.user.id_usuario);      // Info Usuario Logueado
-  const consulta_Placa_Existente = await Consulta('CALL SP_FN_Existencia_Placa("'+nueva_placa+'");');
+  const consulta_Placa_Existente = await pool.query('CALL SP_FN_Existencia_Placa("'+nueva_placa+'");');
   const {existencia_placa} = consulta_Placa_Existente[0][0];
   console.log('Placabuscada',nueva_placa);
   console.log('RESPUESTA',existencia_placa);
@@ -492,7 +492,7 @@ router.post('/nuevo-cliente',async (req, res, next) => {
     req.flash('messages','Esa placa ya existe')
     res.redirect('/consultar');
   }else{
-    const consulta_cliente_dni = await Consulta('select nombre_cliente,dni,id_cliente from tcliente');
+    const consulta_cliente_dni = await pool.query('select nombre_cliente,dni,id_cliente from tcliente');
     const data = {nombre_cliente,dni,id_cliente} = consulta_cliente_dni;
 
     let nombre_dni=[];
@@ -508,7 +508,7 @@ router.post('/nuevo-cliente',async (req, res, next) => {
       cont++;
     });
 
-    const Sp_get_marcas = await Consulta('CALL SP_get_marca_auto()');
+    const Sp_get_marcas = await pool.query('CALL SP_get_marca_auto()');
     const consulta = Sp_get_marcas[0];
 
     const id=[];
@@ -521,7 +521,7 @@ router.post('/nuevo-cliente',async (req, res, next) => {
     });
 
     // Consulta para los Tipo de Cliente
-    const Consulta_tipo_cliente = await Consulta('SELECT id_tipo_cliente,tipo_cliente FROM ttipo_cliente') 
+    const Consulta_tipo_cliente = await pool.query('SELECT id_tipo_cliente,tipo_cliente FROM ttipo_cliente') 
     const TipoCliente = {id_tipo_cliente,tipo_cliente} = Consulta_tipo_cliente;
 
     const idTipo_cliente=[];
@@ -566,17 +566,17 @@ router.post('/', async (req, res, next)=>{
   const person_username = req.user.username;
   const {password_old,password_new,password_confirm} = req.body
   console.log('Datass',password_old,password_new,password_confirm)
-  const Password = await Consulta('SELECT password FROM tusuario WHERE username = "'+person_username+'";');
+  const Password = await pool.query('SELECT password FROM tusuario WHERE username = "'+person_username+'";');
   let Existencia_Password = await helpers.matchPassword(password_old,Password[0].password);
 
   if(Existencia_Password){
     if(password_new == password_confirm){
       let encript_password_new = await helpers.encryptPassword(password_confirm);
 
-      await Consulta('UPDATE tusuario SET password ="'+encript_password_new+'" WHERE username = "'+person_username+'"');
+      await pool.query('UPDATE tusuario SET password ="'+encript_password_new+'" WHERE username = "'+person_username+'"');
 
       // Enviar a email Su nueva contraseña
-        const Email_Usuario = await Consulta('SELECT email FROM v_tusuario_tpersona WHERE username = "'+person_username+'";');
+        const Email_Usuario = await pool.query('SELECT email FROM v_tusuario_tpersona WHERE username = "'+person_username+'";');
         console.log('EMAIL,',Email_Usuario)
         const cuerpoMensage = '<ul>\
           <li><b>Usuario:</b>'+person_username+'</li>\
@@ -604,14 +604,14 @@ router.get('/nueva-orden',isLoggedIn, (req, res, next)=>{
 
 router.get('/listar/delete/:id',async (req,res,next) => {
   const { id } = req.params;
-  await Consulta('delete from torden where id= ?',[id]);
+  await pool.query('delete from torden where id= ?',[id]);
   req.flash('success','Orden finalizada correctamente');
   res.redirect('/listar');
 });
 
 router.get('/listar/edit/:id',async (req,res,next) => {
   const { id } = req.params;
-  const ordenes = await Consulta('SELECT * FROM torden WHERE id= ?',[id]);
+  const ordenes = await pool.query('SELECT * FROM torden WHERE id= ?',[id]);
   res.render('editarOrden',{ordenes:ordenes[0]});
 });
 
@@ -625,7 +625,7 @@ router.post('/listar/edit/:id',async (req,res,next) => {
   };
   //console.log(newLink);
   //res.send('actualizado');
-  await Consulta('UPDATE torden set ? WHERE id = ?', [newLink, id]);
+  await pool.query('UPDATE torden set ? WHERE id = ?', [newLink, id]);
   req.flash('success','Orden actualizada correctamente');
   res.redirect('/listar');
 });
@@ -661,7 +661,7 @@ router.post('/registro-completo',isLoggedIn,async (req,res,next) => {
   console.log('query',query);
 
   try {
-    await Consulta(query);
+    await pool.query(query);
     console.log('pasword_encriptado',password_ecript);
 
     console.log('Username:',Username);
@@ -689,7 +689,7 @@ router.post('/detalle-pedido',isLoggedIn,async (req,res,next) => {
   const {id_detalle_pedido,mis_Observaciones,id_tipo_usuario,id_usuario_asignador} = req.body;
 
   console.log('mis_Observaciones',req.body);
-  await Consulta('UPDATE tdetallepedido SET Detalle_requerimiento = "'+mis_Observaciones+'" WHERE (id_detallePedido = '+id_detalle_pedido+');');
+  await pool.query('UPDATE tdetallepedido SET Detalle_requerimiento = "'+mis_Observaciones+'" WHERE (id_detallePedido = '+id_detalle_pedido+');');
   
   //SELECCIONARA EL ID DE CAJA RANDOM XD soi telible
   const consulta_id_caja = await Consulta('SELECT id_usuario FROM v_cajeros_habilitados ORDER BY RAND() limit 1;');
@@ -697,7 +697,7 @@ router.post('/detalle-pedido',isLoggedIn,async (req,res,next) => {
 
   //INGRESAMOS UN NUEVO DETALLE PEDIDO PARA FACTURACION
 
-  await Consulta('INSERT into tdetalle_facturacion VALUES (default,'+id_usuario+','+id_detalle_pedido+',default);');
+  await pool.query('INSERT into tdetalle_facturacion VALUES (default,'+id_usuario+','+id_detalle_pedido+',default);');
   req.flash('messages','Se ha enviado a facturar esta orden con exito')
   res.redirect('/profile')
 })
@@ -723,7 +723,7 @@ router.get('/detalle-pedido',isLoggedIn,async (req,res,next) => {
 
     //SOLAMENTE QUIERO VER LA INFORMACION DEL PEDIDO CON ESTE ID_DETALLE_PEDIDO
     const query_Detalle_pedido_terminado = 'CALL SP_Mis_facturaciones_asignadas('+idDetallePedido+')';
-    const consulta_Detalle_pedido_terminado = await Consulta(query_Detalle_pedido_terminado);
+    const consulta_Detalle_pedido_terminado = await pool.query(query_Detalle_pedido_terminado);
     console.log('Respuesta detalle-pedido:',consulta_Detalle_pedido_terminado[0]);
 
     const Detalle_Pedido = consulta_Detalle_pedido_terminado[0];
@@ -744,7 +744,7 @@ router.post('/detalle-pedido-facturacion',isLoggedIn,async (req,res,next) => {
     
   // SABER LA FECHA DE INICIO Y nro_orden de este id_detalle_pedido
     let query_fecha_inicio = 'SELECT fecha,nro_Orden FROM tdetallepedido where id_detallePedido = '+id_detalle_pedido+';';
-    const consulta_fecha_inicio = await Consulta(query_fecha_inicio);
+    const consulta_fecha_inicio = await pool.query(query_fecha_inicio);
     const {fecha,nro_Orden} = consulta_fecha_inicio[0];
 
     // ordenamos la fecha para incertar en TABLA ORDENES GENERALES
@@ -757,32 +757,32 @@ router.post('/detalle-pedido-facturacion',isLoggedIn,async (req,res,next) => {
       console.log('La Fecha de iniciacion es',dateTime,'Y numero de orden es : ',nro_Orden)
 
    // CAMBIAR EL ESTADO DE ORDEN A 5 = finalizado DE ORDENES ACTUALES
-    await Consulta('UPDATE tordenes_actuales SET id_estadoOrden = 5 WHERE (nro_orden = '+nro_Orden+');');
-    await Consulta('UPDATE tdetallepedido SET id_estadoOrden = 5 WHERE (nro_orden = '+nro_Orden+');');
+    await pool.query('UPDATE tordenes_actuales SET id_estadoOrden = 5 WHERE (nro_orden = '+nro_Orden+');');
+    await pool.query('UPDATE tdetallepedido SET id_estadoOrden = 5 WHERE (nro_orden = '+nro_Orden+');');
 
     // INCERTANDO EN ORDENES GENERALES
-     await Consulta('INSERT INTO tordenes_generales VALUES (default,'+nro_Orden+',5,"'+dateTime+'","'+pFechaHoy+'",'+id_detalle_pedido+');');
+     await pool.query('INSERT INTO tordenes_generales VALUES (default,'+nro_Orden+',5,"'+dateTime+'","'+pFechaHoy+'",'+id_detalle_pedido+');');
   
      // ACTUALIZAMOS EL DETALLE FACTURACION A 2 PARA SABER QUE SE HA FACTURADO
-    await Consulta('UPDATE tdetalle_facturacion SET id_estado_facturacion = 2 where (id_detalle_pedido = '+id_detalle_pedido+');');
+    await pool.query('UPDATE tdetalle_facturacion SET id_estado_facturacion = 2 where (id_detalle_pedido = '+id_detalle_pedido+');');
   
     // ELIMINAR ESTA NOTIFICACION DE PEDIDO QUE ME ENVIO EL ASIGNADOR
-    await Consulta('UPDATE tnotificaciones SET id_estado_notificacion = 2 where (id_notificaciones = '+id_Notificacion+');');
+    await pool.query('UPDATE tnotificaciones SET id_estado_notificacion = 2 where (id_notificaciones = '+id_Notificacion+');');
 
     // ELIMINAR ESTA NOTIFICACION DE PEDIDO QUE ME ENVIO EL ASIGNADOR
-    const consulta_IdServicios_Usados = await Consulta('SELECT id_servicio FROM tpedido where (id_detallePedido = '+id_detalle_pedido+');');
+    const consulta_IdServicios_Usados = await pool.query('SELECT id_servicio FROM tpedido where (id_detallePedido = '+id_detalle_pedido+');');
     const id_servicio = consulta_IdServicios_Usados;
     console.log('id_servicio',id_servicio);
 
     //RANKEAR LOS SERVICIOS QUE SE UTILIZARON
     for (let cont = 0; cont <= id_servicio.length-1; cont++) {  
-      let consulta_veces = await Consulta('SELECT veces_usada FROM tservicios_generales WHERE id_servicios_generales = '+id_servicio[cont].id_servicio+';'); 
+      let consulta_veces = await pool.query('SELECT veces_usada FROM tservicios_generales WHERE id_servicios_generales = '+id_servicio[cont].id_servicio+';'); 
       let veces = consulta_veces[0].veces_usada;
       veces++;
-      await Consulta('UPDATE tservicios_generales SET veces_usada = '+veces+' WHERE id_servicios_generales = '+id_servicio[cont].id_servicio+';');
+      await pool.query('UPDATE tservicios_generales SET veces_usada = '+veces+' WHERE id_servicios_generales = '+id_servicio[cont].id_servicio+';');
     } 
 
-  //await Consulta('DELETE FROM tnotificaciones WHERE (id_user_emisor = '+id_usuario_asignador+' && id_user_receptor = '+req.user.id_persona+');');
+  //await pool.query('DELETE FROM tnotificaciones WHERE (id_user_emisor = '+id_usuario_asignador+' && id_user_receptor = '+req.user.id_persona+');');
   req.flash('messages','Se ha acabado con esta orden')
   console.log('FIN CAJERO SUBMIT______________________________________________________________________________________________');
   res.redirect('/profile')    
@@ -802,7 +802,7 @@ router.get('/detalle-pedido-facturacion',isLoggedIn,async (req,res,next) => {
 
   //SOLAMENTE QUIERO VER LA INFORMACION DEL PEDIDO CON ESTE ID_DETALLE_PEDIDO
   const query_Detalle_pedido_terminado = 'CALL SP_Mis_facturaciones_asignadas('+idDetallePedido+')';
-  const consulta_Detalle_pedido_terminado = await Consulta(query_Detalle_pedido_terminado);
+  const consulta_Detalle_pedido_terminado = await pool.query(query_Detalle_pedido_terminado);
   console.log('Respuesta:',consulta_Detalle_pedido_terminado[0]);
 
   const Detalle_Pedido = consulta_Detalle_pedido_terminado[0];
