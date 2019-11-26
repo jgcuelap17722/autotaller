@@ -20,7 +20,7 @@ Consulta = (pQuery) => { return coneccion.query(pQuery) };
 // Objeto para fecha normal HOY y Fecha Para incertar
 let f_hoy = {
   f_date:helpers.new_Date(new Date()),
-  f_str:(helpers.new_Date(new Date())).toLocaleString()
+  f_str:helpers.formatDate(helpers.new_Date(new Date()))
 }
 
 //inicializacion
@@ -59,7 +59,7 @@ app.use(async (req, res, next) => {
   }
   app.locals.f_hoy = {
     f_date:helpers.new_Date(new Date()),
-    f_str:(helpers.new_Date(new Date())).toLocaleString()
+    f_str:helpers.formatDate(helpers.new_Date(new Date()))
   }
   next();
 });
@@ -123,7 +123,7 @@ Ejecucion_de_Cron = async (data, nDatos) => {
 
   // INCERTAR LA FECHA DE NOTIFICACION 
   let fecha_Notificacion = helpers.new_Date(new Date()),
-    fecha_Notificacion_str = fecha_Notificacion.toLocaleString();
+    fecha_Notificacion_str = helpers.formatDate(fecha_Notificacion);
 
   let query = 'UPDATE tseguimiento SET fecha_notificacion = "' + fecha_Notificacion_str + '" WHERE id_seguimiento = ' + data.id_seguimiento + ';';
   await Consulta(query);
@@ -192,7 +192,7 @@ Ejecucion_de_Cron = async (data, nDatos) => {
 
         let Mi_fecha_cron_1_String = '' + Mi_fecha_cron_1 + '/' + Mi_mes_cron_1 + '/' + Mi_anio_cron_1 + ''
 
-        console.log('Nueva fecha Cron_1 es ==', fecha_cron_1.toLocaleString())
+        console.log('Nueva fecha Cron_1 es ==', helpers.formatDate(fecha_cron_1))
         console.log('Mi fecha', My_Fecha_Actual, ' >= ', fecha_cron_1);
         if (My_Fecha_Actual >= fecha_cron_1) {
 
@@ -228,7 +228,7 @@ Ejecucion_de_Cron = async (data, nDatos) => {
         fecha_cron_2.setHours(9);
         fecha_cron_2.setMinutes(0);
         fecha_cron_2.setSeconds(0);
-        console.log('Nueva fecha Cron_2 es ==', fecha_cron_2.toLocaleString())
+        console.log('Nueva fecha Cron_2 es ==', helpers.formatDate(fecha_cron_2));
 
         let Mi_anio_cron_2 = fecha_cron_2.getFullYear();
         let Mi_fecha_cron_2 = fecha_cron_2.getDate();  //1 - 31
@@ -272,7 +272,7 @@ Ejecucion_de_Cron = async (data, nDatos) => {
         fecha_cron_3.setHours(9);
         fecha_cron_3.setMinutes(0);
         fecha_cron_3.setSeconds(0);
-        console.log('Nueva fecha Cron_3 es ==', fecha_cron_3.toLocaleString())
+        console.log('Nueva fecha Cron_3 es ==', helpers.formatDate(fecha_cron_3));
 
         let Mi_anio_cron_3 = fecha_cron_3.getFullYear();
         let Mi_fecha_cron_3 = fecha_cron_3.getDate();  //1 - 31
@@ -698,7 +698,7 @@ io.on('connection', (sk_Navigation) => {
       let { id_detalle_pedido, id_cliente, id_vehiculo } = data;
 
       let fecha_salida = helpers.new_Date(new Date()),
-        fecha_salida_str = fecha_salida.toLocaleString();
+        fecha_salida_str = helpers.formatDate(fecha_salida);
 
       //fecha_salida_str    = fecha_salida.toISOString().slice(0, 19).replace('T', ' ');
 
@@ -748,7 +748,7 @@ io.on('connection', (sk_Navigation) => {
 
           let Mi_fecha_cron_1_String = '' + Mi_fecha_cron_1 + '/' + Mi_mes_cron_1 + '/' + Mi_anio_cron_1 + ''
 
-          console.log('Nueva fecha Cron_1 es ==', fecha_cron_1.toLocaleString())
+          console.log('Nueva fecha Cron_1 es ==', helpers.formatDate(fecha_cron_1));
 
           if (Mi_fecha_String == Mi_fecha_cron_1_String) {
 
@@ -773,7 +773,7 @@ io.on('connection', (sk_Navigation) => {
         let consulta_cliente_pedido = await Consulta('CALL SP_cliente_de_Pedido_actual(' + id_detalle_pedido + ');')
         let fecha_Notificacion = helpers.new_Date(new Date()),
           //fecha_Notificacion_str  = fecha_Notificacion.toISOString().slice(0, 19).replace('T', ' ');
-          fecha_Notificacion_str = fecha_Notificacion.toLocaleString();
+          fecha_Notificacion_str = helpers.formatDate(fecha_Notificacion);
         await Consulta('UPDATE tseguimiento SET fecha_notificacion = "' + fecha_Notificacion_str + '" where id_seguimiento = ' + id_seguimiento + ';');
         let { nombre_cliente } = consulta_cliente_pedido[0][0];
 

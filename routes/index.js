@@ -31,7 +31,7 @@ router.post('/info-cliente',async (req, res, next) =>{
     estado_tipo_cliente = data.tipo_cliente.split(',');
 
   let pFechaHoy = helpers.new_Date(new Date())
-      pFechaHoy = pFechaHoy.toLocaleString();
+      pFechaHoy = helpers.formatDate(pFechaHoy);
 
   // CONVERTIMOS EL TIPO DE CASO A NUMERO
     const tipo_Caso = parseInt(estado_Caso,10) // vehiculo
@@ -752,7 +752,7 @@ router.post('/detalle-pedido-facturacion',isLoggedIn,async (req,res,next) => {
       let time = fecha.getHours() + ":" + fecha.getMinutes() + ":" + fecha.getSeconds();
       let dateTime = date+' '+time;
       let pFechaHoy = helpers.new_Date(new Date())
-          pFechaHoy = pFechaHoy.toLocaleString()
+          pFechaHoy = helpers.formatDate(pFechaHoy);
       // la salida es esta
       console.log('La Fecha de iniciacion es',dateTime,'Y numero de orden es : ',nro_Orden)
 
