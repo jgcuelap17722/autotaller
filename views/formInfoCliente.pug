@@ -262,12 +262,12 @@ prepend area-scripts
         });
       // BOTON REGISTRAR
         $('#btnCrear').click(() => {
-          let nombre_cliente    = $('#nombre').val();
-            //-telefono  = $('#telefono').val(),
-            //-email     = $('#email').val(),
-            //-dni       = $('#dni').val(),
-            //-ruc       = $('#RUC').val(),
-            //-direccion = $('#Direccion').val();
+          let nombre_cliente    = $('#nombre').val(),
+            telefono  = $('#telefono').val(),
+            email     = $('#email').val(),
+            dni       = $('#dni').val(),
+            ruc       = $('#RUC').val(),
+            direccion = $('#Direccion').val();
           let val_tipo_cliente = $('#tipo_cliente').val();
         let Campos = [val_tipo_cliente,nombre_cliente]
         if(Validacion_Campos(Campos)){

@@ -9,13 +9,13 @@ block contenido
                     .card.text-center
                         .card-body
                         a(href=datos[i].url, target='_blank')
-                            h3.card-title.text-uppercase #{datos[i].title}
-                        p.m-2 #{datos[i].description}
-                        p.text-muted #{datos[i].created_at}
-                        a.btn.btn-danger(href='/listar/delete/'+datos[i].id)
+                            h3.card-title.text-uppercase #{datos[i].km_inicial}
+                        p.m-2 #{datos[i].Detalle_requerimiento}
+                        p.text-muted #{datos[i].fecha}
+                        a.btn.btn-danger(href='/listar/delete/'+datos[i].id_detallePedido)
                             //- enviame a ala ruta links/delete con su respectivo id
                             | Delete Link
-                        a.btn.btn-secondary(href='/listar/edit/'+datos[i].id)
+                        a.btn.btn-secondary(href='/listar/edit/'+datos[i].id_detallePedido)
                             | Edit
                 - i++           
             else

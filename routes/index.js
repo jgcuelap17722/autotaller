@@ -451,11 +451,12 @@ router.route('/info-cliente')
   .get(isLoggedIn,Recuperar_info_Cliente);
 
 router.get('/listar',isLoggedIn,async (req, res, next)=> {
-  const SP_misOrdenes = await Consulta('SELECT * FROM torden WHERE user_id = ?', [req.user.id]);
+  const InfoUser      = await helpers.InfoUser(req.user.id_usuario);
+  const SP_misOrdenes = await Consulta('SELECT * FROM tdetallepedido WHERE id_usuario_asignado = "'+InfoUser.id_usuario+'"');
   const misOrdenes = SP_misOrdenes;
   var index = 0;
   misOrdenes.forEach(element => {
-    misOrdenes[index].created_at = helpers.timeago_int(misOrdenes[index].created_at);
+    misOrdenes[index].fecha = helpers.timeago_int(misOrdenes[index].fecha);
 /*     console.log(element.created_at,m); */
     index++;
   });
@@ -472,7 +473,7 @@ router.post('/listar',isLoggedIn, async (req, res, next) => {
     description,
     user_id: req.user.id
   };
-  await Consulta('SET @@auto_increment_increment = 1; INSERT INTO torden set ?', [nueva_orden]);
+  await Consulta('INSERT INTO torden set ?', [nueva_orden]);
 /*     console.log("tamaño es",misOrdenes.length,"y",misOrdenes[0]); */
   console.log(req.flash('success',''),"post")
 /*   res.render("formListarOrdenes"); */
@@ -697,7 +698,7 @@ router.post('/detalle-pedido',isLoggedIn,async (req,res,next) => {
 
   //INGRESAMOS UN NUEVO DETALLE PEDIDO PARA FACTURACION
 
-  await Consulta('SET @@auto_increment_increment = 1; INSERT into tdetalle_facturacion VALUES (default,'+id_usuario+','+id_detalle_pedido+',default);');
+  await Consulta('CALL SP_ADD_Detalle_Facturacion('+id_usuario+','+id_detalle_pedido+');');
   req.flash('messages','Se ha enviado a facturar esta orden con exito')
   res.redirect('/profile')
 })
@@ -761,7 +762,7 @@ router.post('/detalle-pedido-facturacion',isLoggedIn,async (req,res,next) => {
     await Consulta('UPDATE tdetallepedido SET id_estadoOrden = 5 WHERE (nro_orden = '+nro_Orden+');');
 
     // INCERTANDO EN ORDENES GENERALES
-     await Consulta('SET @@auto_increment_increment = 1; INSERT INTO tordenes_generales VALUES (default,'+nro_Orden+',5,"'+dateTime+'","'+pFechaHoy+'",'+id_detalle_pedido+');');
+     await Consulta('CALL SP_ADD_OrdenesGenerales('+nro_Orden+',"'+dateTime+'","'+pFechaHoy+'",'+id_detalle_pedido+');');
   
      // ACTUALIZAMOS EL DETALLE FACTURACION A 2 PARA SABER QUE SE HA FACTURADO
     await Consulta('UPDATE tdetalle_facturacion SET id_estado_facturacion = 2 where (id_detalle_pedido = '+id_detalle_pedido+');');
