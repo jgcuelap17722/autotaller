@@ -655,7 +655,7 @@ router.get('/studio',async (req,res,next) => {
   let mi_fecha_str = helpers.formatDateTime(pfecha);
   let fecha_convertida = pfecha.toISOString();
   
-  console.log('my fecha pura ',pfecha," Convertida ",fecha_convertida);
+  console.log('my fecha pura ',pfecha,'de formato',typeof pfecha," Convertida ",fecha_convertida,'de formato',typeof fecha_convertida);
 
   let peru_lima = moment(fecha_convertida);
 
