@@ -638,8 +638,18 @@ router.get('/checklist',isLoggedIn,(req,res,next) => {
   res.render('FormCkeckList');
 });
 
-router.get('/studio',(req,res,next) => {
-  res.render('studio');
+router.get('/studio',async (req,res,next) => {
+
+  let fecha_sql = await Consulta('SELECT fecha_creacion FROM v_notificacion_usuario_persona WHERE id_notificaciones = 861')
+      fecha_sql = fecha_sql[0];
+
+  let fecha_extrangera = moment(fecha_sql).tz('Europe/Lisbon').format("YYYY-MM-DD HH:mm:ss")
+  let mi_fecha = new Date();
+  console.log('Fecha extrangera de Servidor',helpers.formatDateTime(mi_fecha));
+
+  let NewTimeago = new Date(fecha_extrangera);
+  console.log('Fecha extrangera Europe/Lisbon',helpers.formatDateTime(NewTimeago));
+  console.log('Convercion de fechastring a date',helpers.formatDateTime(NewTimeago));
 });
 
 router.route('/crear-checklist')
