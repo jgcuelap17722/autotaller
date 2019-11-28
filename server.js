@@ -22,9 +22,6 @@ let f_hoy = {
   f_date:helpers.new_Date(new Date()),
   f_str:helpers.formatDateTime(helpers.new_Date(new Date()))
 }
-console.log('Objeto Completo',f_hoy);
-console.log('Nuestra fecha Convertida str',f_hoy.f_str);
-console.log('Nuestra fecha Convertida date',f_hoy.f_date);
 
 //inicializacion
 const app = express();
@@ -448,6 +445,10 @@ io.on('connection', (sk_Navigation) => {
     //RECUPERAR EL ID DE NOTIFICACION VINCULADA A ESTE EMISOR Y RECEPTOR
     //(Fn_Enviar_Notificacion) esta funcion inserta en tnotificaciones un user_emisor y user_receptor
     //despues recupera el id de la notificacion agregada.
+    console.log('Objeto Completo',f_hoy);
+    console.log('Nuestra fecha Convertida str',f_hoy.f_str);
+    console.log('Nuestra fecha Convertida date',f_hoy.f_date);
+
     let query_id_notificacion = 'CALL SP_FN_Enviar_Notificacion(' + data_idUsuario_emisor + ',' + data_idUsuario_receptor + ',"'+f_hoy.f_str+'")';
     const consulta_id_Notificacion = await Consulta(query_id_notificacion)
     const { id_Notificacion } = consulta_id_Notificacion[0][0]
@@ -518,6 +519,10 @@ io.on('connection', (sk_Navigation) => {
     console.log('data_idUsuario_emisor', data_idUsuario_emisor);
 
     //RECUPERAR EL ID DE NOTIFICACION VINCULADA A ESTE EMISOR(MECANICO) Y RECEPTOR(CAJA)
+    console.log('Objeto Completo',f_hoy);
+    console.log('Nuestra fecha Convertida str',f_hoy.f_str);
+    console.log('Nuestra fecha Convertida date',f_hoy.f_date);
+
     let query_id_notificacion = 'CALL SP_FN_Enviar_Notificacion(' + data_idUsuario_emisor + ',' + data_idUsuario_receptor + ',"'+f_hoy.f_str+'")';
     const consulta_id_Notificacion = await coneccion.query(query_id_notificacion)
     const { id_Notificacion } = consulta_id_Notificacion[0][0]
