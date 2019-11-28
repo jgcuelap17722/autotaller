@@ -643,6 +643,8 @@ router.get('/studio',async (req,res,next) => {
   let fecha_sql = await Consulta('SELECT fecha_creacion FROM v_notificacion_usuario_persona WHERE id_notificaciones = 861')
       fecha_sql = fecha_sql[0];
 
+  console.log('Salida de consulta',fecha_sql);
+  
   let fecha_extrangera = moment(fecha_sql).tz('Europe/Lisbon').format("YYYY-MM-DD HH:mm:ss")
   let mi_fecha = new Date();
   console.log('Fecha extrangera de Servidor',helpers.formatDateTime(mi_fecha));
@@ -650,6 +652,10 @@ router.get('/studio',async (req,res,next) => {
   let NewTimeago = new Date(fecha_extrangera);
   console.log('Fecha extrangera Europe/Lisbon',helpers.formatDateTime(NewTimeago));
   console.log('Convercion de fechastring a date',helpers.formatDateTime(NewTimeago));
+
+  const salida = helpers.timeago(NewTimeago);
+  console.log('Salida de helpers.timeago_int',salida);
+  res.send(salida);
 });
 
 router.route('/crear-checklist')
