@@ -23,6 +23,9 @@ let f_hoy = {
   f_str:helpers.formatDateTime(helpers.new_Date(new Date()))
 }
 
+console.log('Nuestra fecha Convertida str',f_hoy.f_str);
+console.log('Nuestra fecha Convertida date',f_hoy.f_date);
+
 //inicializacion
 const app = express();
 require('./lib/passport');
