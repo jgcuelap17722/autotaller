@@ -659,7 +659,7 @@ router.get('/studio',async (req,res,next) => {
 
   let peru_lima = moment("2019-11-28T11:14:14.000Z");
 
-  let mi_fecha_en_Europa = peru_lima.tz('America/Lima').format('YYYY-MM-DD HH:mm:ss');
+  let mi_fecha_en_Europa = peru_lima.tz('Europe/Lisbon').format('YYYY-MM-DD HH:mm:ss');
   console.log('Mi fecha ',mi_fecha_str,' y en europa es ',mi_fecha_en_Europa);
   let new_fecha_eur = new Date(mi_fecha_en_Europa);
   let salida  = helpers.timeago(new_fecha_eur);
