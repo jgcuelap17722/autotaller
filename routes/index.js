@@ -3,7 +3,7 @@ var helpers = require('../lib/helpers');
 const { isNotLoggedIn } = require('../lib/auth');
 const pdf = require('html-pdf')
 var path = require('path');
-
+const moment = require('moment-timezone');
 var router = express.Router();
 
 const pool = require('../database'); //referencia a ala base de datos
