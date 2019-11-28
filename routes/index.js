@@ -648,7 +648,9 @@ router.get('/studio',async (req,res,next) => {
   let fecha_sql = await Consulta('SELECT fecha_creacion FROM v_notificacion_usuario_persona WHERE id_notificaciones = 861')
   let pfecha = fecha_sql[0].fecha_creacion;
 
-  console.log('Salida de consulta',fecha_sql);
+  pfecha.setHours(pfecha.getHours()+5);
+
+  /* console.log('Salida de consulta',fecha_sql);
 
   //let fecha_str = moment(helpers.formatDateTime(fecha));
 
@@ -661,13 +663,13 @@ router.get('/studio',async (req,res,next) => {
 
   let mi_fecha_en_Europa = peru_lima.tz('Europe/Lisbon').format('YYYY-MM-DD HH:mm:ss');
   console.log('Mi fecha ',mi_fecha_str,' y en europa es ',mi_fecha_en_Europa);
-  let new_fecha_eur = new Date(mi_fecha_en_Europa);
-  let salida  = helpers.timeago(new_fecha_eur);
+  let new_fecha_eur = new Date(mi_fecha_en_Europa); */
+  let salida  = helpers.timeago(pfecha);
 
-  var aestTime = new Date(mi_fecha_str).toLocaleString("en-US", {timeZone: "Europe/Lisbon"});
+/*   var aestTime = new Date(mi_fecha_str).toLocaleString("en-US", {timeZone: "Europe/Lisbon"});
   aestTime = new Date(aestTime);
 
-  console.log('Abre we',aestTime.toLocaleString());
+  console.log('Abre we',aestTime.toLocaleString()); */
   
 
   //let new_fecha =  helpers.timeago(new Date(moment(helpers.formatDateTime(fecha)).tz('Europe/Lisbon').format('YYYY-MM-DD HH:mm:ss')));
