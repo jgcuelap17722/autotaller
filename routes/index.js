@@ -642,7 +642,7 @@ router.get('/studio',async (req,res,next) => {
   console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
   
   let fecha_sql = await Consulta('SELECT fecha_creacion FROM v_notificacion_usuario_persona WHERE id_notificaciones = 861')
-  let fecha = fecha_sql.fecha_creacion;
+  let fecha = fecha_sql[0].fecha_creacion;
 
   console.log('Salida de consulta',fecha_sql);
   console.log('Salida de Convercion fecha',helpers.formatDateTime(fecha));
