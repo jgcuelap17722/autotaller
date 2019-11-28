@@ -640,7 +640,11 @@ router.get('/checklist',isLoggedIn,(req,res,next) => {
 
 router.get('/studio',async (req,res,next) => {
   console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
-  
+
+  let fecha_servidor = new Date();
+
+  console.log('Fecha de servidor',helpers.formatDateTime(fecha_servidor));
+
   let fecha_sql = await Consulta('SELECT fecha_creacion FROM v_notificacion_usuario_persona WHERE id_notificaciones = 861')
   let pfecha = fecha_sql[0].fecha_creacion;
 
@@ -653,7 +657,9 @@ router.get('/studio',async (req,res,next) => {
   
   console.log('my fecha pura ',pfecha," Convertida ",fecha_convertida);
 
-  let mi_fecha_en_Europa = moment(fecha_convertida).tz('Europe/Lisbon').format('YYYY-MM-DD HH:mm:ss');
+  let peru_lima = moment(fecha_convertida);
+
+  let mi_fecha_en_Europa = peru_lima.tz('Europe/Lisbon').format('YYYY-MM-DD HH:mm:ss');
   console.log('Mi fecha ',mi_fecha_str,' y en europa es ',mi_fecha_en_Europa);
   let new_fecha_eur = new Date(mi_fecha_en_Europa);
   let salida  = helpers.timeago(new_fecha_eur);
