@@ -639,13 +639,15 @@ router.get('/checklist',isLoggedIn,(req,res,next) => {
 });
 
 router.get('/studio',async (req,res,next) => {
-
+  console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
+  
   let fecha_sql = await Consulta('SELECT fecha_creacion FROM v_notificacion_usuario_persona WHERE id_notificaciones = 861')
-      fecha_sql = fecha_sql[0];
+  let fecha = fecha_sql.fecha_creacion;
 
   console.log('Salida de consulta',fecha_sql);
+  console.log('Salida de Convercion fecha',helpers.formatDateTime(fecha));
   
-  let fecha_extrangera = moment(fecha_sql).tz('Europe/Lisbon').format("YYYY-MM-DD HH:mm:ss")
+  let fecha_extrangera = moment(fecha).tz('Europe/Lisbon').format("YYYY-MM-DD HH:mm:ss")
   let mi_fecha = new Date();
   console.log('Fecha extrangera de Servidor',helpers.formatDateTime(mi_fecha));
 
