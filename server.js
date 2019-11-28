@@ -22,7 +22,7 @@ let f_hoy = {
   f_date:helpers.new_Date(new Date()),
   f_str:helpers.formatDateTime(helpers.new_Date(new Date()))
 }
-
+console.log('Objeto Completo',f_hoy);
 console.log('Nuestra fecha Convertida str',f_hoy.f_str);
 console.log('Nuestra fecha Convertida date',f_hoy.f_date);
 
