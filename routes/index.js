@@ -657,7 +657,7 @@ router.get('/studio',async (req,res,next) => {
   
   console.log('my fecha pura ',pfecha,'de formato',typeof pfecha," Convertida ",fecha_convertida,'de formato',typeof fecha_convertida);
 
-  let peru_lima = moment("2014-12-01T12:00:00Z");
+  let peru_lima = moment("2019-11-28T11:14:14.000Z");
 
   let mi_fecha_en_Europa = peru_lima.tz('America/Lima').format('YYYY-MM-DD HH:mm:ss');
   console.log('Mi fecha ',mi_fecha_str,' y en europa es ',mi_fecha_en_Europa);
