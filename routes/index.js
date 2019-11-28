@@ -649,7 +649,7 @@ router.get('/studio',async (req,res,next) => {
   //let fecha_str = moment(helpers.formatDateTime(fecha));
 
   let mi_fecha_str = helpers.formatDateTime(pfecha);
-  let fecha_convertida = pfecha.utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";
+  let fecha_convertida = pfecha.toISOString();
   
   console.log('my fecha pura ',pfecha," Convertida ",fecha_convertida);
 
