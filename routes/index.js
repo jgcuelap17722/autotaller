@@ -645,10 +645,37 @@ router.get('/studio',async (req,res,next) => {
   let fecha = fecha_sql[0].fecha_creacion;
 
   console.log('Salida de consulta',fecha_sql);
-  console.log('Salida de Convercion fecha',helpers.formatDateTime(fecha));
+  console.log('Salida de Convercion fecha',);
   
-  let fecha_extrangera = moment(fecha).tz('Europe/Lisbon').format("YYYY-MM-DD HH:mm:ss")
-  let mi_fecha = new Date();
+  let fecha_str = helpers.formatDateTime(fecha);
+
+  var Europa_Lisbon    = moment.tz(fecha_str, "Europe/Lisbon");
+  console.log('Fecha extrangera Europe/Lisbon',Europa_Lisbon);
+  console.log('Tipo extrangera Europe/Lisbon',typeof Europa_Lisbon);
+
+  try {
+    let Europa_date     = new Date(Europa_Lisbon);
+    let formatDateTime  = helpers.formatDateTime(Europa_date),
+        timeago         = helpers.timeago(Europa_date);
+    console.log('Salida de formatDateTime',formatDateTime);
+    console.log('Con el Timeago_int_CATCH ',timeago);
+    res.send(timeago);
+
+  } catch (err) {
+    console.log('ERRORO__',err);
+    let New_Europa_Lisbon = Europa_Lisbon.format("YYYY-MM-DD HH:mm:ss")
+    console.log('Fecha Europe/Lisbon Formateando_CATCH ',New_Europa_Lisbon);
+
+    let NewTimeago = new Date(New_Europa_Lisbon);
+    let formatDateTime_2  = helpers.formatDateTime(NewTimeago),
+        timeago_2         = helpers.timeago(NewTimeago);
+    console.log('Salida de formatDateTime_2',formatDateTime_2);
+    console.log('Con el Timeago_int_CATCH ',timeago_2);
+    res.send(timeago_2);
+  }
+
+/*   let fecha_extrangera = moment(fecha).tz('Europe/Lisbon').format("YYYY-MM-DD HH:mm:ss")
+  
   console.log('Fecha extrangera de Servidor',helpers.formatDateTime(mi_fecha));
 
   let NewTimeago = new Date(fecha_extrangera);
@@ -657,7 +684,7 @@ router.get('/studio',async (req,res,next) => {
 
   const salida = helpers.timeago(NewTimeago);
   console.log('Salida de helpers.timeago_int',salida);
-  res.send(salida);
+  res.send(salida); */
 });
 
 router.route('/crear-checklist')
