@@ -664,7 +664,11 @@ router.get('/studio',async (req,res,next) => {
   let new_fecha_eur = new Date(mi_fecha_en_Europa);
   let salida  = helpers.timeago(new_fecha_eur);
 
+  var aestTime = new Date(mi_fecha_str).toLocaleString("en-US", {timeZone: "Europe/Lisbon"});
+  aestTime = new Date(aestTime);
 
+  console.log('Abre we',aestTime.toLocaleString());
+  
 
   //let new_fecha =  helpers.timeago(new Date(moment(helpers.formatDateTime(fecha)).tz('Europe/Lisbon').format('YYYY-MM-DD HH:mm:ss')));
 
