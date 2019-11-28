@@ -645,7 +645,6 @@ router.get('/studio',async (req,res,next) => {
   let fecha = fecha_sql[0].fecha_creacion;
 
   console.log('Salida de consulta',fecha_sql);
-  console.log('Salida de Convercion fecha',);
   
   let fecha_str = helpers.formatDateTime(fecha);
 
