@@ -645,10 +645,20 @@ router.get('/studio',async (req,res,next) => {
   let fecha = fecha_sql[0].fecha_creacion;
 
   console.log('Salida de consulta',fecha_sql);
-  
-  let fecha_str = helpers.formatDateTime(fecha);
 
-  var Europa_Lisbon    = moment.tz(fecha_str, "Europe/Lisbon");
+  //let fecha_str = moment(helpers.formatDateTime(fecha));
+
+  let new_fecha =  helpers.timeago(new Date(moment(helpers.formatDateTime(fecha)).tz('Europe/Lisbon').format('YYYY-MM-DD HH:mm:ss')));
+
+  //let new_fecha = new Date(Europe_Lisbon);
+
+/*   console.log('Fecha en Europe/Lisbon',new_fecha);
+  let formatDateTime  = helpers.formatDateTime(new_fecha);
+  let timeago_int  = helpers.timeago(new_fecha); */
+  let salida  = ''+new_fecha+'__'+new_fecha+'';
+  res.send(salida);
+  
+  /* var Europa_Lisbon    = moment.tz(fecha_str, "Europe/Lisbon").format("YYYY-MM-DD HH:mm:ss");
   console.log('Fecha extrangera Europe/Lisbon',Europa_Lisbon);
   console.log('Tipo extrangera Europe/Lisbon',typeof Europa_Lisbon);
 
@@ -671,7 +681,7 @@ router.get('/studio',async (req,res,next) => {
     console.log('Salida de formatDateTime_2',formatDateTime_2);
     console.log('Con el Timeago_int_CATCH ',timeago_2);
     res.send(timeago_2);
-  }
+  } */
 
 /*   let fecha_extrangera = moment(fecha).tz('Europe/Lisbon').format("YYYY-MM-DD HH:mm:ss")
   
