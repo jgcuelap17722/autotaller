@@ -649,7 +649,11 @@ router.get('/studio',async (req,res,next) => {
   //let fecha_str = moment(helpers.formatDateTime(fecha));
 
   let mi_fecha_str = helpers.formatDateTime(pfecha);
-  let mi_fecha_en_Europa = moment(helpers.formatDateTime(pfecha)).tz('Europe/Lisbon').format('YYYY-MM-DD HH:mm:ss');
+  let fecha_convertida = pfecha.utc().format("YYYY-MM-DDTHH:mm:ss") + "Z";
+  
+  console.log('my fecha pura ',pfecha," Convertida ",fecha_convertida);
+
+  let mi_fecha_en_Europa = moment(fecha_convertida).tz('Europe/Lisbon').format('YYYY-MM-DD HH:mm:ss');
   console.log('Mi fecha ',mi_fecha_str,' y en europa es ',mi_fecha_en_Europa);
   let new_fecha_eur = new Date(mi_fecha_en_Europa);
   let salida  = helpers.timeago(new_fecha_eur);
