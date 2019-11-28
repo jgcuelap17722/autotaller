@@ -642,20 +642,28 @@ router.get('/studio',async (req,res,next) => {
   console.log('&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&');
   
   let fecha_sql = await Consulta('SELECT fecha_creacion FROM v_notificacion_usuario_persona WHERE id_notificaciones = 861')
-  let fecha = fecha_sql[0].fecha_creacion;
+  let pfecha = fecha_sql[0].fecha_creacion;
 
   console.log('Salida de consulta',fecha_sql);
 
   //let fecha_str = moment(helpers.formatDateTime(fecha));
 
-  let new_fecha =  helpers.timeago(new Date(moment(helpers.formatDateTime(fecha)).tz('Europe/Lisbon').format('YYYY-MM-DD HH:mm:ss')));
+  let mi_fecha_str = helpers.formatDateTime(pfecha);
+  let mi_fecha_en_Europa = moment(helpers.formatDateTime(pfecha)).tz('Europe/Lisbon').format('YYYY-MM-DD HH:mm:ss');
+  console.log('Mi fecha ',mi_fecha_str,' y en europa es ',mi_fecha_en_Europa);
+  let new_fecha_eur = new Date(mi_fecha_en_Europa);
+  let salida  = helpers.timeago(new_fecha_eur);
+
+
+
+  //let new_fecha =  helpers.timeago(new Date(moment(helpers.formatDateTime(fecha)).tz('Europe/Lisbon').format('YYYY-MM-DD HH:mm:ss')));
 
   //let new_fecha = new Date(Europe_Lisbon);
 
 /*   console.log('Fecha en Europe/Lisbon',new_fecha);
   let formatDateTime  = helpers.formatDateTime(new_fecha);
   let timeago_int  = helpers.timeago(new_fecha); */
-  let salida  = ''+new_fecha+'__'+new_fecha+'';
+  
   res.send(salida);
   
   /* var Europa_Lisbon    = moment.tz(fecha_str, "Europe/Lisbon").format("YYYY-MM-DD HH:mm:ss");
