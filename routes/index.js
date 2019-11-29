@@ -650,74 +650,10 @@ router.get('/studio',async (req,res,next) => {
 
   pfecha.setHours(pfecha.getHours()+5);
 
-  /* console.log('Salida de consulta',fecha_sql);
-
-  //let fecha_str = moment(helpers.formatDateTime(fecha));
-
-  let mi_fecha_str = helpers.formatDateTime(pfecha);
-  let fecha_convertida = pfecha.toISOString();
-  
-  console.log('my fecha pura ',pfecha,'de formato',typeof pfecha," Convertida ",fecha_convertida,'de formato',typeof fecha_convertida);
-
-  let peru_lima = moment(fecha_convertida);
-
-  let mi_fecha_en_Europa = peru_lima.tz('Europe/Lisbon').format('YYYY-MM-DD HH:mm:ss');
-  console.log('Mi fecha ',mi_fecha_str,' y en europa es ',mi_fecha_en_Europa);
-  let new_fecha_eur = new Date(mi_fecha_en_Europa); */
   let salida  = helpers.timeago(pfecha);
-
-/*   var aestTime = new Date(mi_fecha_str).toLocaleString("en-US", {timeZone: "Europe/Lisbon"});
-  aestTime = new Date(aestTime);
-
-  console.log('Abre we',aestTime.toLocaleString()); */
-  
-
-  //let new_fecha =  helpers.timeago(new Date(moment(helpers.formatDateTime(fecha)).tz('Europe/Lisbon').format('YYYY-MM-DD HH:mm:ss')));
-
-  //let new_fecha = new Date(Europe_Lisbon);
-
-/*   console.log('Fecha en Europe/Lisbon',new_fecha);
-  let formatDateTime  = helpers.formatDateTime(new_fecha);
-  let timeago_int  = helpers.timeago(new_fecha); */
   
   res.send(salida);
-  
-  /* var Europa_Lisbon    = moment.tz(fecha_str, "Europe/Lisbon").format("YYYY-MM-DD HH:mm:ss");
-  console.log('Fecha extrangera Europe/Lisbon',Europa_Lisbon);
-  console.log('Tipo extrangera Europe/Lisbon',typeof Europa_Lisbon);
 
-  try {
-    let Europa_date     = new Date(Europa_Lisbon);
-    let formatDateTime  = helpers.formatDateTime(Europa_date),
-        timeago         = helpers.timeago(Europa_date);
-    console.log('Salida de formatDateTime',formatDateTime);
-    console.log('Con el Timeago_int_CATCH ',timeago);
-    res.send(timeago);
-
-  } catch (err) {
-    console.log('ERRORO__',err);
-    let New_Europa_Lisbon = Europa_Lisbon.format("YYYY-MM-DD HH:mm:ss")
-    console.log('Fecha Europe/Lisbon Formateando_CATCH ',New_Europa_Lisbon);
-
-    let NewTimeago = new Date(New_Europa_Lisbon);
-    let formatDateTime_2  = helpers.formatDateTime(NewTimeago),
-        timeago_2         = helpers.timeago(NewTimeago);
-    console.log('Salida de formatDateTime_2',formatDateTime_2);
-    console.log('Con el Timeago_int_CATCH ',timeago_2);
-    res.send(timeago_2);
-  } */
-
-/*   let fecha_extrangera = moment(fecha).tz('Europe/Lisbon').format("YYYY-MM-DD HH:mm:ss")
-  
-  console.log('Fecha extrangera de Servidor',helpers.formatDateTime(mi_fecha));
-
-  let NewTimeago = new Date(fecha_extrangera);
-  console.log('Fecha extrangera Europe/Lisbon',helpers.formatDateTime(NewTimeago));
-  console.log('Convercion de fechastring a date',helpers.formatDateTime(NewTimeago));
-
-  const salida = helpers.timeago(NewTimeago);
-  console.log('Salida de helpers.timeago_int',salida);
-  res.send(salida); */
 });
 
 router.route('/crear-checklist')
