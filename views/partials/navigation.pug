@@ -422,13 +422,13 @@ script.
             </div>\
             </div>\
             <div class="dropdown-divider my-1"></div>'
-        );
+            );
         }
 
         Crear_Seguimiento = (pNombre_Cliente,pDia,pFecha,pId_detallePedido,pidSeguimiento,id_cliente,id_vehiculo) => {
             // NECESITA COLOR DE TELEFONITO
             let color_tel = '';
-            pDia == 'dia 1'? color_tel = 'success': pDia == 'dia 7'? color_tel = 'info':pDia == 'dia 30'? color_tel = 'danger': color_tel = 'muted';
+            pDia == 'dia 1'? color_tel = 'success': pDia == 'dia 7'? color_tel = 'info':pDia == 'dia 30'? color_tel = 'warning': color_tel = 'muted';
 
             $('#Cuerpo_Seguimiento').prepend('<div id="item_seguimiento_'+pidSeguimiento+'" class="container-fluid"\
             onclick=Click_Seguimiento('+pId_detallePedido+','+pidSeguimiento+','+id_cliente+','+id_vehiculo+')\
