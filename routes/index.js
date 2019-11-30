@@ -651,10 +651,8 @@ router.get('/studio',async (req,res,next) => {
   });
   
   console.log('La fecha de Peru_LIMA ',nDate); */
-  let salida = helpers.formatTime(new Date('2019-11-29 11:00:00'))
+  let salida = helpers.formatTime(new Date('2019-11-29 23:00:00'))
   console.log('Salida es ', salida );
-  
-  salida = new Date(salida);
 
   res.send(salida);
 
