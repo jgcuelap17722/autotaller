@@ -702,7 +702,7 @@ router.get('/studio',async (req,res,next) => {
 
   let objet_salida = {
     date:eu_dddd_str,
-    timeago:helpers.timeago(fecha_creada)
+    timeago:helpers.timeago(eu_fecha_creada)
   }
 
   res.send(objet_salida);
