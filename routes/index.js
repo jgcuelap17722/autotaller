@@ -646,7 +646,11 @@ router.get('/studio',async (req,res,next) => {
   pfecha.setHours(pfecha.getHours()+5);
 
   let salida  = helpers.timeago(pfecha);
+  const nDate = new Date().toLocaleString('en-US', {
+    timeZone: 'America/Lima'
+  });
   
+  console.log('La fecha de Peru_LIMA ',nDate);
   res.send(salida);
 
 });
