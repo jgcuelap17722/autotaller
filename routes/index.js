@@ -651,12 +651,12 @@ router.get('/studio',async (req,res,next) => {
   });
   
   console.log('La fecha de Peru_LIMA ',nDate); */
-  let fech = new Date('2019-11-29 23:00:00');
-  let di = fech.toLocaleString('en-US',{
+  let fech = new Date('2019-11-29T23:00:00Z');
+/*   let di = fech.toLocaleString('en-US',{
     timeZone: 'Europe/Lisbon'
   });
-  let di2 = new Date(di);
-  salida = helpers.formatTime(di2)
+  let di2 = new Date(di); */
+  salida = helpers.formatTime(fech)
   console.log('Salida es ', salida );
 
   res.send(salida);
