@@ -588,7 +588,7 @@ block contenido
                           td #{data.info_servicios.historial_servicios[i].Detalle_usuario}
                           //td #{data.historial_servicios[i].nombre_cliente}
                           td #{data.info_servicios.Tiempo_Inicio[i]}
-                          td #{data.info_servicios.Tiempo_Inicio_corto[i]}
+                          td #{data.info_servicios.Tiempo_Inicio_corto[i].fecha} #{data.info_servicios.Tiempo_Inicio_corto[i].timeago}
                           if data.info_servicios.historial_servicios[i].Detalle_requerimiento == null
                             td.text-danger Hace falta los requerimientos
                           else

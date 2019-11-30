@@ -61,7 +61,7 @@ info_clienteCtr.Recuperar_info_Cliente = async (req, res, next) => {
   
     historial_servicios.forEach(element => {
       Tiempo_Inicio[h]        = helpers.timeago_int(historial_servicios[h].fecha_iniciacion)
-      Tiempo_Inicio_corto[h]  = helpers.formatDate(historial_servicios[h].fecha_iniciacion)
+      Tiempo_Inicio_corto[h]  = helpers.formatTime(historial_servicios[h].fecha_iniciacion)
       h++
     });
 
