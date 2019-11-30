@@ -640,7 +640,7 @@ router.get('/checklist',isLoggedIn,(req,res,next) => {
 
 router.get('/studio',async (req,res,next) => {
 
-  let fecha_sql = await Consulta('SELECT fecha_creacion FROM v_notificacion_usuario_persona WHERE id_notificaciones = 861')
+  /* let fecha_sql = await Consulta('SELECT fecha_creacion FROM v_notificacion_usuario_persona WHERE id_notificaciones = 861')
   let pfecha = fecha_sql[0].fecha_creacion;
 
   pfecha.setHours(pfecha.getHours()+5);
@@ -650,7 +650,8 @@ router.get('/studio',async (req,res,next) => {
     timeZone: 'America/Lima'
   });
   
-  console.log('La fecha de Peru_LIMA ',nDate);
+  console.log('La fecha de Peru_LIMA ',nDate); */
+  let salida = helpers.formatTime(new Date())
   res.send(salida);
 
 });
