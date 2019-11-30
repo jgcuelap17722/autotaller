@@ -689,7 +689,6 @@ router.get('/studio',async (req,res,next) => {
 
   // Convertimos a formato iso string
   let eu_iso_str = new Date(eu_dddd_str).toISOString();
-  console.log(' Convercion de yyyy-mm-dd a ISO-String ',eu_iso_str);
 
   let eu_fecha_creada = new Date(eu_iso_str);
 
@@ -704,8 +703,8 @@ router.get('/studio',async (req,res,next) => {
     date:eu_dddd_str,
     timeago:helpers.timeago(eu_fecha_creada)
   }
-
-  res.send(objet_salida);
+  let formatTime = helpers.formatTime(date_pfecha);
+  res.send(formatTime);
 });
 
 router.route('/crear-checklist')
