@@ -662,14 +662,14 @@ router.get('/studio',async (req,res,next) => {
 
   let fecha_sql = await Consulta('SELECT creacionVehiculo FROM tvehiculo where id_vehiculo = 515;')
   let date_pfecha = fecha_sql[0].creacionVehiculo;
-
+  // 2019-11-30 11:38:38
   console.log('▼▼▼▼▼▼▼▼▼▼▼▼▼▼ MI FECHA ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼');
   
   console.log(' Entrada Fecha Formato ISO-Date ',date_pfecha);
   let str_pfecha = date_pfecha.toISOString();
   console.log(' Convercion Fecha Formato ISO-String ',str_pfecha);
 
-  let My_format_dDate = Convercion_ISO_String(str_pfecha,'America/Lima');
+  let My_format_dDate = Convercion_ISO_String(str_pfecha,'Europe/Lisbon'); // donde estas?
   console.log(' Convercion Fecha Formato yyyy-mm-dd ',My_format_dDate);
 
   let fecha_creada = new Date(str_pfecha);
@@ -682,7 +682,7 @@ router.get('/studio',async (req,res,next) => {
   let eu_ISOstr_pfecha = date_pfecha.toISOString();
   console.log(' Convercion Fecha Formato ISO-String ',eu_ISOstr_pfecha);
 
-  let eu_dddd_str = Convercion_ISO_String(eu_ISOstr_pfecha,'Europe/Lisbon');
+  let eu_dddd_str = Convercion_ISO_String(eu_ISOstr_pfecha,'Asia/Oral');
 
   // Desde aca se considera fecha de 'Europe/Lisbon'
   console.log(' Convercion Fecha Formato yyyy-mm-dd ',eu_dddd_str);
@@ -702,7 +702,7 @@ router.get('/studio',async (req,res,next) => {
 
   let objet_salida = {
     date:eu_dddd_str,
-    timeago:helpers.timeago(eu_fecha_creada)
+    timeago:helpers.timeago(fecha_creada)
   }
 
   res.send(objet_salida);
