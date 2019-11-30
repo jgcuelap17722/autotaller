@@ -639,30 +639,73 @@ router.get('/checklist',isLoggedIn,(req,res,next) => {
 });
 
 router.get('/studio',async (req,res,next) => {
+  Convercion_ISO_String = (pStr_pfecha,TimeZOne) =>{
+    // Now we can access our time at date[1], and monthdayyear @ date[0]
+    var date = new Date(pStr_pfecha).toLocaleString('en-US',{
+      hour12:false,
+      timeZone: TimeZOne
+    }).split(" ");
 
-  /* let fecha_sql = await Consulta('SELECT fecha_creacion FROM v_notificacion_usuario_persona WHERE id_notificaciones = 861')
-  let pfecha = fecha_sql[0].fecha_creacion;
+    var time = date[1];
+    var mdy = date[0];
 
-  pfecha.setHours(pfecha.getHours()+5);
+    // We then parse  the mdy into parts
+    mdy = mdy.split('/');
+    var month = parseInt(mdy[0]);
+    var day = parseInt(mdy[1]);
+    var year = parseInt(mdy[2]);
 
-  let salida  = helpers.timeago(pfecha);
-  const nDate = new Date().toLocaleString('en-US', {
-    timeZone: 'America/Lima'
-  });
+    // Putting it all together
+    const formattedDate = year + '-' + month + '-' + day + ' ' + time;
+    return formattedDate
+  }
+
+  let fecha_sql = await Consulta('SELECT creacionVehiculo FROM tvehiculo where id_vehiculo = 515;')
+  let date_pfecha = fecha_sql[0].creacionVehiculo;
+
+  console.log('▼▼▼▼▼▼▼▼▼▼▼▼▼▼ MI FECHA ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼');
   
-  console.log('La fecha de Peru_LIMA ',nDate); */
-  let fech = new Date('2019-11-29T23:00:00Z');
+  console.log(' Entrada Fecha Formato ISO-Date ',date_pfecha);
+  let str_pfecha = date_pfecha.toISOString();
+  console.log(' Convercion Fecha Formato ISO-String ',str_pfecha);
 
-  let di = fech.toLocaleString('en-US',{
-    timeZone: 'Europe/Lisbon'
-  });
+  let My_format_dDate = Convercion_ISO_String(str_pfecha,'America/Lima');
+  console.log(' Convercion Fecha Formato yyyy-mm-dd ',My_format_dDate);
 
-  let di2 = new Date(di);
-  salida = helpers.formatTime(di2)
-  console.log('Salida es ', salida );
+  let fecha_creada = new Date(str_pfecha);
 
-  res.send(salida);
+  console.log(' Convercion de ISO-String => ISO-Date ',fecha_creada);
+ 
+  console.log('▼▼▼▼▼▼▼▼▼▼▼▼▼▼ FECHA EUROPE ▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼▼');
 
+  console.log(' Entrada Fecha Formato ISO-Date ',date_pfecha);
+  let eu_ISOstr_pfecha = date_pfecha.toISOString();
+  console.log(' Convercion Fecha Formato ISO-String ',eu_ISOstr_pfecha);
+
+  let eu_dddd_str = Convercion_ISO_String(eu_ISOstr_pfecha,'Europe/Lisbon');
+
+  // Desde aca se considera fecha de 'Europe/Lisbon'
+  console.log(' Convercion Fecha Formato yyyy-mm-dd ',eu_dddd_str);
+
+  // Convertimos a formato iso string
+  let eu_iso_str = new Date(eu_dddd_str).toISOString();
+  console.log(' Convercion de yyyy-mm-dd a ISO-String ',eu_iso_str);
+
+  let eu_fecha_creada = new Date(eu_iso_str);
+
+  // Convercion fecha europea a AMerica/Lima
+  let am_dddd_str = Convercion_ISO_String(eu_ISOstr_pfecha,'America/Lima');
+  console.log(' Convercion Fecha Formato yyyy-mm-dd (America) ',am_dddd_str);
+
+  let am_iso_str = new Date(am_dddd_str).toISOString();
+  console.log(' Convercion de yyyy-mm-dd a ISO-String (America) ',am_iso_str);
+
+  let objet_salida = {
+    date:eu_dddd_str,
+    timeago:helpers.timeago(eu_fecha_creada)
+  }
+
+  res.send(objet_salida);
 });
 
 router.route('/crear-checklist')
