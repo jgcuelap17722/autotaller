@@ -637,7 +637,66 @@ router.route('/consultar')
 router.get('/checklist',isLoggedIn,(req,res,next) => {
   res.render('FormCkeckList');
 });
+router.get('/horas',async (req,res,next) => {
 
+  // I (fecha string formato ISO ,Nombre timezone)
+  Convercion_ISO_String2 = (pStr_pfecha,TimeZOne) => {
+   var date = new Date(pStr_pfecha).toLocaleString('en-US',{
+     hour12: false,
+     timeZone: TimeZOne
+   }).split(" ");
+
+   var time = date[1];
+   var mdy = date[0];
+
+   mdy = mdy.split('/');
+   var month = parseInt(mdy[0]);
+   var day = parseInt(mdy[1]);
+   var year = parseInt(mdy[2]);
+
+   const formattedDate = year + '-' + month + '-' + day + ' ' + time;
+   return formattedDate
+ }// O dddd-mm-dd hh:mm:ss
+
+  // I (fecha Date formato ISO ,Nombre timezone)
+  Convercion_ISO_String = (pISO_pfecha,TimeZOne) => {
+
+   let pStr_pfecha = pISO_pfecha.toISOString();
+   var date = new Date(pStr_pfecha).toLocaleString('en-US',{
+     hour12: false,
+     timeZone: TimeZOne
+   }).split(" ");
+
+   var time = date[1];
+   var mdy = date[0];
+
+   mdy = mdy.split('/');
+   var month = parseInt(mdy[0]);
+   var day = parseInt(mdy[1]);
+   var year = parseInt(mdy[2]);
+
+   const formattedDate = year + '-' + month + '-' + day + ' ' + time;
+   let eu_iso_str = new Date(formattedDate).toISOString();
+
+   let eu_fecha_creada = new Date(eu_iso_str);
+
+   return eu_fecha_creada
+ }// O dddd-mm-dd hh:mm:ss
+
+ let fecha_entrada = new Date('2019-12-02 12:00:00');
+
+ let iso_str = new Date(fecha_entrada).toISOString();
+
+ let fecha_creada = new Date(iso_str);
+
+ let salida_date = Convercion_ISO_String(fecha_creada,'Asia/Oral')
+ 
+ let salida = {
+   hora:Convercion_ISO_String2(salida_date),
+   timeago:helpers.timeago(salida_date)
+ }
+ res.send(salida);
+});
 router.get('/studio',async (req,res,next) => {
   Convercion_ISO_String = (pStr_pfecha,TimeZOne) =>{
     // Now we can access our time at date[1], and monthdayyear @ date[0]
