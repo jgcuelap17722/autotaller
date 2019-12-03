@@ -14,7 +14,9 @@ ordenesCtr.crearOrden = async (req, res, next) => { //CREAR NUEVA ORDEN
     const InfoUser = await helpers.InfoUser(req.user.id_usuario);
     let id_usuario = InfoUser.id_usuario;
 
-    let str_fecha = helpers.formatDateTime(helpers.new_Date(new Date()))
+    let f_date  = req.app.locals.f_hoy.f_date,
+        f_str   = req.app.locals.f_hoy.f_str;
+
   //RECUPERAR ID_VEHICULO Y EL ID_TIPO_CLIENTE
   let id_vehiculo     = parseInt(req.body.id_vehiculo, 10),
       id_cliente      = req.body.id_usuario,
@@ -81,7 +83,7 @@ ordenesCtr.crearOrden = async (req, res, next) => { //CREAR NUEVA ORDEN
     // ==> Incertar en ordenes Actuales y
     // en deTalle pedido SIN datos del asignado y sin datos de detalle
     console.log('numero_Orden,id_usuario,id_cliente,id_vehiculo', numero_Orden, id_usuario, id_cliente, id_vehiculo);
-    let query_insert_Dpedido = 'CALL SP_add_OrdenActual_DetallePedido(' + numero_Orden + ',' + id_vehiculo + ',' + id_cliente + ',' + id_tipo_cliente + ',' + id_usuario + ',"'+str_fecha+'")';
+    let query_insert_Dpedido = 'CALL SP_add_OrdenActual_DetallePedido(' + numero_Orden + ',' + id_vehiculo + ',' + id_cliente + ',' + id_tipo_cliente + ',' + id_usuario + ',"'+f_str+'")';
     await pool.query(query_insert_Dpedido);
 
     const NroOrden = numero_Orden.toString().padStart(6, '0'); // Concatenamos el numero de ortden para mostrar
