@@ -18,10 +18,6 @@ require('dotenv').config()
 Consulta = (pQuery) => { return coneccion.query(pQuery) };
 
 // Objeto para fecha normal HOY y Fecha Para incertar
-let f_hoy = {
-  f_date:helpers.new_Date(new Date()),
-  f_str:helpers.formatDateTime(helpers.new_Date(new Date()))
-}
 
 //inicializacion
 const app = express();
@@ -56,10 +52,6 @@ app.use(async (req, res, next) => {
   if (typeof req.user != 'undefined') {
     const infUser = await Consulta('SELECT * FROM v_tusuario_tpersona WHERE id_usuario = ' + req.user.id_usuario + ';');
     app.locals.users = infUser[0];
-  }
-  app.locals.f_hoy = {
-    f_date:helpers.new_Date(new Date()),
-    f_str:helpers.formatDateTime(helpers.new_Date(new Date()))
   }
   next();
 });
@@ -397,7 +389,8 @@ io.on('connection', (sk_nuevoCliente) => {
 io.on('connection', (sk_CrearOrden) => {
   sk_CrearOrden.on('Crear_Servicio', async (Data) => {
     console.log(Data)
-    await coneccion.query('CALL SP_Crear_Servicio("' + Data.Nombre + '","' + Data.id + '","'+f_hoy.f_str+'");');
+    let str_fecha = helpers.formatDateTime(helpers.new_Date(new Date()))
+    await coneccion.query('CALL SP_Crear_Servicio("' + Data.Nombre + '","' + Data.id + '","'+str_fecha+'");');
     let Servicio_Agregado = await coneccion.query('CALL SP_Recuperar_Servicio_Agregado("' + Data.id + '")');
     const NewService = Servicio_Agregado[0][0]
     sk_CrearOrden.emit('Servicio_agregado', NewService);
@@ -446,8 +439,8 @@ io.on('connection', (sk_Navigation) => {
     //(Fn_Enviar_Notificacion) esta funcion inserta en tnotificaciones un user_emisor y user_receptor
     //despues recupera el id de la notificacion agregada.
     console.log('Mostrar Objeto',f_hoy);
-    
-    let query_id_notificacion = 'CALL SP_FN_Enviar_Notificacion(' + data_idUsuario_emisor + ',' + data_idUsuario_receptor + ',"'+f_hoy.f_str+'")';
+    let str_fecha = helpers.formatDateTime(helpers.new_Date(new Date()))
+    let query_id_notificacion = 'CALL SP_FN_Enviar_Notificacion(' + data_idUsuario_emisor + ',' + data_idUsuario_receptor + ',"'+str_fecha+'")';
     const consulta_id_Notificacion = await Consulta(query_id_notificacion)
     const { id_Notificacion } = consulta_id_Notificacion[0][0]
 
@@ -518,7 +511,8 @@ io.on('connection', (sk_Navigation) => {
 
     //RECUPERAR EL ID DE NOTIFICACION VINCULADA A ESTE EMISOR(MECANICO) Y RECEPTOR(CAJA)
     console.log('Mostrar Objeto',f_hoy);
-    let query_id_notificacion = 'CALL SP_FN_Enviar_Notificacion(' + data_idUsuario_emisor + ',' + data_idUsuario_receptor + ',"'+f_hoy.f_str+'")';
+    let str_fecha = helpers.formatDateTime(helpers.new_Date(new Date()))
+    let query_id_notificacion = 'CALL SP_FN_Enviar_Notificacion(' + data_idUsuario_emisor + ',' + data_idUsuario_receptor + ',"'+str_fecha+'")';
     const consulta_id_Notificacion = await coneccion.query(query_id_notificacion)
     const { id_Notificacion } = consulta_id_Notificacion[0][0]
 
@@ -858,9 +852,10 @@ io.on('connection', (sk_InfoCliente) => {
         const { nombre_cliente, telefono, email, dni, ruc, razon_social, direccion, val_arr, val_id_Vehiculo, id_persona } = Data;
         const tipo_cliente = val_arr[0];
         // incertar nuevo tipo cliente
+        let str_fecha = helpers.formatDateTime(helpers.new_Date(new Date()))
         const query_1 = 'CALL SP_ADD_New_Client(' + val_id_Vehiculo + ',\
           '+ null + ',"' + tipo_cliente + '","' + nombre_cliente + '","' + telefono + '","' + email + '",' + dni + ',' + ruc + ',"' + razon_social + '","' + direccion + '",\
-          '+ id_persona + ',' + 1 + ',"'+f_hoy.f_str+'")';
+          '+ id_persona + ',' + 1 + ',"'+str_fecha+'")';
         await coneccion.query(query_1, (err, rows) => {
           if (!err && rows[0].length > 0) {
             console.log('rows', rows);
@@ -876,9 +871,10 @@ io.on('connection', (sk_InfoCliente) => {
         const { nombre_cliente, telefono, email, dni, ruc, razon_social, direccion, val_arr, val_id_Vehiculo } = Data;
         const id_tipo_cliente = val_arr[0];
         // incertar nuevo tipo cliente
+        let str_fecha = helpers.formatDateTime(helpers.new_Date(new Date()))
         const query_2 = 'CALL SP_ADD_New_Client(' + val_id_Vehiculo + ',\
           '+ id_tipo_cliente + ',"' + null + '","' + nombre_cliente + '","' + telefono + '","' + email + '",' + dni + ',' + ruc + ',"' + razon_social + '","' + direccion + '",\
-          '+ null + ',' + 0 + ',"'+f_hoy.f_str+'")';
+          '+ null + ',' + 0 + ',"'+str_fecha+'")';
         await coneccion.query(query_2, (err, rows) => {
           if (!err && rows[0].length > 0) {
             console.log('rows', rows);
