@@ -692,7 +692,7 @@ router.get('/horas',async (req,res,next) => {
  let salida_date = Convercion_ISO_String(fecha_creada,'Asia/Oral')
  
  let salida = {
-   hora:Convercion_ISO_String2(salida_date),
+   hora:Convercion_ISO_String2(salida_date,'Europe/Lisbon'),
    timeago:helpers.timeago(salida_date)
  }
  res.send(salida);
