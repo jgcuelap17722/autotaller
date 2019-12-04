@@ -419,7 +419,7 @@ io.on('connection', (sk_Navigation) => {
 
   // Este es un pinche tubo que registra la asignacion y envia esa notificacion
   sk_Navigation.on('Enviar_Notificacion', async (data_idUsuario_receptor, data_idUsuario_emisor, pNoroOrden) => {
-    const d_hoy = {
+    let d_hoy = {
       d_date:helpers.new_Date(new Date()),
       d_str:helpers.formatDateTime(helpers.new_Date(new Date()))
     }
@@ -518,7 +518,7 @@ io.on('connection', (sk_Navigation) => {
     console.log('data_idUsuario_emisor', data_idUsuario_emisor);
 
     //RECUPERAR EL ID DE NOTIFICACION VINCULADA A ESTE EMISOR(MECANICO) Y RECEPTOR(CAJA)
-    let query_id_notificacion = 'CALL SP_FN_Enviar_Notificacion(' + data_idUsuario_emisor + ',' + data_idUsuario_receptor + ',"'+d_hoy.s_str+'")';
+    let query_id_notificacion = 'CALL SP_FN_Enviar_Notificacion(' + data_idUsuario_emisor + ',' + data_idUsuario_receptor + ',"'+d_hoy.d_str+'")';
     const consulta_id_Notificacion = await coneccion.query(query_id_notificacion)
     const { id_Notificacion } = consulta_id_Notificacion[0][0]
 
