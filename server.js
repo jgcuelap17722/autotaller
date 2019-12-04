@@ -425,7 +425,10 @@ io.on('connection', (sk_Navigation) => {
 
   // Este es un pinche tubo que registra la asignacion y envia esa notificacion
   sk_Navigation.on('Enviar_Notificacion', async (data_idUsuario_receptor, data_idUsuario_emisor, pNoroOrden) => {
-
+    const d_hoy = {
+      d_date:helpers.new_Date(new Date()),
+      d_str:helpers.formatDateTime(helpers.new_Date(new Date()))
+    }
     // === === === === ASIGNACION DE PEDIDO === === === ===
 
     //SABER CON QUE TIPO USUARIO ESTOY 
@@ -447,7 +450,7 @@ io.on('connection', (sk_Navigation) => {
     //despues recupera el id de la notificacion agregada.
     console.log('Mostrar Objeto',f_hoy);
     
-    let query_id_notificacion = 'CALL SP_FN_Enviar_Notificacion(' + data_idUsuario_emisor + ',' + data_idUsuario_receptor + ',"'+f_hoy.f_str+'")';
+    let query_id_notificacion = 'CALL SP_FN_Enviar_Notificacion(' + data_idUsuario_emisor + ',' + data_idUsuario_receptor + ',"'+d_hoy.d_str+'")';
     const consulta_id_Notificacion = await Consulta(query_id_notificacion)
     const { id_Notificacion } = consulta_id_Notificacion[0][0]
 
@@ -489,6 +492,11 @@ io.on('connection', (sk_Navigation) => {
     pId_Detalle_Pedido,
     pId_Notificacion) => {
 
+    const d_hoy = {
+      d_date:helpers.new_Date(new Date()),
+      d_str:helpers.formatDateTime(helpers.new_Date(new Date()))
+    }
+
     let query_info_vehiculo = `SELECT distinct placa,vehiculo_marca,modelo  
       FROM v_detales_de_enviopedido
       WHERE id_detallePedido = `+ pId_Detalle_Pedido + `;`;
@@ -518,7 +526,7 @@ io.on('connection', (sk_Navigation) => {
 
     //RECUPERAR EL ID DE NOTIFICACION VINCULADA A ESTE EMISOR(MECANICO) Y RECEPTOR(CAJA)
     console.log('Mostrar Objeto',f_hoy);
-    let query_id_notificacion = 'CALL SP_FN_Enviar_Notificacion(' + data_idUsuario_emisor + ',' + data_idUsuario_receptor + ',"'+f_hoy.f_str+'")';
+    let query_id_notificacion = 'CALL SP_FN_Enviar_Notificacion(' + data_idUsuario_emisor + ',' + data_idUsuario_receptor + ',"'+d_hoy.s_str+'")';
     const consulta_id_Notificacion = await coneccion.query(query_id_notificacion)
     const { id_Notificacion } = consulta_id_Notificacion[0][0]
 
