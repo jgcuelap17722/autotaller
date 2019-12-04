@@ -1258,8 +1258,11 @@ router.get('/detalle-seguimiento',isLoggedIn,async (req,res,next) => {
 router.post('/detalle-seguimiento',isLoggedIn,async (req,res,next) => {
   const InfoUser = await helpers.InfoUser(req.user.id_usuario)
   const {id_seguimiento,detalle_seguimiento} = req.body
-  let f_date  = req.app.locals.f_hoy.f_date,
-      f_str   = req.app.locals.f_hoy.f_str;
+  let d_hoy = {
+    d_date:helpers.new_Date(new Date()),
+    d_str:helpers.formatDateTime(helpers.new_Date(new Date()))
+  }
+
   // RECUPERAR INFORMACION DE ESTE SEGUIMIENTO
   const query_info_seguimiento     = 'SELECT * FROM tseguimiento WHERE id_seguimiento = '+id_seguimiento+';',
         consulta_info_seguimiento  = await Consulta(query_info_seguimiento),
@@ -1297,7 +1300,7 @@ router.post('/detalle-seguimiento',isLoggedIn,async (req,res,next) => {
     `+id_etapa_seguimiento+`,
     "`+detalle_seguimiento+`",
     "`+helpers.formatDateTime(fecha_salida)+`",
-    "`+f_str+`"
+    "`+d_hoy.d_str+`"
     );`;
   await Consulta(query_registrar_seguimiento); 
   //console.log('Salida de ESTE SEGUIMIENTO',info_seguimiento[0]);
