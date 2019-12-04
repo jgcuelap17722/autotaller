@@ -833,7 +833,7 @@ io.on('connection', (sk_Navigation) => {
         id_vehiculo: element.id_vehiculo,
       }
       i++
-      console.log('Salida del array data_seguimiento', data_seguimiento[i].element.id_seguimiento);
+      console.log('Salida del array data_seguimiento', data_seguimiento[i].id_seguimiento);
     });
     
     sk_Navigation.emit('Emitir_Notificaciones_Seguimineto', data_seguimiento, nro_seguimientos);
