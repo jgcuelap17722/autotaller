@@ -215,7 +215,7 @@ Ejecucion_de_Cron = async (data, nDatos) => {
 
         let fecha_cron_2 = consulta_ultimo_seguimiento_2[0][0].fecha_seguimiento;
         fecha_cron_2.setDate(fecha_cron_2.getDate() + 7);
-        fecha_cron_2.setHours(9);
+        fecha_cron_2.setHours(14); //por que 14 horas? (es por que a esa hora en america latima es 9 am)
         fecha_cron_2.setMinutes(0);
         fecha_cron_2.setSeconds(0);
         console.log('Nueva fecha Cron_2 es ==', helpers.formatDateTime(fecha_cron_2));
@@ -259,7 +259,7 @@ Ejecucion_de_Cron = async (data, nDatos) => {
         fecha_cron_3.setDate(fecha_cron_3.getDate() + 30);
         //fecha_cron_3.setMonth(fecha_cron_3.getMonth());
         //fecha_cron_3.setFullYear(consulta_ultimo_seguimiento_3[0][0].fecha_seguimiento.getFullYear());
-        fecha_cron_3.setHours(9);
+        fecha_cron_3.setHours(14); //por que 14 horas? (es por que a esa hora en america latima es 9 am)
         fecha_cron_3.setMinutes(0);
         fecha_cron_3.setSeconds(0);
         console.log('Nueva fecha Cron_3 es ==', helpers.formatDateTime(fecha_cron_3));
@@ -741,7 +741,7 @@ io.on('connection', (sk_Navigation) => {
 
           let fecha_cron_1 = data_seguimiento.fecha_salida;
           fecha_cron_1.setDate(fecha_cron_1.getDate() + 1);
-          fecha_cron_1.setHours(9);
+          fecha_cron_1.setHours(14); //por que 14 horas? (es por que a esa hora en america latima es 9 am)
           fecha_cron_1.setMinutes(0);
           fecha_cron_1.setSeconds(0);
 
@@ -818,7 +818,7 @@ io.on('connection', (sk_Navigation) => {
   sk_Navigation.on('Requiero_Notificaciones_Seguimiento', async () => {
     const query_notificaciones_seguimiento = 'SELECT * FROM v_ids_detalle_seguimiento WHERE fecha_notificacion is not null && id_estado_seguimiento <> 2;';
     const consulta_notificaciones_seguimiento = await Consulta(query_notificaciones_seguimiento);
-    console.log('por recarga de seguimiento = ', consulta_notificaciones_seguimiento)
+    console.log('por recarga numero de seguimientos = ', consulta_notificaciones_seguimiento.length)
 
     let data_seguimiento = [], i = 0, nro_seguimientos = consulta_notificaciones_seguimiento.length;
 
@@ -833,8 +833,9 @@ io.on('connection', (sk_Navigation) => {
         id_vehiculo: element.id_vehiculo,
       }
       i++
+      console.log('Salida del array data_seguimiento', data_seguimiento[i].element.id_seguimiento);
     });
-    console.log('Salida del array data_seguimiento', data_seguimiento);
+    
     sk_Navigation.emit('Emitir_Notificaciones_Seguimineto', data_seguimiento, nro_seguimientos);
   })
 })
