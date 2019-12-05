@@ -681,10 +681,10 @@ io.on('connection', (sk_Navigation) => {
           let query_Detalle_Notificacion = 'CALL SP_Detalles_Notificacion(' + data_idUsuario_receptor + ',' + consulta_id_notificacion[index].id_notificaciones + ')'
           let consulta_Detalles_Notificacion = await coneccion.query(query_Detalle_Notificacion)
           console.log(consulta_Detalles_Notificacion[0][0]);
-          Emisor_nombre[index] = consulta_Detalles_Notificacion[0][0].nombre;
-          Emisor_apellido_paterno[index] = consulta_Detalles_Notificacion[0][0].apellido_paterno;
-          Emisor_fecha_creacion[index] = helpers.timeago_int(consulta_Detalles_Notificacion[0][0].fecha_creacion);
-          ids_Notificaciones[index] = consulta_id_notificacion[index].id_notificaciones;
+          Emisor_nombre[index]            = consulta_Detalles_Notificacion[0][0].nombre;
+          Emisor_apellido_paterno[index]  = consulta_Detalles_Notificacion[0][0].apellido_paterno;
+          Emisor_fecha_creacion[index]    = helpers.timeago_int(consulta_Detalles_Notificacion[0][0].fecha_creacion);
+          ids_Notificaciones[index]       = consulta_id_notificacion[index].id_notificaciones;
           //nro_orden[i] = consulta_Detalles_Notificacion[0][0].nro_orden;
         }
         console.log('Salida de Emisor Nombre', Emisor_nombre, Emisor_apellido_paterno, Emisor_fecha_creacion)
