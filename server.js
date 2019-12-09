@@ -816,7 +816,12 @@ io.on('connection', (sk_Navigation) => {
   });
 
   sk_Navigation.on('Requiero_Notificaciones_Seguimiento', async () => {
-    const query_notificaciones_seguimiento = 'SELECT * FROM v_ids_detalle_seguimiento WHERE fecha_notificacion is not null && id_estado_seguimiento <> 2;';
+    const query_notificaciones_seguimiento = `SELECT * FROM v_ids_detalle_seguimiento 
+    WHERE fecha_notificacion is not null && id_estado_seguimiento <> 2 
+    && id_etapa_seguimiento <> 4
+    && id_etapa_seguimiento <> 5
+    && id_etapa_seguimiento <> 6
+    ORDER BY fecha_notificacion`
     const consulta_notificaciones_seguimiento = await Consulta(query_notificaciones_seguimiento);
     console.log('por recarga numero de seguimientos = ', consulta_notificaciones_seguimiento.length)
 
