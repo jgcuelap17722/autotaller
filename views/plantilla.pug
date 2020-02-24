@@ -77,6 +77,7 @@ block contenido
                             th.th-sm Detalle de Cliente
                             th.th-sm Detalle de Recepcion
                             th.th-sm Nombre Usuario
+                            th.th-sm Celular
                             th.th-sm Antiguedad de Visita
                             th.th-sm Fecha de Visita
                             th.th-sm Detalle Requerimiento
@@ -107,6 +108,7 @@ block contenido
                                 td #{data.historial[i].descripcion_cliente}
                                 td #{data.historial[i].Detalle_usuario}
                                 td #{data.historial[i].nombre_cliente}
+                                td #{data.historial[i].telefono}
                                 td #{data.Tiempo_Inicio[i]}
                                 td #{data.Tiempo_Inicio_corto[i]}
                                 if data.historial[i].Detalle_requerimiento == null
@@ -124,6 +126,7 @@ block contenido
                             th Detalle de Cliente
                             th Detalle de Recepcion
                             th Nombre Usuario
+                            th Celular
                             th Antiguedad de Visita
                             th Fecha de Visita
                             th Detalle Requerimiento
