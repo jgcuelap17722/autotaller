@@ -110,20 +110,21 @@ app.get('*', function (req, res) {
 // === S O C K E T S ===
 
 Ejecucion_de_Cron = async (data, nDatos) => {
-
+  // Crea la notificacion en el mismo instante
   // INCERTAR LA FECHA DE NOTIFICACION 
   let fecha_Notificacion = helpers.new_Date(new Date()),
     fecha_Notificacion_str = helpers.formatDateTime(fecha_Notificacion);
 
-  let query = 'UPDATE tseguimiento SET fecha_notificacion = "' + fecha_Notificacion_str + '" WHERE id_seguimiento = ' + data.id_seguimiento + ';';
-  await Consulta(query);
-
-  //let fecha_timeago = helpers.timeago(fecha_Notificacion);
+  //let query = 'UPDATE tseguimiento SET fecha_notificacion = "' + fecha_Notificacion_str + '" WHERE id_seguimiento = ' + data.id_seguimiento + ';';
+  let query = 'CALL SP_Get_Fecha_Notificacion("' + fecha_Notificacion_str + '",' + data.id_seguimiento + ')';
+  //await Consulta(query);
+  const Consulta_Fecha_Notificacion = await Consulta(query);
+  let fechaNotificacion = Consulta_Fecha_Notificacion[0][0].fecha_notificacion;
 
   let obj_Crear_Seguimiento = {
     nombre_cliente: data.nombre_cliente,
     dia: data.nombre_etapa_seguimineto,
-    fecha_notificacion: helpers.timeago_int(data.fecha_Notificacion),
+    fecha_notificacion: helpers.timeago_int(fechaNotificacion),
     id_detalle_pedido: data.id_detallePedido,
     id_seguimiento: data.id_seguimiento,
     id_cliente: data.id_cliente,
@@ -697,6 +698,15 @@ io.on('connection', (sk_Navigation) => {
   sk_Navigation.on('Registrar_Seguimiento', async (data) => {
     try {
       //helpers.Notificacion_dia_1();
+      const query_notificaciones_futuras = `SELECT * FROM v_ids_detalle_seguimiento 
+      WHERE fecha_notificacion is not null && id_estado_seguimiento <> 2 
+      && id_etapa_seguimiento <> 4
+      && id_etapa_seguimiento <> 5
+      && id_etapa_seguimiento <> 6
+      ORDER BY fecha_notificacion`;
+      const Notif_Futuras = await Consulta(query_notificaciones_futuras);
+      let nro_seguimientos = Notif_Futuras.length+1;
+       // SUMO +1 POR QUE CUANDO EL CRON SE EJECUTE LOS SEGUIMIENTOS DEVE SUMAR +1
       console.log('informacion entrante', data);
       let { id_detalle_pedido, id_cliente, id_vehiculo } = data;
 
@@ -740,7 +750,7 @@ io.on('connection', (sk_Navigation) => {
         case 1:
 
           let fecha_cron_1 = data_seguimiento.fecha_salida;
-          fecha_cron_1.setDate(fecha_cron_1.getDate() + 1);
+          fecha_cron_1.setDate(fecha_cron_1.getDate()+1);
           fecha_cron_1.setHours(14); //por que 14 horas? (es por que a esa hora en america latima es 9 am)
           fecha_cron_1.setMinutes(0);
           fecha_cron_1.setSeconds(0);
@@ -753,7 +763,7 @@ io.on('connection', (sk_Navigation) => {
 
           console.log('Nueva fecha Cron_1 es ==', helpers.formatDateTime(fecha_cron_1));
 
-          if (Mi_fecha_String == Mi_fecha_cron_1_String) {
+          //if (Mi_fecha_String == Mi_fecha_cron_1_String) {
 
             new CronJob({
               cronTime: fecha_cron_1,
@@ -764,11 +774,11 @@ io.on('connection', (sk_Navigation) => {
               start: true,
               timeZone: 'America/Lima'
             });
-          } else {
+          //} else {
             const mensage_salida = `* * * * * * * * * * * * * * * *\nNuevo Cron con id: ` + data_seguimiento.id_seguimiento + `\nDe estado: ` + data_seguimiento.nombre_etapa_seguimineto + `\nFue programado para esta fecha: ` + helpers.formatDate(fecha_cron_1) + `\n* * * * * * * * * * * * * * * *`;
             console.log(mensage_salida);
 
-          }
+          //}
           break;
       }
       async function Ejecucion() {
