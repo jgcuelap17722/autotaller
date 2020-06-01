@@ -111,7 +111,7 @@ app.get('*', function (req, res) {
 
 Ejecucion_de_Cron = async (data, nDatos) => {
   // Crea la notificacion en el mismo instante
-  // INCERTAR LA FECHA DE NOTIFICACION 
+  // INCERTAR LA FECHA DE NOTIFICACION EN LA BASE DE DATOS
   let fecha_Notificacion = helpers.new_Date(new Date()),
     fecha_Notificacion_str = helpers.formatDateTime(fecha_Notificacion);
 
