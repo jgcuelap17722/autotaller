@@ -1308,7 +1308,7 @@ router.post('/detalle-seguimiento',isLoggedIn,async (req,res,next) => {
   const data = {InfoUser}
   res.render('F_Registro_seguimiento_exito',{data:data});
 })
-
+//Nueva ruta
 router.route('/reportes')
   .get(recuperarReporte_get)
 
