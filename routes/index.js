@@ -13,6 +13,7 @@ const { isLoggedIn } = require('../lib/auth'); //SIRBE PARA PROTEGER rutas
 const {asinarOrden} = require('../controllers/controlador.ordenes');
 const {HacerConsulta} = require('../controllers/controlador.consultas');
 const {Recuperar_info_Cliente} = require('../controllers/controlador.info-cliente');
+const {recuperarReporte_get} = require('../controllers/controlador.reportes');
 
 // Funcion parahacer consultass
 Consulta = (pQuery) => {return pool.query(pQuery)};
@@ -1307,4 +1308,8 @@ router.post('/detalle-seguimiento',isLoggedIn,async (req,res,next) => {
   const data = {InfoUser}
   res.render('F_Registro_seguimiento_exito',{data:data});
 })
+
+router.route('/reportes')
+  .get(recuperarReporte_get)
+
 module.exports = router; // 859

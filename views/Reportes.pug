@@ -1,0 +1,124 @@
+extends layouts/main.pug
+prepend head
+    link(href="lib/MDBootstrap 4.8.7/css/addons/datatables.min.css" rel="stylesheet")
+    link(href="lib/morris.js-0.5.1/css/morris.css" rel="stylesheet")
+append area-librerias-scripts
+    script(type="text/javascript" src="lib/MDBootstrap 4.8.7/js/addons/datatables.min.js")
+    script(type="text/javascript" src="lib/morris.js-0.5.1/js/raphael-min.js")
+    script(type="text/javascript" src="lib/morris.js-0.5.1/js/morris.min.js")
+append styles
+    style.
+        .dtBasicExample {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        #dtBasicExample th, td {
+            white-space: nowrap;
+        }
+        table.dataTable thead .sorting:after,
+        table.dataTable thead .sorting:before,
+        table.dataTable thead .sorting_asc:after,
+        table.dataTable thead .sorting_asc:before,
+        table.dataTable thead .sorting_asc_disabled:after,
+        table.dataTable thead .sorting_asc_disabled:before,
+        table.dataTable thead .sorting_desc:after,
+        table.dataTable thead .sorting_desc:before,
+        table.dataTable thead .sorting_desc_disabled:after,
+        table.dataTable thead .sorting_desc_disabled:before {
+            bottom: .5em;
+        }
+block contenido
+    .container-fluid.px-0
+        .card.rounded-0
+            .card-header.py-2.border-bottom-0
+                i#iconombre.fas.fa-history.text-muted.mr-2
+                strong.text-muted Marcas y modelos de Vehiculos mas Recurrentes
+            .card-body
+                // Collapse buttons
+                .border.border-mutted
+                    a.btn.btn-info.rounded-pill(data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample")
+                        i.far.fa-question-circle.prefix.mr-1
+                        | Ayuda
+                    // / Collapse buttons
+                    // Collapsible element
+                    #collapseExample.collapse
+                        .m-2.ml-2
+                            strong.text-info Search :
+                            small.ml-2 Busca el dato por cualquier atributo de una fila
+                            br
+                            strong.text-info Show-entries :
+                            small.ml-2 Muestar la cantidad de datos que quieras ver en la tabla
+                            br
+                            strong.text-info Previous-Next :
+                            small.ml-2 Navega por las paginas de la tabla
+                            br
+                            strong.text-info ▲-▼ :
+                            small.ml-2 Organiza los datos de la tabla dese (a-z) o de mayor a menor
+                table#dtBasicExample.table.table-striped.table-bordered.table-sm(cellspacing="0" width="100%")
+                    thead
+                        tr
+                            th.th-sm N°
+                            th.th-sm Marca Vehiculo
+                            th.th-sm Modelo Vehiculo
+                            th.th-sm Año
+                            th.th-sm Numero de Registros
+                    tbody
+                        - var i = 0;
+                        each val in data.vehiculos_recurrentes
+                            tr
+                                td #{i+1}
+                                td #{data.vehiculos_recurrentes[i].vehiculo_marca}
+                                td #{data.vehiculos_recurrentes[i].modelo}
+                                td #{data.vehiculos_recurrentes[i].anio}
+                                td #{data.vehiculos_recurrentes[i].nregistros}
+                            - i++
+                    tfoot
+                        tr
+                            th N°
+                            th Marca Vehiculo
+                            th Modelo Vehiculo
+                            th Año
+                            th Numero de Registros
+        .card.rounded-0
+            .card-header.py-2.border-bottom-0
+                i#iconombre.fas.fa-history.text-muted.mr-2
+                strong.text-muted Top 10 de Marcas de Vehiculos registrados
+            .card-body
+                #graph(style="height: 250px;")
+
+block area-scripts
+    script.
+        $(document).ready(function(){
+            const data    = !{JSON.stringify(data)};
+            
+            $('#dtBasicExample').DataTable({
+                "scrollX": true,
+                "order": [[ 4, 'desc' ]]
+            });
+            
+            $('.dataTables_length').addClass('bs-select');
+
+        
+        console.log("array armado",data.top_marcas)
+
+        // Use Morris.Bar
+        Morris.Bar({
+        element: 'graph',
+        data: data.top_marcas,
+        xkey: 'vehiculo_marca',
+        ykeys: ['cantidad'],
+        labels: ['Vehiculos'],
+        resize: true,
+        barColors: function (row, series, type) {
+            if (type === 'bar') {
+            var red = Math.ceil(255 * row.y / this.ymax);
+            return 'rgb(' + red + ',0,0)';
+            }
+            else {
+            return '#000';
+            }
+        }
+        });
+            
+            //console.log('toda la info',data.vehiculos_recurrentes[0].nro_orden);
+        })
