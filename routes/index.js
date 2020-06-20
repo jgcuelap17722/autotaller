@@ -1122,6 +1122,29 @@ router.post('/pdfd',async (req,res,next) => {
   res.download(file);
 })
 
+/* router.get('/historial',isLoggedIn,async (req,res,next) => {
+  let InfoUser      = await helpers.InfoUser(req.user.id_usuario);      // Info Usuario Logueado
+  //const query_data_historial_resumen = 'SELECT * FROM v_historial_resumen;';
+  const query_data_historial_resumen = 'SELECT * FROM v_historial_completo;';
+
+  const consulta_data_historial_resumen = await Consulta(query_data_historial_resumen);
+  const historial = consulta_data_historial_resumen
+
+  let Tiempo_Inicio=[];
+  let Tiempo_Inicio_corto=[]
+  let n = 0;
+  historial.forEach(element => {
+    Tiempo_Inicio[n] = helpers.timeago_int(historial[n].fecha_iniciacion)
+    Tiempo_Inicio_corto[n] = helpers.formatDate(historial[n].fecha_iniciacion)
+    n++
+  });
+
+  const data = {historial,Tiempo_Inicio,Tiempo_Inicio_corto,InfoUser};
+
+  console.log('Resumen de Historial',data);
+  res.render('plantilla',{data:data});
+}) */
+
 router.get('/historial',isLoggedIn,async (req,res,next) => {
   let InfoUser      = await helpers.InfoUser(req.user.id_usuario);      // Info Usuario Logueado
   //const query_data_historial_resumen = 'SELECT * FROM v_historial_resumen;';
@@ -1138,6 +1161,9 @@ router.get('/historial',isLoggedIn,async (req,res,next) => {
     Tiempo_Inicio_corto[n] = helpers.formatDate(historial[n].fecha_iniciacion)
     n++
   });
+  //console.log('Resumen de Historial',data);
+  res.render('plantilla',{data:data});
+});
 
 router.get('/detalle-seguimiento',isLoggedIn,async (req,res,next) => {
   console.log('req.query',req.query);
