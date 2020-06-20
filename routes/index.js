@@ -1162,6 +1162,8 @@ router.get('/historial',isLoggedIn,async (req,res,next) => {
     n++
   });
   //console.log('Resumen de Historial',data);
+  const data = {historial,Tiempo_Inicio,Tiempo_Inicio_corto,InfoUser};
+  
   res.render('plantilla',{data:data});
 });
 
