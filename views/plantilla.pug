@@ -6,14 +6,57 @@ append area-librerias-scripts
 prepend area-scripts
     script.
         $(document).ready(function(){
-            $('#dtBasicExample').DataTable({
+            const tabla = $('#dtBasicExample').DataTable({
                 "scrollX": true
             });
-            
-            $('.dataTables_length').addClass('bs-select');
+            (function($){
+                $.fn.datepicker.dates['es'] = {
+                    days: ["Domingo", "Lunes", "Martes", "Miércoles", "Jueves", "Viernes", "Sábado"],
+                    daysShort: ["Dom", "Lun", "Mar", "Mié", "Jue", "Vie", "Sáb"],
+                    daysMin: ["Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa"],
+                    months: ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"],
+                    monthsShort: ["Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dic"],
+                    today: "Hoy",
+                    monthsTitle: "Meses",
+                    clear: "Borrar",
+                    weekStart: 1,
+                    format: "dd/mm/yyyy"
+                };
+            }(jQuery));
+            $('#max').datepicker({
+                format: 'mm/dd/yyyy',
+                autoclose: 'true',
+                todayBtn: 'true',
+                todayHighlight: 'true',
+                orientation: 'auto top',
+                language: 'es'
+            }).on('changeDate', function() {
+                tabla.draw()
+            });
 
-            const data    = !{JSON.stringify(data)};
-            console.log('toda la info',data.historial[0].nro_orden);
+            $('#min').datepicker({
+                format: 'mm/dd/yyyy',
+                autoclose: 'true',
+                todayBtn: 'true',
+                todayHighlight: 'true',
+                orientation: 'auto top',
+                language: 'es'
+            }).on('changeDate', function() {
+                tabla.draw()
+            });
+
+            $.fn.dataTable.ext.search.push(
+                function (settings, data, dataIndex) {
+                var min = $('#min').datepicker("getDate");
+                var max = $('#max').datepicker("getDate");
+                var startDate = new Date(data[10]);
+                if (min == null && max == null) { return true; }
+                if (min == null && startDate <= max) { return true;}
+                if(max == null && startDate >= min) {return true;}
+                if (startDate <= max && startDate >= min) { return true; }
+                return false;
+            });
+
         })
 append styles
     style.
@@ -41,7 +84,7 @@ block contenido
         .card.rounded-0
             .card-header.py-2.border-bottom-0
                 i#iconombre.fas.fa-history.text-muted.mr-2
-                strong.text-muted Historial general (Demo)
+                strong.text-muted Historial general
             .card-body
                 // Collapse buttons
                 .border.border-mutted
@@ -65,7 +108,11 @@ block contenido
                             small.ml-2 Organiza los datos de la tabla dese (a-z) o de mayor a menor
                             br
                             strong.text-info PLACA :
-                            small.ml-2 Si haces click en La (placa) veras mas informacion del vehiculo
+                .input-group.input-daterange.m-2
+                    input#min.form-control.dpick(type="text" placeholder="Dia/Mes/Año")
+                    .input-group-addon.m-2 Hasta
+                    input#max.form-control.dpick(type="text" placeholder="Dia/Mes/Año")
+
                 table#dtBasicExample.table.table-striped.table-bordered.table-sm(cellspacing="0" width="100%")
                     thead
                         tr
