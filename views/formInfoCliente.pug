@@ -219,6 +219,21 @@ prepend area-scripts
           }
           if(contador != array.length){return false}else{return true}
           }
+        
+        Copiar = (element) => {
+          //creamos un input que nos ayudara a guardar el texto temporalmente
+          var $temp = $("<input>");
+          //lo agregamos a nuestro body
+          $("body").append($temp);
+          //agregamos en el atributo value del input el contenido html encontrado
+          //en el td que se dio click
+          //y seleccionamos el input temporal
+          $temp.val($(element).html()).select();
+          //ejecutamos la funcion de copiado
+          document.execCommand("copy");
+          //eliminamos el input temporal
+          $temp.remove();
+        }
 
       // === EVENTOS === ===
       //BOTON TIPO CLIENTE ( BLUR )    
@@ -438,7 +453,7 @@ block contenido
                               .col-6
                                 label DNI: 
                               .col-6
-                                p.card-text #{data.ClientCarr[i].dni}
+                                p.card-text(onclick="Copiar(this)") #{data.ClientCarr[i].dni}
                           .form-group.col-md-4
                             .row
                               .col-6

@@ -14,6 +14,7 @@ const {asinarOrden} = require('../controllers/controlador.ordenes');
 const {HacerConsulta} = require('../controllers/controlador.consultas');
 const {Recuperar_info_Cliente} = require('../controllers/controlador.info-cliente');
 const {recuperarReporte_get} = require('../controllers/controlador.reportes');
+const {recuperarOrdenes_hoy_get} = require('../controllers/controlador.ordenes-hoy');
 
 // Funcion parahacer consultass
 Consulta = (pQuery) => {return pool.query(pQuery)};
@@ -1122,29 +1123,6 @@ router.post('/pdfd',async (req,res,next) => {
   res.download(file);
 })
 
-/* router.get('/historial',isLoggedIn,async (req,res,next) => {
-  let InfoUser      = await helpers.InfoUser(req.user.id_usuario);      // Info Usuario Logueado
-  //const query_data_historial_resumen = 'SELECT * FROM v_historial_resumen;';
-  const query_data_historial_resumen = 'SELECT * FROM v_historial_completo;';
-
-  const consulta_data_historial_resumen = await Consulta(query_data_historial_resumen);
-  const historial = consulta_data_historial_resumen
-
-  let Tiempo_Inicio=[];
-  let Tiempo_Inicio_corto=[]
-  let n = 0;
-  historial.forEach(element => {
-    Tiempo_Inicio[n] = helpers.timeago_int(historial[n].fecha_iniciacion)
-    Tiempo_Inicio_corto[n] = helpers.formatDate(historial[n].fecha_iniciacion)
-    n++
-  });
-
-  const data = {historial,Tiempo_Inicio,Tiempo_Inicio_corto,InfoUser};
-
-  console.log('Resumen de Historial',data);
-  res.render('plantilla',{data:data});
-}) */
-
 router.get('/historial',isLoggedIn,async (req,res,next) => {
   let InfoUser      = await helpers.InfoUser(req.user.id_usuario);      // Info Usuario Logueado
   //const query_data_historial_resumen = 'SELECT * FROM v_historial_resumen;';
@@ -1333,5 +1311,8 @@ router.post('/detalle-seguimiento',isLoggedIn,async (req,res,next) => {
 //Nueva ruta
 router.route('/reportes')
   .get(recuperarReporte_get)
+
+router.route('/ordenes-hoy')
+  .get(isLoggedIn,recuperarOrdenes_hoy_get)
 
 module.exports = router; // 859
