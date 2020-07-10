@@ -67,7 +67,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 //Iniciar el Servidor
 
 // localhost con sertificado ssl
-const httpsOptions = {
+/* const httpsOptions = {
   key: fs.readFileSync('./security/cert.key'),
   cert: fs.readFileSync('./security/cert.pem')
 }
@@ -75,12 +75,12 @@ const httpsOptions = {
 const server = https.createServer(httpsOptions, app)
   .listen(app.get('port'), () => {
     console.log('Servidor en Puerto ', app.get('port'));
-  });
+  }); */
 
 // localhost SIN sertificado ssl
-/* const server = app.listen(app.get('port'),() => {
+const server = app.listen(app.get('port'),() => {
 	console.log('Servidor en Puerto ',app.get('port'));
-}); */
+});
 
 //coneccion de socket
 const SocketIO = require('socket.io');
