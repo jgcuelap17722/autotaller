@@ -7,13 +7,20 @@ append area-librerias-scripts
     // JavaScript de awesomplate 
     script(src='../lib/lib_awesomplete/awesomplete.js')
 append message
+append styles
+    style.
+        .awesomplete > ul {
+            text-transform: uppercase;
+            font-weight: 425;
+        }
 block contenido
         #total.container.h-100
             .row.align-items-center.h-100
                 .col-12
                     .card.border-danger
                         form#form-post(action="nuevo-cliente" method="post")
-                            .card-header.text-center.alert-danger.value Ingrese almenos 2 digitos para buscar por placa
+                            .card-header.text-center.alert-danger.value 
+                                strong INGRESE LA PLACA DEL VEHICULO
                             .card-body
                                 .row.justify-content-center.align-items-center
                                     section.form-gradient

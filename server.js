@@ -356,8 +356,46 @@ io.on('connection', (sk_nuevoCliente) => {
 
   //SOCKES PARA CONSULTAS DE APIS
   sk_nuevoCliente.on('solicitar_info_dni', async (pDni) => {
-    let data = await helpers.Consulta_Dni(pDni);
-    sk_nuevoCliente.emit('recuperar_info_dni', data)
+    let query_consulta_dni = 'SELECT id_cliente FROM tcliente where dni="' + pDni + '";';
+    if (pDni != 0){
+      if (pDni.toString().length < 8) {
+
+        pDni          = pDni.toString().padStart(8, '0')
+        console.log("BUSCAR DNI EN LA BD");
+        let consulta_dni = await Consulta(query_consulta_dni);
+        console.log("BUSCANDO DNI/",pDni,"RESPUESTA/",consulta_dni);
+        if(consulta_dni.length != 0){ // SI ENCONTRAMOS EL CLIENTE EN LA BD
+          consulta_dni = consulta_dni[0];
+          sk_nuevoCliente.emit('recuperar_info_dni_db', consulta_dni)
+        }else{ // NO ENCONTRAMOS EL CLIENTE EN LA BD
+          let data = await helpers.Consulta_Dni(pDni);
+          sk_nuevoCliente.emit('recuperar_info_dni_online', data)
+        }
+        
+      }else{
+        console.log("BUSCAR DNI EN LA BD");
+        let consulta_dni = await Consulta(query_consulta_dni);
+        console.log("BUSCANDO DNI/",pDni,"RESPUESTA/",consulta_dni);
+        if(consulta_dni.length != 0){ // SI ENCONTRAMOS EL CLIENTE EN LA BD
+          consulta_dni = consulta_dni[0];
+          sk_nuevoCliente.emit('recuperar_info_dni_db', consulta_dni)
+        }else{ // NO ENCONTRAMOS EL CLIENTE EN LA BD
+          let data = await helpers.Consulta_Dni(pDni);
+          sk_nuevoCliente.emit('recuperar_info_dni_online', data)
+        }
+      }
+      //return helpers.Consulta_Dni_Aux(pDni)
+    }else{
+      console.log("ERROR EL DNI ES 0");
+      let data = await helpers.Consulta_Dni(pDni);
+      sk_nuevoCliente.emit('recuperar_info_dni_online', data)
+    }
+
+    
+    //CONSULTA EN LINEA CUANDO NO ENCONTREMOS EN LA BASE DE DATOS
+/*     let data = await helpers.Consulta_Dni(pDni);
+    sk_nuevoCliente.emit('recuperar_info_dni_online', data) */
+
   });
 
   sk_nuevoCliente.on('solicitar_info_ruc', async (pRuc) => {

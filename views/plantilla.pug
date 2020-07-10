@@ -7,7 +7,8 @@ prepend area-scripts
     script.
         $(document).ready(function(){
             const tabla = $('#dtBasicExample').DataTable({
-                "scrollX": true
+                "scrollX": true,
+                "order": [[ 0, "desc" ]]
             });
             (function($){
                 $.fn.datepicker.dates['es'] = {
@@ -23,24 +24,27 @@ prepend area-scripts
                     format: "dd/mm/yyyy"
                 };
             }(jQuery));
-            $('#max').datepicker({
-                format: 'mm/dd/yyyy',
-                autoclose: 'true',
-                todayBtn: 'true',
-                todayHighlight: 'true',
-                orientation: 'auto top',
-                language: 'es'
-            }).on('changeDate', function() {
-                tabla.draw()
-            });
 
-            $('#min').datepicker({
-                format: 'mm/dd/yyyy',
-                autoclose: 'true',
-                todayBtn: 'true',
-                todayHighlight: 'true',
-                orientation: 'auto top',
-                language: 'es'
+
+            $('#min,#max').datepicker({
+                autoclose: true,
+                beforeShowDay: $.noop,
+                calendarWeeks: false,
+                clearBtn: false,
+                daysOfWeekDisabled: [],
+                endDate: Infinity,
+                forceParse: true,
+                format: 'dd/mm/yyyy',
+                keyboardNavigation: true,
+                language: 'es',
+                minViewMode: 0,
+                orientation: "auto",
+                rtl: false,
+                startDate: -Infinity,
+                //startView: 2,
+                todayBtn: true,
+                todayHighlight: true,
+                weekStart: 0
             }).on('changeDate', function() {
                 tabla.draw()
             });
@@ -81,19 +85,19 @@ append styles
         }
 block contenido
     .container-fluid.px-0
-        .card.rounded-0
-            .card-header.py-2.border-bottom-0
-                i#iconombre.fas.fa-history.text-muted.mr-2
-                strong.text-muted Historial general
+        .card
+            .card-header.bg-danger.text-white.py-2.border-bottom-0
+                .d-flex.bd-highlight
+                    .mr-auto.bd-highlight
+                        i#iconombre.fas.fa-history.text-white.mr-2
+                        strong Historial
+                    .bd-highlight
+                        a.text-white(data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample")
+                            i.far.fa-question-circle.prefix.mr-1
+                            | Ayuda
             .card-body
-                // Collapse buttons
-                .border.border-mutted
-                    a.btn.btn-info.rounded-pill(data-toggle="collapse" href="#collapseExample" aria-expanded="false" aria-controls="collapseExample")
-                        i.far.fa-question-circle.prefix.mr-1
-                        | Ayuda
-                    // / Collapse buttons
-                    // Collapsible element
-                    #collapseExample.collapse
+                #collapseExample.collapse
+                    .border.border-mutted
                         .m-2.ml-2
                             strong.text-info Search :
                             small.ml-2 Busca el dato por cualquier atributo de una fila
@@ -107,12 +111,11 @@ block contenido
                             strong.text-info ▲-▼ :
                             small.ml-2 Organiza los datos de la tabla dese (a-z) o de mayor a menor
                             br
-                            strong.text-info PLACA :
+                            strong.text-info PLACA : click para ingresar al perfil del vehiculo
                 .input-group.input-daterange.m-2
                     input#min.form-control.dpick(type="text" placeholder="Dia/Mes/Año")
                     .input-group-addon.m-2 Hasta
                     input#max.form-control.dpick(type="text" placeholder="Dia/Mes/Año")
-
                 table#dtBasicExample.table.table-striped.table-bordered.table-sm(cellspacing="0" width="100%")
                     thead
                         tr

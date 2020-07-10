@@ -506,7 +506,7 @@ router.post('/nuevo-cliente',async (req, res, next) => {
     let cont = 0 
     data.forEach(element => {
       pnombre_cliente[cont] = element.nombre_cliente;
-      pId_cliente[cont] = element.id_cliente
+      pId_cliente[cont]     = element.id_cliente
       nombre_dni[cont,cont] = [element.dni+' - '+element.nombre_cliente,element.nombre_cliente]
       cont++;
     });

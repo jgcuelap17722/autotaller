@@ -52,11 +52,11 @@ append styles
 
         /* Switch 1 Specific Style End */
 
-        .fa,
+        /*.fa,
         .far,
         .fas {
         color: #4f4f4f;
-        }
+        }*/
         
         .awesomplete {
             margin-left: 2.5rem;
@@ -68,8 +68,8 @@ append styles
         }
 block contenido
     form(action='/info-cliente', method='POST')
-        .card
-            .card-header.text-center.alert-secondary.value Ingrese informacion de nuevo vehiculo
+        .card.rounded-0
+            .card-header.text-center.alert-danger.value INGRESE INFORMACION DEL VEHICULO
             .card-body
                 //-.container-fluid.h-100
                 //-    .row.align-items-center.h-100
@@ -126,14 +126,20 @@ block contenido
                                 i.fas.fa-car-side.prefix.mt-1
                                 input#color.form-control.orden(type='text' name='color' required)
                                 label#lbcolor(for='color') color
-                .row.m-1
-                    i.fas.fa-info-circle.prefix.text-info.mr-1
-                    small.text-info Porfavor ingrese datos correctos al formulario por que podria surgir un error
-                p3 Datos del Usuario
+                //.row.m-1
+                //    i.fas.fa-info-circle.prefix.text-info.mr-1
+                //    small.text-info Porfavor ingrese datos correctos al formulario por que podria surgir un error
+                //p3.text-center Datos del Usuario
+        .card.rounded-0
+            .card-header.text-center.alert-danger.value INGRESE INFORMACION DEL USUARIO
+            .card-body
+                //.text-center.alert-secondary.value.m-1.border
+                //    .p-2 INGRESE INFORMACION DEL USUARIO
                 .container-fluid.px-0
-                    small.text-muted Solo buscar al usuario por "DNI" cuando desee registrar un nuevo vehiculo
+                    //small.text-muted Verifique si el cliente existe (Ingrese DNI o NOMBRE o RAZON SOCIAL)
                     .row.mt-2
-                        .col-12.col-md-6
+                        //.col-12.col-md-6
+                        .col-12
                             section.form-gradient
                                 .md-form.mb-1.mt-0
                                     .d-flex.bd-highlight
@@ -142,25 +148,38 @@ block contenido
                                             i#icon_busqueda.fas.fa-search.prefix.mt-1
                                             input#idBusqueda.form-control.orden(type='text')
                                             label#lb_busqueda(for='idBusqueda') Buscar Usuario por DNI o Nombre
-                        .col-12.col-md-6
-                            section.form-gradient
-                                .md-form.mb-1.mt-0
-                                    .d-flex.bd-highlight
-                                        .flex-fill.bd-highlight
-                                            input#tipo_cliente_send(type='hidden',autocomplete='off',name='tipo_cliente')
-                                            i#ico_tipo_cliente.fas.fa-user-friends.prefix.mt-1
-                                            input#tipo_cliente.form-control(type='text',autocomplete='off' required)
-                                            label#lb_tipo_cliente(for='tipo_cliente') Tipo Usuario del vehiculo ej. "propietario" *
-                                        button#btn_tipo_cliente.m-auto.border.mb-2.rounded-right.bg-transparent(type="button")
-                                            i.fas.fa-caret-down.m-2                        
+                                            small#busquedahelp.form-text.text-info Verifique si el cliente existe (ESCRIBE NOMBRE O DNI O RAZON SOCIAL)
+                        //.col-12.col-md-6
+                        //    section.form-gradient
+                        //        .md-form.mb-1.mt-0
+                        //            .d-flex.bd-highlight
+                        //                .flex-fill.bd-highlight
+                        //                    input#tipo_cliente_send(type='hidden',autocomplete='off',name='tipo_cliente')
+                        //                    i#ico_tipo_cliente.fas.fa-user-friends.prefix.mt-1
+                        //                    input#tipo_cliente.form-control(type='text',autocomplete='off' required)
+                        //                    label#lb_tipo_cliente(for='tipo_cliente') Tipo Usuario del vehiculo ej. "propietario" *
+                        //                button#btn_tipo_cliente.m-auto.border.mb-2.rounded-right.bg-transparent(type="button")
+                        //                    i.fas.fa-caret-down.m-2                    
+                .h6.mb-0.mt-4 Datos del Usuario
                 .form-row
-                    .col-md-6
+                    .col-12.col-md-6
                         section.form-gradient
-                            .md-form
-                                i#icoemail.fas.fa-at.prefix.mt-1
-                                input#email.form-control.orden(type='email',name='email')
-                                label#lbemail(for='email') email
-                                small#emailHelp.form-text.text-muted ejemplo@gmail.com
+                            .md-form.mb-1
+                                .d-flex.bd-highlight
+                                    .flex-fill.bd-highlight
+                                        input#tipo_cliente_send(type='hidden',autocomplete='off',name='tipo_cliente')
+                                        i#ico_tipo_cliente.fas.fa-user-friends.prefix.mt-1
+                                        input#tipo_cliente.form-control(type='text',autocomplete='off' required)
+                                        label#lb_tipo_cliente(for='tipo_cliente') Tipo Usuario del vehiculo ej. "propietario" *
+                                    button#btn_tipo_cliente.m-auto.border.mb-2.rounded-right.bg-transparent(type="button")
+                                        i.fas.fa-caret-down.m-2 
+                    //.col-md-6
+                    //    section.form-gradient
+                    //        .md-form
+                    //            i#icoemail.fas.fa-at.prefix.mt-1
+                    //            input#email.form-control.orden(type='email',name='email')
+                    //            label#lbemail(for='email') email
+                    //            small#emailHelp.form-text.text-muted ejemplo@gmail.com
                     .col-md-6
                         section.form-gradient
                             .md-form
@@ -223,12 +242,20 @@ block contenido
                                         i#icorazon_social.fas.fa-id-card-alt.prefix.mt-1
                                         input#razon_social.form-control.orden(type='text',name='razon_social')
                                         label#lbrazon_social(for='razon_social') Razón Social
-                .form-group
-                    section.form-gradient
-                        .md-form
-                            i#icoDireccion.fas.fa-home.prefix.mt-1
-                            input#Direccion.form-control.orden(type='text',name='direccion')
-                            label#lbDireccion(for='Direccion') Direccion
+                .form-row.mt-1                        
+                    .form-group.col-md-6
+                        section.form-gradient
+                            .md-form
+                                i#icoDireccion.fas.fa-home.prefix.mt-1
+                                input#Direccion.form-control.orden(type='text',name='direccion')
+                                label#lbDireccion(for='Direccion') Direccion
+                    .col-md-6
+                        section.form-gradient
+                            .md-form
+                                i#icoemail.fas.fa-at.prefix.mt-1
+                                input#email.form-control.orden(type='email',name='email')
+                                label#lbemail(for='email') email
+                                small#emailHelp.form-text.text-muted ejemplo@gmail.com              
             .card-footer
                 .row
                     .col-6.d-flex.justify-content-center
@@ -554,80 +581,6 @@ block area-scripts
                         console.log('NO creó AWSPGeneracion')
                     }
                 });
-                //$('#Switch').click(() => {
-                //    val_check == 0 ? val_check = 1:val_check = 0;
-                //        //let val_modelo = $('#id_modelo').val();
-                //        console.log('val_check es=',val_check)
-                //        if(val_check != 0 ){ //esta activado
-                //            if(typeof AWSPModelo == 'undefined'){//obcion 3 // AWSPModelo NO fue creado
-                //                console.log('NO Removiendo el Ul de modelo')
-                //                $('#id_marca').prop('disabled',true)
-                //                $('#id_modelo').prop('disabled',false)
-                //                $('#id_generacion').prop('disabled',false)
-                //                console.log('no marca - no modelo - no generacion')
-                //                tipo_entrada = [val_check,1] // F F F 1 nuevo
-                //                $('#sendSwitch').val(tipo_entrada);
-                //                $('#id_marca_send').val('');
-                //                $('#id_modelo_send').val('');
-                //                $('#id_generacion_send').val('');
-                //            }else{
-                //                if(typeof AWSPGeneracion == 'undefined'){//obcion 3 
-                //                    console.log('NO Removiendo el Ul')
-                //                    $('#id_marca').prop('disabled',true)
-                //                    $('#id_modelo').prop('disabled',true)
-                //                    $('#id_generacion').prop('disabled',false)
-                //                    console.log('si marca - no modelo - no generacion')
-                //                    tipo_entrada = [val_check,2] // v f f 2
-                //                    $('#sendSwitch').val(tipo_entrada);
-                //                    $('#id_modelo_send').val('');
-                //                    $('#id_generacion_send').val('');
-                //                }else if($('#id_modelo').val().length <= 0 && $('#id_generacion').val().length <= 0 ){// obcion 1
-                //                    //alert('Error! desactiva "Nuevo vehiculo" o actualiza la pagina para volver a ingresar')
-                //                    location.reload();
-                //                }else{
-                //                    let campo_generacion = $('.generacion').find('ul').attr('id');
-                //                    $('#'+campo_generacion).remove();
-                //                    // desabilitamos marca y modelo para solo ingresar el año
-                //                    $('#id_marca').prop('disabled',true)
-                //                    $('#id_modelo').prop('disabled',true)
-                //                    $('#id_generacion').prop('disabled',false)
-                //                    console.log('si marca - si modelo - no generacion')
-                //                    tipo_entrada = [val_check,3] // v v f 3 no año'
-                //                    $('#sendSwitch').val(tipo_entrada);
-                //                    $('#id_generacion_send').val('');
-                //                }     
-                //            //obcion 2  // AWSPModelo fue creado al hacer click en una marca // si marca - si modelo - no generacion
-                //                let campo_modelo = $('.modelo').find('ul').attr('id');
-                //                $('#'+campo_modelo).remove();
-                //            }
-                //            $('#btn_modelo').hide();
-                //            $('#btn_generacion').hide();
-                //        }else{ // esta desactivado
-                //            console.log('desactivando check')
-                //            $('#sendSwitch').val(val_check);
-                //            if(typeof AWSPModelo != 'undefined'){
-                //                console.log('si existe AWSPModelo modelo')
-                //                $('#btn_modelo').prop('disabled',true)
-                //                //$('#id_generacion').prop('disabled',true)
-                //            }else{
-                //                console.log('NO existe modelo')
-                //                $('#id_modelo').prop('disabled',true)
-                //            }
-                //            AWSPMarca.evaluate()
-                //            AWSPMarca.goto(0)
-                //            AWSPMarca.select()
-                //            $('#btn_modelo').show();
-                //            $('#btn_generacion').show();
-                //            $('#id_marca').prop('disabled',false)
-                //            //$('#id_modelo').prop('disabled',true)
-                //            $('#id_generacion').prop('disabled',true)
-                //            // borrartexto-blur => modelo,generacion
-                //            $('#id_modelo').val('')
-                //            $('#id_modelo').blur()
-                //            $('#id_generacion').val('')
-                //            $('#id_generacion').blur()
-                //        }                  
-                //});
 
                 $("#btnclean").click(() => {
                     $('#busqueda_id_cliente').val('');
@@ -888,6 +841,7 @@ block area-scripts
                                 Estilo_input_AWSP(lb_tipo_cliente,'','#4f4f4f','');
                             }
                     });
+                
                 //BOTON BUSCAR_DNI (CLICK)
                     $('#btn_dni').click(() => {
                         const dni = $('#dni').val();
@@ -961,7 +915,7 @@ block area-scripts
                     Awesome_Combo_Bootstrap(id_generacion,lb_generacion,ico_generacion,btn_generacion);            
 
             // === === SOCKETS === ===
-
+                //Autocompletar los campos al encontrar el cliente
                 sk_nuevoCliente.on('data_info_cliente',data =>{
                     
                     //$('#tipo_cliente').val(data.tipo_cliente);
@@ -1029,7 +983,7 @@ block area-scripts
                 });
 
                 // Recibir apis de dni e Ruc
-                sk_nuevoCliente.on('recuperar_info_dni',(data) => {
+                sk_nuevoCliente.on('recuperar_info_dni_online',(data) => {
                     if(data != 'DESCONECCION'){
                         if(data != 'An error has occurred.'){
                             $('#lbnombre').addClass("active");
@@ -1048,6 +1002,12 @@ block area-scripts
                         $('#nombre_cliente').val('');
                         alert('No hay coneccion a internet')    // caso Sin internet :'(
                     }
+                });
+                // Recibir apis de dni e Ruc
+                sk_nuevoCliente.on('recuperar_info_dni_db',(data) => {
+                    console.log("busqueda por dni",data);
+                    $('#busqueda_id_cliente').val(data.id_cliente)
+                    sk_nuevoCliente.emit('data_cliente',data.id_cliente)
                 });
 
                 sk_nuevoCliente.on('recuperar_info_ruc',(data) => {

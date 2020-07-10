@@ -1,1 +1,0 @@
-start npm_start.bat

@@ -41,8 +41,8 @@ nav.jose.navbar.navbar-expand-lg.navbar-dark
     .container.d-flex.bd-highlight
         .bd-highlight
             a.navbar-brand.mr-2(href='/profile')
-                i.fab.fa-asymmetrik
-                |utolinea
+                small.fab.fa-asymmetrik
+                small utosystem
                 //small.ml-1.text-monospace(style='font-size: 11px;') V1.1 Demo
         .bd-highlight
             if typeof user != 'undefined' 
@@ -115,37 +115,42 @@ nav.jose.navbar.navbar-expand-lg.navbar-dark
                 //-si user no esta definido
                 if typeof user != 'undefined' 
                     //-user si esta definido
+                    //-.row.justify-content-center.align-items-center
+                    //-.d-flex.align-items-center
                     case users.id_tipo_usuario
                         when 1
-                            li.nav-item.dropdown
+                            li.nav-item.dropdown.d-flex.align-items-center
                                 a#navbarDropdown_admin.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
                                     | Control
-                                .dropdown-menu(aria-labelledby='navbarDropdown_admin')
-                                    a.dropdown-item(href='/listar') Ordenes
-                                    .dropdown-divider
-                                    a.dropdown-item(href='/nueva-orden') Mis Clientes
-                                    .dropdown-divider
-                                    a.dropdown-item(href='/nueva-orden') Recursos Humanos
-                            li.nav-item
+                                    .dropdown-menu(aria-labelledby='navbarDropdown_admin')
+                                        a.dropdown-item(href='/listar') Ordenes
+                                        .dropdown-divider
+                                        a.dropdown-item(href='/nueva-orden') Mis Clientes
+                                        .dropdown-divider
+                                        a.dropdown-item(href='/nueva-orden') Recursos Humanos
+                            li.nav-item.d-flex.align-items-center
                                 a.nav-link(href='/signup') Registrar Nuevo Usuario
                         when 2
-                            li.nav-item
+                            li.nav-item.d-flex.align-items-center
                                 a.nav-link(href='/consultar') Crear Visita
-                            li.nav-item
+                            li.nav-item.d-flex.align-items-center
                                 a.nav-link(href='/ordenes-hoy') Ordenes de Hoy
-                    li.nav-item
+                    li.nav-item.d-flex.align-items-center
                         a.nav-link(href='/historial') Historial
-                    li.nav-item.dropdown
-                        a#navbarDropdown_perfil.nav-link.dropdown-toggle(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
-                            | Perfil
-                        .dropdown-menu(aria-labelledby='navbarDropdown_perfil')
+                    li.nav-item.dropdown.d-flex.align-items-center
+                        a#navbarDropdown_perfil.nav-link(href='#', role='button', data-toggle='dropdown', aria-haspopup='true', aria-expanded='false')
+                            .d-flex.align-items-center
+                                .fas.fa-user-circle.fa-2x
+                                small.font-weight-light #{nombre} #{apellido_paterno}
+                                //-.font-weight-light(style="font-size:1rem") Jose Cuela
+                        .dropdown-menu.dropdown-menu-lg-right(aria-labelledby='navbarDropdown_perfil')
+                            //-a.dropdown-item(href='/profile') #{nombre} #{apellido_paterno}
+                            //-.dropdown-divider
                             a.dropdown-item(href='/edit-password') Editar Contraceña
-                            .dropdown-divider
-                            a.dropdown-item(href='/profile') Perfil
                             .dropdown-divider
                             a.dropdown-item(href='/logout') Cerrar sesión
                 else
-                    li.nav-item
+                    li.nav-item.d-flex.align-items-center
                         a.nav-link(href='/signin') Iniciar Sesion
 script.
     let sk_Navigation = io();
@@ -153,6 +158,8 @@ script.
 
     let user    = !{JSON.stringify(data)},
         My_id_Usuario = user.InfoUser.id_usuario;
+
+    console.log("USUARIO",user)
     
     $(function () {
         $("body").tooltip({ 
