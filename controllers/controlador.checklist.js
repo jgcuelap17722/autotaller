@@ -1,21 +1,22 @@
 const pool = require('../database');
-const checkListCtr = {}
 
-checkListCtr.crearCheckList = async (req,res,next) => {
+const checkListCtr = {};
+
+checkListCtr.crearCheckList = async (req, res) => {
 /*  En el req.body llega un array con 3 tipos de valores
     Tipo 1 : Siempre esta en la posision [0] y sera el "NRO_ORDEN"
     Tipo 2 : Siempre esta en la ultima posision del array y sera "MI DESCRIPCION"
-    Tipo 3 : Siempre esta entre "NRO_ORDEN" y "MI DESCRIPCION" 
+    Tipo 3 : Siempre esta entre "NRO_ORDEN" y "MI DESCRIPCION"
     = es la descripcion del cliente y el Id de servicio que esta requiriendo */
 
   // ==> Recuperar los datos del usuario logeado.
 
-    const id_person = req.user.id_usuario,
-            username =  req.user.username,
-            usuario = {id_person,username};
+  const idPerson = req.user.id_usuario;
+  const { username } = req.user.username;
+  const usuario = { idPerson, username };
 
-    // === RECUPERAR SERVICIOS BUSCADOS O AGREGADOS :)
-/*         const SP_CheckList_find = await pool.query('SELECT id_check_list,nombre_checklist FROM v_items_checlist_add_or_find');
+  // === RECUPERAR SERVICIOS BUSCADOS O AGREGADOS :)
+  /*         const SP_CheckList_find = await pool.query('SELECT id_check_list,  nombre_checklist FROM v_items_checlist_add_or_find');
         const Get_CheckList_Aux = SP_CheckList_find;
 
         let idCkecklist=[],
