@@ -12,11 +12,27 @@ const MySQLStore = require('express-mysql-session');
 const coneccion = require('./database');
 const { database } = require('./keys');
 const helpers = require('./lib/helpers');
-const {CronJob} = require('cron');
+const { CronJob } = require('cron');
 require('dotenv').config();
 
 // Funcion parahacer consultass
 const Consulta = (pQuery) => coneccion.query(pQuery);
+
+/* const Consulta = async (pQuery) => {
+  let conn;
+  try {
+    conn = await coneccion.getConnection();
+    const rows = await conn.query(pQuery);
+    const salida = await conn.query("select * from tcliente where id_cliente < 150;");
+    console.log("MICONSULTA ES", salida);
+    return rows;
+  } catch (err) {
+    console.log("ERROR DE CONNECCION", err);
+    throw err;
+  } finally {
+    if (conn) conn.release(); // release to pool
+  }
+}; */
 
 // inicializacion
 const app = express();
@@ -69,20 +85,20 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Iniciar el Servidor
 
 // localhost con sertificado ssl
-/* const httpsOptions = {
+const httpsOptions = {
   key: fs.readFileSync('./security/cert.key'),
   cert: fs.readFileSync('./security/cert.pem')
-}
+};
 
 const server = https.createServer(httpsOptions, app)
   .listen(app.get('port'), () => {
     console.log('Servidor en Puerto ', app.get('port'));
-  }); */
+  });
 
 // localhost SIN sertificado ssl
-const server = app.listen(app.get('port'), () => {
+/* const server = app.listen(app.get('port'), () => {
   console.log('Servidor en Puerto ', app.get('port'));
-});
+}); */
 
 // coneccion de socket
 const io = SocketIO(server);
