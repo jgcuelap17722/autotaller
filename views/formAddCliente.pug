@@ -66,6 +66,7 @@ append styles
         #Icono_campana{
             color: #fff !important
         }
+
 block contenido
     form(action='/info-cliente', method='POST')
         .card.rounded-0
@@ -78,7 +79,7 @@ block contenido
                 section.form-gradient
                     .md-form
                         i.fa.fa-car.prefix.mb-1
-                        input#placa.form-control-xl.text-center.text-uppercase.h4.orden(type='text',value= data.nueva_placa,maxlength='7', autocomplete='off' name="placa" ,readonly)
+                        input#placa.form-control-xl.text-center.text-uppercase.h4.orden(type='text',value= data.nuevaPlaca,maxlength='7', autocomplete='off' name="placa" ,readonly)
                 //-Centrar y ajustar 
                 .d-flex.align-items-center.justify-content-between
                     .h6.mb-0 Datos del Vehiculo
@@ -90,6 +91,25 @@ block contenido
                         //-.ml-2
                         //-    label.mb-0.text-muted(for="Switch") Nuevo Vehiculo
                 .form-row
+                    .form.col-md-6                              
+                        section.form-gradient
+                            .md-form
+                                .d-flex.bd-highlight
+                                    .flex-fill.bd-highlight
+                                        i#ico_tipoVehiculo.fas.fa-car-side.prefix.mt-1
+                                        input#send_tipoVehiculo(type='hidden',autocomplete='off',name='tipoVehiculo')
+                                        input#id_tipoVehiculo.form-control(type='text',autocomplete='off',
+                                        name='tipoVehiculo')
+                                        datalist#mylist
+                                            option Camioneta
+                                            option pickup
+                                            option band
+                                            option 4x4
+                                        label#lb_tTipo Vehiculo
+                                    button.m-auto.border.mb-2.rounded-right.bg-transparent(type="button",disabled)
+                                        i.fas.fa-caret-down.m-2
+                    .form.col-md-6                              
+
                     .form.col-md-6
                         section.form-gradient
                             .md-form
@@ -306,7 +326,50 @@ block area-scripts
                             console.log('hacer nada')
                         }
                     });
+                // Autocompletado ==> TIPO VEHICULO 
+                    // - variables
+                        // let idTipoVehiculo,
+                        //     nombreTipoVehiculo,
+                        //     AWSTipoVehiculo,
+                        //     inputTipoVehiculo     = document.getElementById('id_tipoVehiculo'),
+                        //     valselectmodelo;
 
+                            // AWSTipoVehiculo = new Awesomplete(inputTipoVehiculo, {
+                            //     maxItems: 5,
+                            //     filter: Awesomplete.FILTER_STARTSWITH,
+                            //     list: "#mylist"
+                            // });
+                        // let val_select_marca;
+                        // - accion click obcion
+                        // var imgList = new Object();
+                        // imgList["Ada"] = "http://www.maglioccola.com/images/add-1.png";
+                        // imgList["Java"] = "http://www.maglioccola.com/images/add-2.png";
+                        // imgList["JavaScript"] = "http://www.maglioccola.com/images/add-3.png";
+                        // imgList["Brainfuck"] = "http://www.maglioccola.com/images/add-4.png";
+                        // imgList["LOLCODE"] = "http://www.maglioccola.com/images/add-4.png";
+                        // imgList["Node.js"] = "http://www.maglioccola.com/images/add-4.png";
+                        // imgList["Ruby on Rails"] = "http://www.maglioccola.com/images/add-4.png";
+                        //     var input = document.getElementById("id_tipoVehiculo");
+                        //     var awesomplete = new Awesomplete(input, {
+                        //         item: myItemFunc,
+                        //         list: "#mylist"
+                        //     });;
+                        
+
+                        // function myItemFunc(text, input) {
+                        //     return Awesomplete.$.create("li", {
+                        //         innerHTML: createItem(text,input),
+                        //         "aria-selected": "false"
+                        //     });
+                        // }
+
+                        // function createItem(text, input) {
+                        //     var img = document.createElement("img");
+                        //     img.style.height = '16px';
+                        //     img.src = imgList[text.label];
+                        //     var html = img.outerHTML + " " + text.label;
+                        //     return html;
+                        // }
                 // Autocompletado ==> MODELO 
                     // - variables
                         let id_de_Modelos,
@@ -1031,4 +1094,4 @@ block area-scripts
                     }
                 });
         });//309
-
+    script(type='text/javascript' src='../js/formNuevoCliente.js')

@@ -411,10 +411,12 @@ router.post('/listar', isLoggedIn, async (req, res) => {
 });
 
 router.post('/nuevo-cliente', async (req, res) => {
-  const { nuevaPlaca } = req.body;
-  const InfoUser      = await helpers.InfoUser(req.user.id_usuario); // Info Usuario Logueado
-  const consultaPlacaExistente = await Consulta(`CALL SP_FN_Existencia_Placa("${nuevaPlaca}");`);
-  const { existenciaPlaca } = consultaPlacaExistente[0][0];
+  const { nuevaPlaca }         = req.body;
+  const InfoUser               = await helpers.InfoUser(req.user.id_usuario);
+  const consultaPlacaExistente = await pool.query(`CALL SP_FN_Existencia_Placa("${nuevaPlaca}");`);
+  const { existenciaPlaca }    = consultaPlacaExistente[0][0];
+
+  console.log("RESPUESTA DE LA BASE DE DATOS ", consultaPlacaExistente);
   console.log('Placabuscada', nuevaPlaca);
   console.log('RESPUESTA', existenciaPlaca);
   if (existenciaPlaca != 0) {
@@ -758,20 +760,21 @@ router.get('/detalle-pedido', isLoggedIn, async (req, res) => {
   console.log('InfoUser', InfoUser);
   const { id_receptor, idDetallePedido, idDNotificacion } = req.query;
 
-  const consulta_verificacion = await Consulta(`SELECT id_tipo_usuario FROM tusuario_ttipousuario WHERE id_usuario = ${id_receptor};`);
-  const { id_tipo_usuario } = consulta_verificacion[0];
+  const consultaVerificacion = await Consulta(`SELECT id_tipo_usuario FROM tusuario_ttipousuario WHERE id_usuario = ${id_receptor};`);
+  const { id_tipo_usuario } = consultaVerificacion[0];
 
   console.log('idTipo_usuario => ', id_tipo_usuario);
-  const query_Detalle_mis_pedidos_asignados = `CALL SP_Mis_pedidos_asignados(${id_receptor})`;
-  const consulta_Detalle_mis_pedidos_asignados = await Consulta(query_Detalle_mis_pedidos_asignados);
-  console.log('consulta_Detalle_mis_pedidos_asignados:', consulta_Detalle_mis_pedidos_asignados[0], 'para mi id: ', id_receptor);
+  /*   const query_Detalle_mis_pedidos_asignados = `CALL SP_Mis_pedidos_asignados(${id_receptor})`;
+    const consulta_Detalle_mis_pedidos_asignados = await Consulta(query_Detalle_mis_pedidos_asignados);
+    console.log('consulta_Detalle_mis_pedidos_asignados:', consulta_Detalle_mis_pedidos_asignados[0], 'para mi id: ', id_receptor); */
 
   // SOLAMENTE QUIERO VER LA INFORMACION DEL PEDIDO CON ESTE ID_DETALLE_PEDIDO
-  const query_Detalle_pedido_terminado = `CALL SP_Mis_facturaciones_asignadas(${idDetallePedido})`;
-  const consulta_Detalle_pedido_terminado = await Consulta(query_Detalle_pedido_terminado);
-  console.log('Respuesta detalle-pedido:', consulta_Detalle_pedido_terminado[0]);
+  const queryDetallePedidoTerminado = `CALL SP_Mis_facturaciones_asignadas(${idDetallePedido})`;
 
-  const Detalle_Pedido = consulta_Detalle_pedido_terminado[0];
+  const consultaDetallePedidoTerminado = await Consulta(queryDetallePedidoTerminado);
+  console.log('Respuesta detalle-pedido:', consultaDetallePedidoTerminado[0]);
+
+  const Detalle_Pedido = consultaDetallePedidoTerminado[0];
   const data = {
     InfoUser, Detalle_Pedido, id_tipo_usuario, idDNotificacion, idDetallePedido
   };
@@ -848,11 +851,11 @@ router.get('/detalle-pedido-facturacion', isLoggedIn, async (req, res) => {
   console.log('Mi id:', id_receptor, ' tiene ', consulta_id_detalle_pedido_caja);
 
   // SOLAMENTE QUIERO VER LA INFORMACION DEL PEDIDO CON ESTE ID_DETALLE_PEDIDO
-  const query_Detalle_pedido_terminado = `CALL SP_Mis_facturaciones_asignadas(${idDetallePedido})`;
-  const consulta_Detalle_pedido_terminado = await Consulta(query_Detalle_pedido_terminado);
-  console.log('Respuesta:', consulta_Detalle_pedido_terminado[0]);
+  const queryDetallePedidoTerminado = `CALL SP_Mis_facturaciones_asignadas(${idDetallePedido})`;
+  const consultaDetallePedidoTerminado = await Consulta(queryDetallePedidoTerminado);
+  console.log('Respuesta:', consultaDetallePedidoTerminado[0]);
 
-  const Detalle_Pedido = consulta_Detalle_pedido_terminado[0];
+  const Detalle_Pedido = consultaDetallePedidoTerminado[0];
   const data = { InfoUser, Detalle_Pedido, idDNotificacion };
   console.log('Detalle_Pedido.length =>', Detalle_Pedido.length);
 

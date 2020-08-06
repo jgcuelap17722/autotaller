@@ -26,7 +26,7 @@ block contenido
                                     section.form-gradient
                                         .md-form
                                             i.fa.fa-car.prefix.mb-1
-                                            input#cbPlaca.form-control-xl.text-center.text-uppercase.h4.orden(type='text',name='nueva_placa',placeholder='Ejemplo,ABC-123', maxlength='7', autocomplete='off',required='')
+                                            input#cbPlaca.form-control-xl.text-center.text-uppercase.h4.orden(type='text',name='nuevaPlaca',placeholder='Ejemplo,XYZ-123', maxlength='7', autocomplete='off',required='')
                                     button#boton_nuevo.btn.btn-success(type='submit')
                                         i.fas.fa-user-plus(font-size='16px')
                                         | nuevo
@@ -35,5 +35,6 @@ block contenido
             input#Placa(type="hidden",name='placa')
 block area-scripts
     script.
-         const data    = !{JSON.stringify(data)};
+        const data    = !{JSON.stringify(data)};
     script(type='text/javascript' src='../js/consultar.js')
+    

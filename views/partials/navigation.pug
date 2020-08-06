@@ -212,8 +212,7 @@ script.
     // ==> Envio_Notificacion
     sk_Navigation.emit('Requiero_Notificaciones',My_id_Usuario)
 
-    // ==> Envio_Notificacion
-    sk_Navigation.emit('Solicito_Notificaciones_Seguimiento')
+    // sk_Navigation.emit('Solicito_Notificaciones_Seguimiento')
 
     //Escuchando Socket por Recarga de pagina
     sk_Navigation.on('Envio_Notificacion',(List_Notifi,
@@ -303,57 +302,57 @@ script.
     });
 
     //SOCKETS DE NOTIFICACIONES SEGUIMIENTO
-    sk_Navigation.on('Emitir_Notificaciones_Seguimineto', async (data,nDatos) => {
+        // POR RECARGA (DESACTIVAR)
+        // sk_Navigation.emit('Requiero_Notificaciones_Seguimiento');
+        
+        sk_Navigation.on('Emitir_Notificaciones_Seguimineto', async (data,nDatos) => {
 
-        $('#NroSeguimientos').text(nDatos)
-        for (let i = 0; i <= data.length-1; i++) {
-            if(i > 3){
-                $('#NotiCallDropDown').css("height","304px");
-                console.log('hola perro')
+            $('#NroSeguimientos').text(nDatos)
+            for (let i = 0; i <= data.length-1; i++) {
+                if(i > 3){
+                    $('#NotiCallDropDown').css("height","304px");
+                    console.log('hola perro')
+                }
+                const {nombre_cliente,dia,fecha_notificacion,id_detalle_pedido,id_seguimiento,id_cliente,id_vehiculo} = data[i];
+                await Crear_Seguimiento(nombre_cliente,dia,fecha_notificacion,id_detalle_pedido,id_seguimiento,id_cliente,id_vehiculo);
             }
-            const {nombre_cliente,dia,fecha_notificacion,id_detalle_pedido,id_seguimiento,id_cliente,id_vehiculo} = data[i];
-            await Crear_Seguimiento(nombre_cliente,dia,fecha_notificacion,id_detalle_pedido,id_seguimiento,id_cliente,id_vehiculo);
-        }
 
-        console.log('Alarma Alarma')
-    });
-    // POR RECARGA
-    sk_Navigation.emit('Requiero_Notificaciones_Seguimiento');
+            console.log('Alarma Alarma')
+        });
+        
+        // POR ENVIO (escucha cuando se se ejecuta la funcion Ejecucion())
+        sk_Navigation.on('Enviar_Notificaciones_Seguimiento', async (data) => {
+            console.log('La fecha que se programara es =>',data);
+            const {nombre_cliente,dia,fecha_salida_timeago,id_detalle_pedido,id_seguimiento,id_cliente,id_vehiculo} = data;
+            await Crear_Seguimiento(nombre_cliente,dia,fecha_salida_timeago,id_detalle_pedido,id_seguimiento,id_cliente,id_vehiculo);
 
-    // POR ENVIO 
-    sk_Navigation.on('Enviar_Notificaciones_Seguimiento', async (data) => {
-        console.log('La fecha que se programara es =>',data);
-        const {nombre_cliente,dia,fecha_salida_timeago,id_detalle_pedido,id_seguimiento,id_cliente,id_vehiculo} = data;
-        await Crear_Seguimiento(nombre_cliente,dia,fecha_salida_timeago,id_detalle_pedido,id_seguimiento,id_cliente,id_vehiculo);
+            $('#NroSeguimientos').text(1);
+        });
 
-        $('#NroSeguimientos').text(1);
-    });
+        sk_Seguimientos.on('Crear_Notificaciones_Seguimiento', async (data) => {
 
-    sk_Seguimientos.on('Crear_Notificaciones_Seguimiento', async (data) => {
+            console.log('RECIBIDO',data);
+            $('#NroSeguimientos').text(data.nro_seguimientos)
+            const {
+                nombre_cliente,
+                dia,
+                fecha_notificacion,
+                id_detalle_pedido,
+                id_seguimiento,
+                id_cliente,
+                id_vehiculo
+            } = data;
 
-        console.log('RECIBIDO',data);
-        $('#NroSeguimientos').text(data.nro_seguimientos)
-        const {
-            nombre_cliente,
-            dia,
-            fecha_notificacion,
-            id_detalle_pedido,
-            id_seguimiento,
-            id_cliente,
-            id_vehiculo
-        } = data;
-
-        await Crear_Seguimiento(
-            nombre_cliente,
-            dia,
-            fecha_notificacion,
-            id_detalle_pedido,
-            id_seguimiento,
-            id_cliente,
-            id_vehiculo
-        );
-
-    });
+            await Crear_Seguimiento(
+                nombre_cliente,
+                dia,
+                fecha_notificacion,
+                id_detalle_pedido,
+                id_seguimiento,
+                id_cliente,
+                id_vehiculo
+            );
+        });// Se ejecuta con la funcion Ejecucion_de_Cron
 
     //=== === EVENTOS === ===
         function Click_Notificacin (id_detalle_pedido,id_tipo_usuario,pidNotificacion){
