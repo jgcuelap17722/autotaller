@@ -1,12 +1,12 @@
 module.exports = {
 
   database: {
-    connectionLimit: process.env.DB_CONNECTION_LIMIT,
-    host           : process.env.DB_HOST,
-    user           : process.env.DB_USER,
-    password       : process.env.DB_PASS,
-    database       : process.env.DB_DATABASE,
-    port           : process.env.DB_PORT
+    connectionLimit: 7,
+    host           : 'hcm4e9frmbwfez47.cbetxkdyhwsb.us-east-1.rds.amazonaws.com',
+    user           : 'mne9auc06g4251c0',
+    password       : 'sjw6nvx79xqo9uu4',
+    database       : 'gjzk9gvt09jnuec7',
+    port           : 3306
   }
 
 };
