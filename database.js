@@ -3,11 +3,11 @@ const mariadb       = require('mariadb');
 const { promisify } = require('util');
 const { database }  = require('./keys');
 
-const poolMysql   = mysql.createPool(database); // Mysql
+// const poolMysql   = mysql.createPool(database); // Mysql
 const poolMariadb = mariadb.createPool(database); // Mariadb
 
 // quiero recuperar un error u la coneccion
-poolMysql.getConnection((err, connection) => {
+/* poolMysql.getConnection((err, connection) => {
   if (err) {
     if (err.code === 'PROTOCOL_CONNECTION_LOST') {
       console.error('Database connection was closed.');
@@ -22,8 +22,8 @@ poolMysql.getConnection((err, connection) => {
   // si obtengo la conneccion
   if (connection) connection.release();
   console.log('DB is Connected');
-});
+}); */
 // convertir a promesas las consultas Mysql sql
-poolMysql.query = promisify(poolMysql.query);
+/* poolMysql.query = promisify(poolMysql.query); */
 
 module.exports = poolMariadb;
