@@ -1,19 +1,20 @@
-const path = require('path');
-const morgan = require('morgan');
-const express = require('express');
-const mysql = require('mysql');
-const SocketIO = require('socket.io');
-const session = require('express-session');
-const passport = require('passport');
-const https = require('https');
-const fs = require('fs');
-const flash = require('connect-flash'); // Middlewares
-const MySQLStore = require('express-mysql-session');
-const coneccion = require('./database');
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config();
+}
+const path         = require('path');
+const morgan       = require('morgan');
+const express      = require('express');
+const SocketIO     = require('socket.io');
+const session      = require('express-session');
+const passport     = require('passport');
+const https        = require('https');
+const fs           = require('fs');
+const flash        = require('connect-flash'); // Middlewares
+const MySQLStore   = require('express-mysql-session');
+const { CronJob }  = require('cron');
+const coneccion    = require('./database');
 const { database } = require('./keys');
-const helpers = require('./lib/helpers');
-const {CronJob} = require('cron');
-require('dotenv').config();
+const helpers      = require('./lib/helpers');
 
 // Funcion parahacer consultass
 const Consulta = (pQuery) => coneccion.query(pQuery);
@@ -27,15 +28,15 @@ app.set('port', process.env.PORT || 4500);
 
 // Middlewares
 app.use(session({
-  secret: 'faztmysqlnodemysql',
-  resave: false,
+  secret           : 'faztmysqlnodemysql',
+  resave           : false,
   saveUninitialized: false,
-  store: new MySQLStore(database) // donde guardar la secion
+  store            : new MySQLStore(database) // donde guardar la secion
 }));
 
 app.use(flash());
 app.use(passport.initialize()); // iniciate passport
-app.use(passport.session());  // inicia secion passport
+app.use(passport.session()); // inicia secion passport
 
 app.use(morgan('dev')); // usar morgan
 app.use(express.urlencoded({ extended: false }));
@@ -66,13 +67,40 @@ app.use('/', routes); */
 // Publico "archibos que toda la APP pueda acceder"
 app.use(express.static(path.join(__dirname, 'public')));
 
+// INICIAR EL SERVIDOR
+
+const servidor = () => {
+  let ser;
+  if (process.env.NODE_ENV !== 'develoment') { // 1 = Desarrollo / 0 = Online
+    // Servidor Online
+    ser = app.listen(app.get('port'), () => {
+      console.log('Servidor Online en Puerto', app.get('port'));
+    });
+    console.log("Ejecutando en", process.env.NODE_ENV);
+    return ser;
+  }
+  // localhost con sertificado ssl
+  const httpsOptions = {
+    key: fs.readFileSync('./security/cert.key'),
+    cert: fs.readFileSync('./security/cert.pem')
+  };
+  ser = https.createServer(httpsOptions, app)
+    .listen(app.get('port'), () => {
+      console.log('Servidor Local en Puerto ', app.get('port'));
+    });
+  console.log("Ejecutando en", process.env.NODE_ENV);
+  return ser;
+};
+
+const server = servidor();
+
 // Iniciar el Servidor
 
 // localhost con sertificado ssl
 /* const httpsOptions = {
   key: fs.readFileSync('./security/cert.key'),
   cert: fs.readFileSync('./security/cert.pem')
-}
+};
 
 const server = https.createServer(httpsOptions, app)
   .listen(app.get('port'), () => {
@@ -80,14 +108,14 @@ const server = https.createServer(httpsOptions, app)
   }); */
 
 // localhost SIN sertificado ssl
-const server = app.listen(app.get('port'), () => {
+/* const server = app.listen(app.get('port'), () => {
   console.log('Servidor en Puerto ', app.get('port'));
-});
+}); */
 
 // coneccion de socket
 const io = SocketIO(server);
 
-// Lugar de las vistas y con el respectivo motor de busquedas
+// Lugar de las vistas y con el respectivo FORMATO DE VISTAS
 app.set('views', path.join(__dirname, 'views'));
 app.set("view engine", "pug");
 app.use(express.urlencoded({ extended: true }));
@@ -125,11 +153,11 @@ Ejecucion_de_Cron = async (data, nDatos) => {
   console.log('OBJETO ARMADO=>', obj_Crear_Seguimiento);
   io.emit('Crear_Notificaciones_Seguimiento', obj_Crear_Seguimiento);
 };
-
-(fauto = async () => {
+// DESBILITE EL LLAMADO AUTOMATICO A ESTA FUNCION
+fauto = async () => {
   const query_notificaciones_futuras = 'SELECT * FROM v_ids_detalle_seguimiento WHERE fecha_notificacion is null && id_estado_seguimiento <> 2 && id_etapa_seguimiento <> 4 && id_etapa_seguimiento <> 5 && id_etapa_seguimiento <> 6;';
   const Notif_Futuras = await Consulta(query_notificaciones_futuras);
-  console.log('Notificaciones SEGUIMIENTO HOY', Notif_Futuras);
+  console.log('Notificaciones SEGUIMIENTO HOY', JSON.stringify(Notif_Futuras));
   // ARMANDO MI FECHA
   let My_Fecha_Actual = helpers.new_Date(new Date());
   let Mi_anio = My_Fecha_Actual.getFullYear();
@@ -281,7 +309,7 @@ Ejecucion_de_Cron = async (data, nDatos) => {
   }
 
   console.log('Esta es mi fecha', My_Fecha_Actual);
-})();
+};
 
 io.on('connection', (sk_nuevoCliente) => {
   // console.log("socket sk_nuevoCliente");
@@ -426,7 +454,6 @@ io.on('connection', (sk_CrearOrden) => {
     io.emit('Mecanico_Asignado', Mecanicos_Habilitados); // => crearOrden
   });
 });
-
 
 io.on('connection', (sk_Navigation) => {
   console.log('=> k_Navigation');
@@ -941,4 +968,4 @@ io.on('connection', (sk_detallePedido) => {
   });
 });
 
-// 1330
+// 986

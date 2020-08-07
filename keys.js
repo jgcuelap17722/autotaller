@@ -1,11 +1,12 @@
 module.exports = {
 
   database: {
-    connectionLimit: 4,
-    host: 'us-cdbr-iron-east-05.cleardb.net',
-    user: 'b6ffa3b7ffc6ee',
-    password: '71938917',
-    database: 'heroku_74117e62ea86038'
+    connectionLimit: process.env.DB_CONNECTION_LIMIT,
+    host           : process.env.DB_HOST,
+    user           : process.env.DB_USER,
+    password       : process.env.DB_PASS,
+    database       : process.env.DB_DATABASE,
+    port           : process.env.DB_PORT
   }
 
 };
